@@ -22,6 +22,7 @@
 ### 문서 목록
 
 - [AOS6-Kotlin-Project-Guide.pdf](./AOS6-Kotlin-Project-Guide.pdf) — Kotlin 프로젝트 가이드
+- [Firestore-설계가이드.md](./Firestore-설계가이드.md) — Firestore SNS/커뮤니티 앱 설계 가이드
 
 *(추가 문서·샘플 프로젝트는 저장소 업데이트에 따라 계속 반영됩니다.)*
 
