@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.likelion.liontalk.core.data.repository.UserRepository
 import com.likelion.liontalk.core.navigation.Screen
+import com.likelion.liontalk.core.navigation.computeStartDestination
 import com.likelion.liontalk.core.ui.error.UiEvent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -187,19 +188,26 @@ class SignViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 이미 로그인된 상태에서 로그인 화면으로 진입한 경우, 이동할 화면이 있으면 그 route를 반환합니다.
+     */
+    suspend fun getRedirectDestinationIfSignedIn(): String? {
+        return try {
+            if (userRepository.authUser.value == null) return null
+            val destination = withContext(Dispatchers.IO) {
+                userRepository.computeStartDestination()
+            }
+            if (destination == Screen.SignScreen.route) null else destination
+        } catch (e: Exception) {
+            Log.e(TAG, "getRedirectDestinationIfSignedIn failed", e)
+            null
+        }
+    }
+
     private suspend fun navigateAfterLogin(provider: String) {
-        // 로그인 직후 Firestore 프로필이 준비되지 않았을 수 있어 ensure를 먼저 호출한다.
-        withContext(Dispatchers.IO) {
-            userRepository.ensureUserProfile(provider = provider)
+        val destination = withContext(Dispatchers.IO) {
+            userRepository.computeStartDestination(provider = provider)
         }
-
-        val user = userRepository.meOrNull
-        val destination = if (user == null || user.name.isBlank()) {
-            Screen.SettingScreen.route
-        } else {
-            Screen.ChatRoomListScreen.route
-        }
-
         _navigationEvents.emit(
             SignNavigationEvent.NavigateTo(
                 route = destination,

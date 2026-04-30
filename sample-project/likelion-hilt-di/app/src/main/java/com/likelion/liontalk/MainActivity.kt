@@ -5,18 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
+import com.likelion.liontalk.core.data.repository.UserRepository
 import com.likelion.liontalk.core.navigation.ChatAppNavigation
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var userRepository: UserRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            ChatAppNavigation(navController = navController)
+            ChatAppNavigation(
+                navController = navController,
+                userRepository = userRepository,
+            )
         }
     }
 }

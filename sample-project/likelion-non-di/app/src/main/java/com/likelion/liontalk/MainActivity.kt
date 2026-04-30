@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.likelion.liontalk.core.data.repository.UserRepository
 import com.likelion.liontalk.core.navigation.ChatAppNavigation
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +15,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            ChatAppNavigation(navController = navController)
+            ChatAppNavigation(
+                navController = navController,
+                userRepository = UserRepository,
+            )
         }
     }
 }

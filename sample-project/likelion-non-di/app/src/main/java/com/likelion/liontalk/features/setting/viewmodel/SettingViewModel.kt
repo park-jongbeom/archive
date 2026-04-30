@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.likelion.liontalk.core.data.model.ChatUser
 import com.likelion.liontalk.core.data.repository.UserRepository
-import com.likelion.liontalk.core.navigation.Screen
+import com.likelion.liontalk.core.navigation.navigateToSignClearingStack
 import com.likelion.liontalk.core.ui.error.UiEvent
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
@@ -86,9 +86,7 @@ class SettingViewModel : ViewModel() {
                 return@launch
             }
 
-            navController.navigate(Screen.SignScreen.route) {
-                popUpTo(Screen.SettingScreen.route) { inclusive = true }
-            }
+            navController.navigateToSignClearingStack()
         }
     }
 }

@@ -2,7 +2,7 @@ package com.likelion.liontalk.features.launcher.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.likelion.liontalk.core.data.repository.UserRepository
-import com.likelion.liontalk.core.navigation.Screen
+import com.likelion.liontalk.core.navigation.computeStartDestination
 import com.likelion.liontalk.core.ui.error.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,18 +26,7 @@ class LauncherViewModel @Inject constructor(
      */
     suspend fun decideStartDestination(): String? {
         return try {
-            val authUser = userRepository.authUser.value
-            if (authUser == null) {
-                Screen.SignScreen.route
-            } else {
-                userRepository.ensureUserProfile()
-                val user = userRepository.meOrNull
-                if (user == null || user.name.isBlank()) {
-                    Screen.SettingScreen.route
-                } else {
-                    Screen.ChatRoomListScreen.route
-                }
-            }
+            userRepository.computeStartDestination()
         } catch (e: Exception) {
             val msg = e.message?.trim()?.takeIf { it.isNotBlank() } ?: "로그인 정보를 불러오지 못했어요."
             _uiEvents.emit(UiEvent.ShowDialog(message = msg))

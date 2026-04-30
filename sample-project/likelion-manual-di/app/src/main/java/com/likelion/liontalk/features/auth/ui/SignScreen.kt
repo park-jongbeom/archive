@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.likelion.liontalk.core.navigation.Screen
 import com.likelion.liontalk.features.auth.viewmodel.SignNavigationEvent
 import com.likelion.liontalk.features.auth.viewmodel.SignViewModel
 import com.likelion.liontalk.core.ui.error.UiEvent
@@ -80,6 +81,12 @@ fun SignScreen(navController: NavController) {
                         }
                     }
                 }
+            }
+        }
+        launch {
+            val destination = viewModel.getRedirectDestinationIfSignedIn() ?: return@launch
+            navController.navigate(destination) {
+                popUpTo(Screen.SignScreen.route) { inclusive = true }
             }
         }
     }
