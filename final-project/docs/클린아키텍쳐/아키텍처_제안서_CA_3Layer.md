@@ -87,30 +87,36 @@ domain → nothing (외부 의존 없음)
 
 ---
 
-## 4. 권장 패키지 구조(예시)
+## 4. 권장 패키지 구조 (Best Practice Structure)
 
-모듈 분리까지는 강제하지 않지만, **패키지 경계**는 지키는 것을 권장합니다.
+단일 모듈 내에서 폴더를 통해 레이어를 나누되, **DI 설정까지 각 레이어 내부로 응집**시키는 것이 포인트입니다.
 
 ```text
-app/
-  presentation/
-    feature_x/
-      XScreen.kt
-      XViewModel.kt
-      XUiState.kt
-      XUiEvent.kt
-  domain/
-    model/
-    repository/
-    usecase/
-  data/
-    repository/
-    datasource/
-      remote/
-      local/
-    model/        (dto, entity mapping helpers)
-    mapper/
-  core/           (공통: Result/Error/Util 등)
+app/src/main/java/com/team/project/
+  ├── domain/                (비즈니스 핵심: 프레임워크 의존성 0%)
+  │   ├── model/             # 순수 Kotlin 엔티티
+  │   ├── repository/        # Repository 인터페이스 (계약)
+  │   ├── usecase/           # 비즈니스 로직 단위 (캡슐화)
+  │   └── di/                # UseCase 관련 DI 설정 (UseCaseModule)
+  │
+  ├── data/                  (구현 디테일: 외부 SDK/DB 연동)
+  │   ├── datasource/        # 원격/로컬 데이터 소스 (Interface & Impl 분리)
+  │   │   ├── XxxRemoteDataSource.kt
+  │   │   └── XxxRemoteDataSourceImpl.kt
+  │   ├── repository/        # Repository 구현체 (Domain 인터페이스 구현)
+  │   ├── model/             # DTO (서버/DB 스키마 맞춤형)
+  │   ├── mapper/            # DTO <-> Domain 변환기
+  │   └── di/                # 데이터 관련 DI (Repository/DataSource/FirebaseModule)
+  │
+  ├── presentation/          (UI 및 상태 관리: 사용자 접점)
+  │   └── feature_name/      # 기능 단위 패키징
+  │       ├── ui/            # Compose Screen, Components
+  │       ├── viewmodel/     # ViewModel (UseCase 호출 및 UiState 생성)
+  │       └── model/         # UiState, UiEvent 정의
+  │
+  └── core/                  (공통 모듈: 프로젝트 전역 공통 코드)
+      ├── navigation/        # 네비게이션 그래프 및 라우팅
+      └── ui/                # 디자인 시스템 및 테마
 ```
 
 ---
