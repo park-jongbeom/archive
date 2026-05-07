@@ -9,7 +9,7 @@
 ### 0-1. 의미 (이 문서가 무엇인가)
 
 - **운영 도구**입니다. 교육 자료가 아닙니다.
-- [01_애자일_팀프로젝트_가이드.md](01_애자일_팀프로젝트_가이드.md) 의 **재배포본도, 요약본도 아닙니다**. 가이드 § 번호로 라우팅하는 **인덱스**에 가깝습니다.
+- [01_애자일_팀프로젝트_가이드.md](../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) 의 **재배포본도, 요약본도 아닙니다**. 가이드 § 번호로 라우팅하는 **인덱스**에 가깝습니다.
 - 답이 이 문서에 적혀 있는 게 아니라, **답이 있는 위치**(가이드 § 번호 + example 파일 경로)가 적혀 있습니다.
 
 ### 0-2. 만들어진 배경 (어떤 문제를 해결하는가)
@@ -57,9 +57,9 @@
 |---|---|
 | Kotlin / Compose 문법, Wear OS SDK 디테일 | 본 문서는 애자일 운영 도구, 기술 스택은 별도 |
 | 학생 산출물 채점 / 평가 루브릭 | 평가는 가이드 § 13, § 14 |
-| GitHub Projects 보드 클릭 가이드 | [03_애자일_GitHub_프로젝트_세팅.md](03_애자일_GitHub_프로젝트_세팅.md) |
-| Issue/PR 마크다운 템플릿 전체 | [02_애자일_문서화_템플릿.md](02_애자일_문서화_템플릿.md) |
-| 역할별(PO/Dev/Reviewer/QA) 상세 운영 | [04_애자일_역할_배분_가이드.md](04_애자일_역할_배분_가이드.md) |
+| GitHub Projects 보드 클릭 가이드 | [03_애자일_GitHub_프로젝트_세팅.md](../final-project/docs/애자일/03_애자일_GitHub_프로젝트_세팅.md) |
+| Issue/PR 마크다운 템플릿 전체 | [02_애자일_문서화_템플릿.md](../final-project/docs/애자일/02_애자일_문서화_템플릿.md) |
+| 역할별(PO/Dev/Reviewer/QA) 상세 운영 | [04_애자일_역할_배분_가이드.md](../final-project/docs/애자일/04_애자일_역할_배분_가이드.md) |
 | 2~6주차 주차별 상세 FAQ | 1주차 한정. 추후 확장 가능 |
 
 ### 0-7. 다른 문서와의 관계
@@ -87,11 +87,11 @@
 
 ## 0-9. 러닝 예제 / 참조 파일 빠른 링크
 
-- **러닝 예제 Brief**: [example/01_product_brief.md](example/01_product_brief.md)
-- **러닝 예제 Flow**: [flow_login.md](example/02_flow/flow_login.md), [flow_home_list.md](example/02_flow/flow_home_list.md), [flow_detail.md](example/02_flow/flow_detail.md)
-- **러닝 예제 Issue**: [issue_login_ui.md](example/03_issue/flow_login/issue_login_ui.md) 외 [example/03_issue/](example/03_issue/) 폴더 다수
-- **정석 예제 (참고)**: [example2/1팀](example2/1팀/), [example2/2팀](example2/2팀/), [example2/3팀](example2/3팀/)
-- **규칙 본문**: [01_애자일_팀프로젝트_가이드.md](01_애자일_팀프로젝트_가이드.md) (모든 답변의 § 번호가 가리키는 곳)
+- **러닝 예제 Brief**: [example/01_product_brief.md](../final-project/docs/애자일/example/01_product_brief.md)
+- **러닝 예제 Flow**: [flow_login.md](../final-project/docs/애자일/example/02_flow/flow_login.md), [flow_home_list.md](../final-project/docs/애자일/example/02_flow/flow_home_list.md), [flow_detail.md](../final-project/docs/애자일/example/02_flow/flow_detail.md)
+- **러닝 예제 Issue**: [issue_login_ui.md](../final-project/docs/애자일/example/03_issue/flow_login/issue_login_ui.md) 외 [example/03_issue/](../final-project/docs/애자일/example/03_issue/) 폴더 다수
+- **정석 예제 (참고)**: [example2/1팀](../final-project/docs/애자일/example2/1팀/), [example2/2팀](../final-project/docs/애자일/example2/2팀/), [example2/3팀](../final-project/docs/애자일/example2/3팀/)
+- **규칙 본문**: [01_애자일_팀프로젝트_가이드.md](../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) (모든 답변의 § 번호가 가리키는 곳)
 
 ---
 
@@ -120,7 +120,7 @@
 **응답 톤**: "한 화면에 끝나야 합니다. 그 이상은 워터폴 신호예요."
 
 **구체적으로 보여주기**:
-[example/01_product_brief.md](example/01_product_brief.md) 파일을 열어주세요. **단 50줄**입니다. Must/Should/Won't까지 다 들어가 있습니다.
+[example/01_product_brief.md](../final-project/docs/애자일/example/01_product_brief.md) 파일을 열어주세요. **단 50줄**입니다. Must/Should/Won't까지 다 들어가 있습니다.
 
 **판정 기준**:
 - ✅ Must/Should/Won't가 **3~7줄로 끝**나는가?
@@ -136,13 +136,13 @@
 **응답 톤**: "PO가 30분 안에 결정합니다. 결정 기록만 남기면 다음 주에 고칠 수 있어요."
 
 **구체적으로 보여주기**:
-[example/01_product_brief.md](example/01_product_brief.md) **27~38줄**의 Must/Should/Won't 구조를 보여주세요. 학생들에게 빈 표만 던지면 발산하므로, **이 표를 칠판/Notion에 그리고 항목을 던지게** 하세요.
+[example/01_product_brief.md](../final-project/docs/애자일/example/01_product_brief.md) **27~38줄**의 Must/Should/Won't 구조를 보여주세요. 학생들에게 빈 표만 던지면 발산하므로, **이 표를 칠판/Notion에 그리고 항목을 던지게** 하세요.
 
 **진행 방법** (학생 4명 기준 30분):
 1. 5분: 각자 "꼭 있어야 하는 화면" 3개씩 포스트잇으로 적기
 2. 10분: 중복/유사 항목 묶기
 3. 10분: PO가 Must(3~5개) / Should(2~3개) / Won't(나머지 전부) 로 분류
-4. 5분: [example2/1팀/06_decision_log.md](example2/1팀/06_decision_log.md) 형식으로 **3줄 기록**
+4. 5분: [example2/1팀/06_decision_log.md](../final-project/docs/애자일/example2/1팀/06_decision_log.md) 형식으로 **3줄 기록**
 
 **근거**: 가이드 § 11-1 (PO 책임), § 4-4 (MVP 범위)
 
@@ -173,7 +173,7 @@
 **응답 톤**: "Flow는 **사용자 행동 + 시스템 반응**의 순서입니다. 디자인은 그 행동이 일어날 화면이고요."
 
 **구체적으로 보여주기**:
-[example/02_flow/flow_login.md](example/02_flow/flow_login.md) 를 열어주세요. **29줄짜리 문서**입니다. 안에 "버튼 색깔", "폰트 크기" 같은 단어가 **한 글자도 없습니다**. 대신:
+[example/02_flow/flow_login.md](../final-project/docs/애자일/example/02_flow/flow_login.md) 를 열어주세요. **29줄짜리 문서**입니다. 안에 "버튼 색깔", "폰트 크기" 같은 단어가 **한 글자도 없습니다**. 대신:
 - 시작 조건 (line 6-8)
 - 주요 단계 with Loading/Success/Error/Retry (line 10-14)
 - 예외 (line 21-23)
@@ -193,7 +193,7 @@
 **응답 톤**: "**1~2개**입니다. 5개면 다 미완성으로 끝납니다."
 
 **구체적으로 보여주기**:
-[example/02_flow/](example/02_flow/) 폴더를 열어보세요. login, home_list, detail, logout, withdraw — 5개가 있지만 **이건 6주 풀 운영 + 보완까지 끝낸 결과물**입니다. 1주차에 5개 잡으면 **다 표면적으로만** 끝납니다.
+[example/02_flow/](../final-project/docs/애자일/example/02_flow/) 폴더를 열어보세요. login, home_list, detail, logout, withdraw — 5개가 있지만 **이건 6주 풀 운영 + 보완까지 끝낸 결과물**입니다. 1주차에 5개 잡으면 **다 표면적으로만** 끝납니다.
 
 **1주차에 학생들에게 시킬 것**:
 1. 핵심 Flow A 1개 **확정**
@@ -213,7 +213,7 @@
 - **구현**: Week 1엔 성공 경로만, Week 3 / Week 5에 보완 (가이드 § 4 주차별 최소 Done)
 
 **러닝 예제로 보여주기**:
-[example/02_flow/flow_home_list.md](example/02_flow/flow_home_list.md) **line 9-15** — Flow 문서엔 Loading/Empty/Error/Retry가 **다 적혀 있습니다**. 하지만 Week 2 데모는 성공 경로만 보여줍니다 (가이드 § 4 *"Week 2: 플로우 A 성공 경로"*).
+[example/02_flow/flow_home_list.md](../final-project/docs/애자일/example/02_flow/flow_home_list.md) **line 9-15** — Flow 문서엔 Loading/Empty/Error/Retry가 **다 적혀 있습니다**. 하지만 Week 2 데모는 성공 경로만 보여줍니다 (가이드 § 4 *"Week 2: 플로우 A 성공 경로"*).
 
 **근거**: 가이드 § 5-2, § 4 주차별 최소 Done
 
@@ -226,7 +226,7 @@
 **응답 톤**: "**'예/아니오로 판정 가능한 문장' 3~7개**입니다."
 
 **구체적으로 보여주기**:
-[example/03_issue/flow_login/issue_login_ui.md](example/03_issue/flow_login/issue_login_ui.md) **line 10-14**:
+[example/03_issue/flow_login/issue_login_ui.md](../final-project/docs/애자일/example/03_issue/flow_login/issue_login_ui.md) **line 10-14**:
 
 ```
 - [ ] 이메일/비밀번호 입력 필드가 있다.
@@ -254,7 +254,7 @@
 **응답 톤**: "**PR 1개로 하루 내 머지 가능한 크기**가 기준입니다."
 
 **구체적으로 보여주기**:
-"오늘의 기록"의 로그인 Flow가 [example/03_issue/flow_login/](example/03_issue/flow_login/) 에서 어떻게 쪼개졌는지 보세요:
+"오늘의 기록"의 로그인 Flow가 [example/03_issue/flow_login/](../final-project/docs/애자일/example/03_issue/flow_login/) 에서 어떻게 쪼개졌는지 보세요:
 - `issue_login_ui.md` — UI 구성만
 - `issue_login_api.md` — API 연동만
 - `issue_login_error_states.md` — 에러/재시도만
@@ -274,7 +274,7 @@
 **응답 톤**: "형식보다 **한 줄이라는 원칙**이 중요합니다."
 
 **구체적으로 보여주기**:
-[example/03_issue/flow_login/issue_login_ui.md](example/03_issue/flow_login/issue_login_ui.md) **line 4-7** 의 정식 형식 vs [01_애자일_팀프로젝트_가이드.md](01_애자일_팀프로젝트_가이드.md) § 6-3 의 **"사용자는 로그인할 수 있다"** 한 줄 형식 — **둘 다 OK**.
+[example/03_issue/flow_login/issue_login_ui.md](../final-project/docs/애자일/example/03_issue/flow_login/issue_login_ui.md) **line 4-7** 의 정식 형식 vs [01_애자일_팀프로젝트_가이드.md](../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) § 6-3 의 **"사용자는 로그인할 수 있다"** 한 줄 형식 — **둘 다 OK**.
 
 **판정 기준**:
 - ✅ **누가 / 무엇을** 하고 싶은지 한 줄로 명확한가?
@@ -296,7 +296,7 @@
 3. Demo Scenario 정상 동작 ✅
 
 **러닝 예제 시뮬레이션**:
-"오늘의 기록"에서 [issue_login_ui.md](example/03_issue/flow_login/issue_login_ui.md) 의 4개 AC 중 3개만 됐는데 PR을 머지한 상황 → **Done 아님**. 보드에서 Done 컬럼으로 못 옮깁니다 (가이드 § 7-1 *"드래그로 Done 금지"*).
+"오늘의 기록"에서 [issue_login_ui.md](../final-project/docs/애자일/example/03_issue/flow_login/issue_login_ui.md) 의 4개 AC 중 3개만 됐는데 PR을 머지한 상황 → **Done 아님**. 보드에서 Done 컬럼으로 못 옮깁니다 (가이드 § 7-1 *"드래그로 Done 금지"*).
 
 **근거**: 가이드 § 10, § 7-1
 
@@ -394,7 +394,7 @@ FLOW-WATCH-COUNT — 워치에서 오늘 기록 개수 보기
 - 한 명은 **PO 추천** (의사결정 부담)
 - 다른 한 명은 **테크 리드 (informal)** — 환경 설정/공용 모듈/리뷰 부하 분담
 
-**근거**: 가이드 § 11, [04_애자일_역할_배분_가이드.md](04_애자일_역할_배분_가이드.md)
+**근거**: 가이드 § 11, [04_애자일_역할_배분_가이드.md](../final-project/docs/애자일/04_애자일_역할_배분_가이드.md)
 
 ---
 
@@ -412,7 +412,7 @@ FLOW-WATCH-COUNT — 워치에서 오늘 기록 개수 보기
 - ❌ 사소한 UI 변경 — Issue 코멘트로 충분
 
 **구체적으로 보여주기**:
-[example2/1팀/06_decision_log.md](example2/1팀/06_decision_log.md) 를 보여주고 *"이 정도 굵직한 결정만 기록한다"* 는 감을 잡게.
+[example2/1팀/06_decision_log.md](../final-project/docs/애자일/example2/1팀/06_decision_log.md) 를 보여주고 *"이 정도 굵직한 결정만 기록한다"* 는 감을 잡게.
 
 **근거**: 가이드 § 0-1 *"예외는 Decision Log에 남기고 최소로만 허용"*
 

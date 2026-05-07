@@ -53,7 +53,7 @@ operation/snapshots/week-N/
 | `06_decision_log.pdf` | Decision Log |
 | `07_retro.pdf` | Retrospective |
 
-> 번호 규칙은 [`../../docs/애자일/example/`](../../docs/애자일/example/) 폴더 구조와 일치.
+> 번호 규칙은 [`../../final-project/docs/애자일/example/`](../../final-project/docs/애자일/example/) 폴더 구조와 일치.
 
 ### 추출 단계
 

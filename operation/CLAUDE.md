@@ -33,7 +33,7 @@
 
 1. `snapshots/week-N/K팀_github.json` + `K팀_status.json` 읽기
 2. (있으면) `snapshots/week-N/K팀_pdf/` 의 PDF를 Read 도구로 읽어 본문 분석
-3. [`../docs/애자일/05_애자일_예제기반_FAQ.md`](../docs/애자일/05_애자일_예제기반_FAQ.md) § 9 안티패턴 표 기반으로 1페이지 진단
+3. [`../ta-guides/애자일_예제기반_FAQ.md`](../ta-guides/애자일_예제기반_FAQ.md) § 9 안티패턴 표 기반으로 1페이지 진단
 4. 가이드 § 번호 근거 명시
 
 ### 패턴 C: "리포트만 다시 써줘"
@@ -135,12 +135,12 @@
 - ❌ JSON에 없는데 추측해서 채우기 — "데이터 없음" 명시
 - ❌ Notion 자동화 도구 호출 / 회사 노션 우회 시도 코드 작성
 - ❌ teams.yaml 비어 있는데 임의 팀명 만들기 — 사용자에게 등록 요청
-- ❌ 가이드 § 번호 없는 진단 — 모든 신호는 [`../docs/애자일/01_애자일_팀프로젝트_가이드.md`](../docs/애자일/01_애자일_팀프로젝트_가이드.md) § 근거 명시
+- ❌ 가이드 § 번호 없는 진단 — 모든 신호는 [`../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md`](../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) § 근거 명시
 
 ## 8. 자주 쓸 인접 문서
 
-- 규칙 본문 (가이드): [`../docs/애자일/01_애자일_팀프로젝트_가이드.md`](../docs/애자일/01_애자일_팀프로젝트_가이드.md)
-- 안티패턴 식별표: [`../docs/애자일/05_애자일_예제기반_FAQ.md`](../docs/애자일/05_애자일_예제기반_FAQ.md) § 9
+- 규칙 본문 (가이드): [`../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md`](../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md)
+- 안티패턴 식별표: [`../ta-guides/애자일_예제기반_FAQ.md`](../ta-guides/애자일_예제기반_FAQ.md) § 9
 - 학생 OT 공지: [`docs/student_ot_notice.md`](docs/student_ot_notice.md)
 - 학생 Status Issue 안내: [`docs/weekly_status_setup.md`](docs/weekly_status_setup.md)
 - 강사 노션 PDF 절차: [`docs/notion_pdf_workflow.md`](docs/notion_pdf_workflow.md)

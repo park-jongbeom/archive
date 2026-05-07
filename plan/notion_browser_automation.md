@@ -38,7 +38,7 @@
 
 - 운영진 추가 승인 절차의 정치적 측면 — *"이미 승인 받았는데 자동화 방식 변경 보고 어떻게?"*
 - Notion 외 다른 도구(Slack, Figma) 자동 수집
-- 학생 GitHub 데이터 — 이미 [`fetch_github.py`](../scripts/fetch_github.py) 로 처리 중, 본 계획 범위 외
+- 학생 GitHub 데이터 — 이미 [`fetch_github.py`](../operation/scripts/fetch_github.py) 로 처리 중, 본 계획 범위 외
 - 분석 로직 자체 — `analyze.py` 의 신호등 로직은 입력 소스만 추가, 임계값 변경 없음
 
 ### 0-6. 다른 문서와의 관계
@@ -354,7 +354,7 @@ operation/playwright-browsers/
 ## 11. 갱신 정책
 
 - 이 PLAN 문서는 **컨펌 시점에 한 번 작성**, 이후 갱신하지 않음
-- 컨펌 후 [`docs/notion_browser_workflow.md`](notion_browser_workflow.md) 가 운영 SSOT 역할
+- 컨펌 후 [`operation/docs/notion_browser_workflow.md`](../operation/docs/notion_browser_workflow.md) 가 운영 SSOT 역할
 - 본 PLAN은 회고용으로 보관 (왜 이 결정을 했는지 기록)
 
 ---

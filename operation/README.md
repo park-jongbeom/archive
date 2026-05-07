@@ -43,7 +43,7 @@
 - **1주차 OT 공지문**: [`docs/student_ot_notice.md`](docs/student_ot_notice.md)
 - **학생 PO용 Status Issue 안내**: [`docs/weekly_status_setup.md`](docs/weekly_status_setup.md)
 - **강사 본인용 노션 PDF 추출 절차**: [`docs/notion_pdf_workflow.md`](docs/notion_pdf_workflow.md)
-- **수집 지표 / 안티패턴**: [`../docs/애자일/05_애자일_예제기반_FAQ.md`](../docs/애자일/05_애자일_예제기반_FAQ.md) § 9
+- **수집 지표 / 안티패턴**: [`../ta-guides/애자일_예제기반_FAQ.md`](../ta-guides/애자일_예제기반_FAQ.md) § 9
 
 ## 주차별 작업
 
