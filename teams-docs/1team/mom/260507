@@ -1,0 +1,75 @@
+2차 회의록
+생성 일시
+2026년 5월 6일 오전 10:31
+참석자
+
+제이
+임
+임정섭
+
+sdfg79
+
+daon
+비고
+비어 있음
+속성 3개 더 보기
+오늘의 안건
+참고용
+오전
+오후
+Project brief 초안 확인
+역할 분담
+제이 + 지희
+정섭 + 성호
+
+회의 요약
+오늘의 안건
+
+애자일 or 워터풀 선택
+애자일 시 product brief 작성(필수)
+
+각 역할 분담 나누기
+
+공통 디렉 & 공통 화면 설정
+참고용
+docs.google.com
+https://docs.google.com/spreadsheets/d/1ONch4O32OrlpdR11bylNZe39mNC5eU_NJBfAgw45ENk/edit?gid=1885314189#gid=1885314189
+오전
+Product brief 초안 작업
+각 역할 분담(전체 프로젝트의 역할 X, 초반 작업에 해당하는 ㅇ) 
+오후
+Project brief 초안 확인
+archive/final-project/docs/애자일/example/01_product_brief.md at finalproject · LIKELION-Android-BOOTCAMP-6th/archive
+Contribute to LIKELION-Android-BOOTCAMP-6th/archive development by creating an account on GitHub.
+
+https://github.com/LIKELION-Android-BOOTCAMP-6th/archive/blob/finalproject/final-project/docs/%EC%95%A0%EC%9E%90%EC%9D%BC/example/01_product_brief.md
+
+위의 Product Brief (샘플) 기준으로 작성되었음
+
+Product Brief — Scoffee | ver 1.0
+역할 분담
+제이 + 지희
+
+디렉토리 구조 1차 생성
+
+app 구조 1차 생성 후 피드백
+
+wear 구조 생성 후 피드백
+
+AppTheme 기본 색상·폰트 세팅
+
+공통 Compose 컴포넌트 파일 생성
+AppButton, AppCard, LoadingSpinner, ErrorView, EmptyView
+
+Navigation Graph 기초 세팅
+
+Hilt 기본 모듈 세팅
+
+DB 설계 초안 작성
+정섭 + 성호
+FLow 작성 ( 구조가 어느정도 만들어지고 나서 작성하기로 결정)
+Android app 파일 first commit
+디렉토리 구조 확인
+
+제이
+4시간 (편집됨)
