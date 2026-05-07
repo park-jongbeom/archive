@@ -1,0 +1,16 @@
+# 팀 정보 등록 파일
+# 1주차 OT 후 학생들로부터 GitHub 레포 URL 받아서 채울 것.
+#
+# Notion 페이지 ID는 사용하지 않음 (회사 정책상 Integration/Export 차단됨).
+# 노션 데이터는 강사가 매주 PDF로 수동 추출 -> snapshots/week-N/팀명_pdf/ 에 저장.
+# 절차: docs/notion_pdf_workflow.md
+
+teams:
+  # ─────────────────────────────────────────────
+  # 예시 (주석 풀고 실제 팀으로 교체)
+  # ─────────────────────────────────────────────
+  # - name: "1팀"
+  #   members: 4
+  #   github:
+  #     repo: "LIKELION-Android-BOOTCAMP-6th/team1-repo"
+  #     project_number: null

@@ -1,0 +1,13 @@
+# Secrets — 절대 commit 금지
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
