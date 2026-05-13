@@ -1,0 +1,47 @@
+# ============================================
+# Secrets — NEVER commit
+# ============================================
+# Personal access tokens (Figma, GitHub, etc.)
+.figma_token
+*.token
+*.key
+*.pem
+
+# Environment files
+.env
+.env.*
+
+# Generic secrets folders
+**/secrets/**
+**/.shared/.figma_token
+**/.shared/*.token
+**/.shared/credentials*
+
+# ============================================
+# Figma raw exports — 선택적 git 제외
+# JSON은 디핑용으로 유지(작음), PNG는 용량 큼
+# ============================================
+# Uncomment to exclude PNG/raw if repo size grows:
+# teams-docs/*/figma/screens/*.png
+# teams-docs/*/figma/raw/
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================
+# IDE
+# ============================================
+.idea/
+.vscode/
+*.iml
+
+# ============================================
+# Temp / logs
+# ============================================
+*.log
+*.tmp
+*.bak

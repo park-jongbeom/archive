@@ -1,0 +1,100 @@
+# 3차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- Flow A, B 작성
+- 와이어 프레임 작성
+- 공통 세팅
+</aside>
+
+## 오늘의 안건
+
+- [ ]  FLOW-A 1차 작성 (카페인입력→잔류량→워치알림)
+- [ ]  FLOW-B 초안 (수면연동→리포트)
+- [ ]  공통 세팅 부분 (AppTheme, 등)
+
+ 
+
+---
+
+# 오전
+
+## Flow 작업
+
+### Flow - A 정리
+
+- [ ]  FLOW-A 1차 작성 (카페인입력→잔류량→워치알림)
+    - [x]  issue 부분 1차 확인
+    - [ ]  **[지희] 와이어 프레임 작성**
+    - [ ]  와이어 프레임 작성 후 이슈 내용 점검
+        - [ ]  Issue A-3 (카페인 입력 BottomSheet UI)
+        - [ ]  Issue A-5 (카페인 반감기 계산 로직 구현)
+- [ ]  정리된 내용 기반으로 Notion에 내용 옮기기 (Flow)
+- [ ]  issue GitHub에 등록
+
+### Flow - B 작성
+
+- [ ]  **[정섭, 성호] FLOW-B 초안 작성 (수면연동→리포트)**
+
+## 공통
+
+### 가벼운 디자인 요소 결정
+
+- [ ]  AppTheme 기본 색상·폰트 세팅 → 선정만 남음
+- [x]  공통 Compose 컴포넌트 파일 생성 (feature/file_structure 브랜치에 있습니다!)
+    - AppButton, AppCard, LoadingSpinner, ErrorView, EmptyView
+- [ ]  Navigation Graph 기초 세팅
+
+### 의존성 주입
+
+- [ ]  [제이] Hilt 기본 모듈 세팅
+
+---
+
+# 오후
+
+## Flow 작업
+
+### Flow - A 정리
+
+- [x]  FLOW-A 1차 작성 (카페인입력→잔류량 표시→워치 알림)
+    
+    → 워치 알림은 app의 flow가 다 완료 된 후에 wear 따로 들어갈 예정
+    
+    - [x]  issue 부분 1차 확인
+    - [x]  **[지희] 와이어 프레임 작성**
+    - [x]  와이어 프레임 작성 후 이슈 내용 점검
+        - [x]  Issue A-3 (카페인 입력 BottomSheet UI)
+        - [x]  Issue A-5 (메인 잔류량 게이지 UI)
+- [x]  정리된 내용 기반으로 Notion에 내용 옮기기 (Flow)
+- [ ]  issue GitHub에 등록
+
+### Flow - B 작성
+
+- [x]  **[정섭, 성호] FLOW-B 초안 작성 (수면연동→리포트)**
+
+<aside>
+🔧
+
+flow를 너무 크게 잡아서 상세히 나누는 중.. wear 전용으로 나오는 FLow C 추가예정
+
+</aside>
+
+### 의존성 주입
+
+- [ ]  [제이] Hilt 기본 모듈 세팅
+
+---
+
+- [성호] 색상 코드 추출
+- [지희] firebase 연결 - 완료
+- [지희] Retrofit 연결 - NetworkModule.kt 작성(임시 서버 기입 - 추후 사용할 서버로 변경 예정)
+- [정섭] 계산 로직 구현
+    - 반감기 공식 구현
+    - 누적 계산 처리
+    - 시간 기반 계산

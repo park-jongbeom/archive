@@ -1,0 +1,90 @@
+# 데이터 모델
+
+### User(Collection)
+
+사용자의 기본 정보
+
+| **필드명** | **데이터 타입** | **형식** | **비고** |
+| --- | --- | --- | --- |
+| id | String | UUID | 사용자 고유 식별자 (Document ID) |
+| nickname | String | Plain Text | 앱 내 표시될 닉네임 |
+| profile_image | String | Url | 사용자 프로필 이미지 주소 |
+| status | String | Enum/String | 실시간 상태 (심심함, 무전금지 등) |
+| is_sharing | Boolean | true/false | 위치 공유 활성화 스위치 |
+| location | GeoPoint | (Lat, Long) | 최근 위도와 경도 |
+| fcm_token | String | Token String | 푸시 알림 전송용 토큰 |
+| last_active | Timestamp | ISO 8601 | 마지막 활동 시간 |
+| is_online | Boolean | true/false | 온라인 여부 판별 |
+| login_type | String | kakao, naver, google | 소셜 로그인 여부 |
+|  |  |  |  |
+
+### Friendship (Sub-collection under User)
+
+친구 관계 (양방향 저장 권장)
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+| friend_id | String | UUID | 친구의 고유 ID (Document ID) |
+| nickname | String | Plain Text | 앱 내 표시될 닉네임 |
+| profile_image_url | String | Url | 사용자 프로필 이미지 주소 |
+| status | String | Enum/String | 실시간 상태 (심심함, 무전금지 등) |
+| is_online | Boolean | true/false | 온라인 여부 판별 |
+| friendship_status | String | Enum | 관계 상태 (PENDING, ACCEPTED, NONE) |
+|  |  |  |  |
+
+### Notifications (Sub-collection under User)
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+| noti_id | String | UUID | 알림 고유 ID (Document ID) |
+| type | String | Enum | 알림 타입 (WALKIE, DM, REQ) |
+| sender_id | String | UID | 발신자 고유 ID |
+| sender_name | String | String | 발신자 이름 (알림 리스트 표시용) |
+| content | String | Plain Text | 알림 내용 (예: "음성 메시지가 도착했습니다.") |
+| audio_url | String | URL | (WALKIE 전용) 재생할 음성 파일 주소 |
+| created_at | Timestamp | ISO 8601 | 알림 생성 날짜 및 시간 |
+| room_id | String | UID1_UID2 | 메세지 알림 클릭시 대화창으로 이동 |
+| is_read | Boolean | true/false | 읽음 처리 여부 |
+| expires_at | Timestamp | ISO 8601 | 알림 만료 일시 |
+
+### **VoiceMessages** (Collection)
+
+음성 데이터의 이력과 음성 파일 주소를 관리
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+|  |  |  |  |
+| sender_id | String | String (UID) | 음성 송신자 식별자 |
+| receiver_id | String | String (UID) | 음성 수신자 식별자 |
+| voice_url | String | URL String | Firebase Storage 음성 파일 주소 |
+| duration | Number | Integer (seconds) | 음성 메시지 길이 |
+| sent_at | Timestamp | ServerTimestamp | 무전 전송 시각 |
+| status | String | online / offline | 수신 당시 상대방의 상태 (처리 로직 기록) |
+| is_read | Boolean | True / False | 수신자가 음성을 확인(재생)했는지 여부 |
+|  |  |  |  |
+
+### DMs (Collection)
+
+메신저 
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+| room_id | String | UID1_UID2 | 1:1 채팅방 고유 ID |
+| participants | Array | [UID, UID] | 채팅 참여자 목록 |
+| last_msg | String | Plain Text | 목록에 노출할 마지막 메시지 |
+| unread_counts | Map | {"uid1": 0, "uid2": 3} | 채팅방 목록에 표시할 / 읽지 않은 메세지 개수 |
+| updated_at | Timestamp | ISO 8601 | 방 최신 업데이트 시점 |
+|  |  |  |  |
+
+### DMs/Messages (Sub-collection)
+
+문자 메세지
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+| msg_id | String | UUID | 개별 메시지 ID (Document ID) |
+| sender_id | String | UUID | 발신자 UID |
+| content | String | Plain Text | 텍스트 메시지 내용 |
+| sent_at | Timestamp | ISO 8601 | 메시지 전송 시각 |
+| is_read | Boolean | True / False | 읽음 처리 여부 |
+|  |  |  |  |

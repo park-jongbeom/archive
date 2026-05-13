@@ -1,0 +1,104 @@
+# 4차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+[제목 없음](https://www.notion.so/35a73873401a80a5807bc4f118e9c0ad?pvs=21)
+
+## 오늘의 안건
+
+- 이슈 역할 분담
+- Flow A 이슈 깃허브에 등록하기
+- 개인 작업 들어가기
+
+---
+
+# 오전
+
+### 성호
+
+- [ ]  issue A-1  CaffeineEntity 및 Room DB 구축
+    - [ ]  CaffeineEntity 생성
+
+### 정섭
+
+- [x]  카페인 반감기 계산 로직 commit
+- [ ]  전체적인 개발 pr 작업
+
+### 지희
+
+- [ ]  API → DB화 작업(연결 및 데이터 분류 및 저장)
+
+### 제이
+
+- [x]  hilt 구조 도입 commit
+- [x]  issue A-4 카페인 저장 기능 구현
+    - [x]  저장 기능을 위해 최소 Room 구축
+    - [x]  더미 데이터로 음료 내용 준비
+    - [x]  Repository 추가
+
+---
+
+# 오후
+
+### 성호
+
+- [ ]  issue A-1  CaffeineEntity 및 Room DB 구축
+    
+    
+
+### 정섭
+
+- [x]  카페인 반감기 계산 로직 commit
+- [ ]  메인 잔류량 게이지 UI
+- [ ]  전체적인 개발 pr 작업
+
+### 지희
+
+- [ ]  API → DB화 작업(연결 및 데이터 분류 및 저장)
+
+  실시간 == 소요 시간 길다 ⇒ 불가
+
+  클라우드함수 → 매일 자정 DB ⇒ 과금 우려
+
+### 제이
+
+- [x]  hilt 구조 도입 commit
+- [x]  issue A-4 카페인 저장 기능 구현
+    - [x]  Repository > UseCase > ViewModel 연결
+    - [x]  간단한 ui 준비하여 선택/입력 테스트 확인
+    - [x]  Room으로 더미데이터 선택해서 저장되는거 확인 (선택해서 저장하는 방법은 실제 앱 내에서 사용하지 않을 것이지만, insert를 확인하기 위한 테스트)
+    
+    ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A3b91d90e-98a8-4677-a165-d7766bdaebf1%3Aimage.png?table=block&id=35d73873-401a-8007-9c89-cfe59ca841e0&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=2000&userId=&cache=v2)
+
+---
+
+### 회의
+
+**문제 원인**
+
+식품코드 공공 데이터 API의 데이터가 2,679개로 과도하게 많아 관리의 어려움 발생. 음료 데이터만 해도 2,000건 이상으로 드롭다운 형식의 UI로는 제공 불가.
+
+### 강사님 면담
+
+데이터의 최신성 고려는? 
+
+⇒ 현재 프로젝트에서는 사용자에게 미리 고지하는 방식으로 넘어갈 것이다. 추후에 
+
+ 현재는 그대로 하고 나중에 고도화를 할 때 최신화를 한다? ⇒  admin 사이트를 만들어서 해당 데이터를 조회 & 정제 & DB에 저장 == 나중에
+
+그러면 현재는 json 파일을 우리의 입맛에 맞게 한 번 더 정제화를 거쳐야 되는데, 정제화 후에 파이어베이스 스토리지에 넣는다라고 이해하면 될까요?
+
+**해결 방법**
+
+1. 공공 API에서 정제된 JSON 파일 확보 (약 1.11MB)
+2. Firebase Console에서 Firebase Storage에 JSON 파일 업로드 (개발자 1회 작업) → 완료
+3. Cloud Function으로 JSON을 읽어 Firestore에 적재 (1회 실행, 2,679건 쓰기 → 무료 한도 내) → 진행중
+4. 앱에서 드롭다운 대신 **텍스트 검색 방식**으로 Firestore 조회

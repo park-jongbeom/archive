@@ -1,0 +1,99 @@
+Flow - A | ver 1.0
+User Flow — 카페인 입력 → 잔류량 확인
+속성
+항목
+내용
+Flow ID
+FLOW-A
+목표
+사용자가 카페인을 입력하면 잔류량을 확인한다.
+Owner
+—
+상태
+확정
+주차(Iteration)
+Sprint 1
+데모 포함
+예
+관련 Issue
+A-1, A-2, A-3, A-4(A-4-2, A-4-3), A-5, A-6, A-7, A-8
+시작 조건
+
+앱 최초 온보딩 완료
+
+사용자 프로필 입력 완료
+성공 흐름
+사용자가 홈 화면에 진입
+"카페인 입력" 버튼 탭
+음료 목록 BottomSheet 표시 (Loading → 목록 렌더)
+사용자가 음료 선택
+섭취 시간 자동 입력 (현재 시간 기준)
+저장 버튼 클릭
+카페인 기록 → Room DB 저장
+잔류 카페인 계산 실행
+메인 화면 잔류량 게이지 갱신
+성공 종료 조건
+
+카페인 기록 저장 완료
+
+잔류량 UI 갱신 완료
+실패 / 에러 처리
+상황
+처리
+DB 저장 실패
+Snackbar + 재시도 버튼
+워치 연결 실패
+폰 알림으로 fallback
+Gemini(AI) 호출 실패
+기본 컷오프 공식 사용
+네트워크 실패
+오프라인 모드 유지
+잘못된 시간 입력
+저장 차단 + 경고 표시
+상태 정의
+Loading
+저장 중 → 버튼 비활성화 + Circular Indicator
+잔류량 계산 중 → 게이지 Skeleton UI
+워치 전송 중 → "워치 동기화 중..." 표시
+Success: 성공 종료 조건 3개 모두 충족
+Error: 실패/에러 처리 표 참고
+Empty
+오늘 기록 없음 → "아직 기록이 없어요" 표시
+음료 데이터 없음 → 기본 음료 초기화 유도
+예외(Edge Cases)
+하루 권장 카페인 초과 시 경고 표시
+동일 시간 중복 저장 방지
+워치 미연결 시 폰 알림으로 대체
+앱 백그라운드 상태에서도 알림 유지
+네트워크 오류 시 오프라인 모드 유지
+UI 구성
+Home Screen 
+- 현재 잔류 카페인 게이지
+- 오늘 섭취량
+- 카페인 입력 버튼
+- 컷오프 시간 표시
+
+Add Caffeine
+- 음료 리스트
+- 검색 기능
+- 즐겨찾기
+- 커스텀 입력
+​
+데이터 흐름
+UI → ViewModel → UseCase → Repository → Room DB
+
+저장 완료
+→ Flow emit → StateFlow 업데이트 → Compose recomposition → UI 자동 갱신
+​
+연결 (Related)
+GitHub Issue: #A-1 · #A-2 · #A-3 · #A-4 · #A-5 · #A-6 · #A-7 · #A-8
+Demo Scenario: DEMO-A (링크 추가 필요)
+Design (Figma): (Frame 링크 추가 필요)
+ Figma 링크는 이 Flow 문서가 아닌, UI 포함 GitHub Issue의 Related 항목에 기재합니다.
+Flow는 흐름·상태 합의 문서입니다.
+
+제이
+5월 8일 (편집됨)
+참조 https://github.com/LIKELION-Android-BOOTCAMP-6th/archive/blob/finalproject/final-project/docs/애자일/02_애자일_문서화_템플릿.md#4-notion--flow-템플릿
+
+강사님 가이드 기준으로 

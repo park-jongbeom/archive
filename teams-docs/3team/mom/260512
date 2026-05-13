@@ -1,0 +1,683 @@
+6차 회의록
+생성 일시
+2026년 5월 11일 오후 6:36
+참석자
+은
+은 지
+
+정우석
+
+유빈
+
+서은신
+비고
+비어 있음
+속성 4개 더 보기
+출결현황
+논의사항
+준비물
+계층 구조 가이드 라인
+계층 구조 예시 코드
+도메인 예상 목록
+4인 분업 상세 설계
+부족한 화면 보충
+로고 제시안
+TMI
+진행 상황 점검
+1차 진행 상황(9시)
+강사님 피드백(10시)
+3차 진행 상황(15시 반)
+강사님 피드백 (16시)
+
+회의 요약
+출결현황
+
+장지은
+
+정우석
+
+서은신
+
+이유빈
+논의사항
+아키텍쳐 정석 vs 간소화 사용 논의 ⇒ 간소화
+작업 선정 방식 협의 ⇒ 도메인
+도메인별 분업 협의 ⇒ 완료
+기능 명세서 도메인 분리
+깃허브 규칙에 대해서 협의
+강사님 피드백 주신 부분에 대한 협의
+워치에서 기능 축소 ← 강사님 제안 
+사용 기술API 확인 → 진행 예정..
+준비물
+부족 화면 디자인 준비
+노피티케이션 알람 화면 → 화면 추가
+노피티케이션 리스트 화면 → 화면 추가
+친구 추가 수락 화면 → 현재 방식으로는 필요 없음
+워치에서 DM확인 → 화면 추가
+로고 이미지 준비 ⇒ 
+
+무전, 위치, 주파수, MZ스럽게
+작업 영역 선정 전 뭐가 좋을 지 생각해오기 ⇒ 기능
+플로우 단위? 화면 단위? 기능 단위?
+파이어스토어(DB)에서 리스너 가이드 준비
+ Collection Group Query
+아키텍쳐 사용 방법 가이드 준비
+힐트+클린 아키텍쳐
+DB와 같이 사용 가이드 라인이 필요하다고 판단됨
+아래 형식대로 프로젝트 계층구조 변경 부탁드립니다!!
+App
+├── 🟢 core (공용 도구함)
+│   ├── base            // 화면/뷰모델 생성 시 반복 코드를 줄여주는 기본 틀
+│   ├── extension       // "String.toDate()" 처럼 기능을 확장하는 편리한 코드
+│   ├── ui              // 앱의 상징색, 글자 크기 등 '디자인 시스템'
+│   ├── util            // 이메일 체크, 시간 계산 등 순수 계산 도구
+│   └── Result       // 성공/실패 데이터를 담아주는 '안전한 택배 상자'
+│
+├── 🔴 domain (앱의 핵심 규칙)
+│   ├── entity          // 서버와 상관없이 앱이 정의한 '진짜 데이터' (User.kt)
+│   ├── repository      // "데이터가 필요하다"는 약속 (UserRepository.kt)
+│   ├── usecase         // "로그인 정보 가져오기" 등 단 하나의 미션 수행 클래스
+│   └── error           // "네트워크 없음" 등 앱만의 비즈니스 예외 정의
+│
+├── 🟡 data (데이터 가져오기 실무)
+│   ├── repository      // 서버/DB 중 어디서 가져올지 결정하는 실제 로직
+│   ├── mapper          // 서버 데이터(DTO) ↔ 앱 데이터(Entity) 번역기
+│   └── source          // 실제 데이터 저장소 (remote/local)
+│       ├── remote      // 외부 API 및 클라우드 서비스 연동 (Firebase, REST 등)
+│       │   ├── auth       // 사용자 인증 및 세션 관리 구현
+│       │   ├── firestore  // 서버 데이터베이스(Firestore) 접근 및 처리 로직
+│       │   └── storage    // FirebaseStorage를 이용한 이미지 업로드/다운로드
+│       └── local          // 영속성 데이터 저장소 접근
+│
+├── 🔵 presentation (화면과 사용자 반응)
+│   ├── main            // 앱 엔트리 포인트 및 전역 네비게이션 제어 구조
+│   ├── home/dm등       // 각 탭별 화면(Screen)과 뷰모델(VM)
+│   └── base            // UI 계층 내 재사용 가능한 공통 컴포넌트 및 로직
+│
+└── ⚙️ di (부품 조립 공장)
+    ├── RepositoryModule // 인터페이스와 구현체를 연결 (Hilt Binds/Provides)
+    ├── UseCaseModule    // 뷰모델에서 사용할 유즈케이스 주입 설정
+    ├── NetworkModule    // Retrofit 등 네트워크 통신 부품 조립
+    └── DatabaseModule   // Room DB 등 내부 저장소 부품 조립
+​
+계층 구조 가이드 라인
+ Domain Layer (비즈니스 규칙)
+앱의 심장이자 외부 환경(서버, DB, UI)에 의존하지 않는 순수한 영역입니다.
+entity: 앱 전체에서 사용하는 순수 데이터 객체입니다. 서버 응답값에 휘둘리지 않는 우리만의 데이터 정의서입니다. (예: User.kt)
+repository: "데이터가 필요하다"라는 추상적인 약속(Interface)만 정의합니다. 실제 구현 방법은 신경 쓰지 않습니다.
+usecase: 단 한 가지의 사용자 동작을 처리하는 클래스입니다. (예: GetUserInfoUseCase.kt)
+error: 비즈니스 관점의 예외 처리를 담당합니다.
+ Data Layer (데이터 소스 구현)
+도메인 계층의 명령을 받아 실제로 데이터를 가져오거나 저장하는 상세 구현 영역입니다.
+repository: Domain 계층의 인터페이스를 실제로 구현합니다. 서버(Remote)와 로컬 DB(Local) 중 어디서 데이터를 가져올지 조율합니다.
+mapper: 서버용 데이터(DTO)를 앱용 데이터(Entity)로 변환하는 '통역사' 역할을 합니다.
+source: remote(Retrofit, API 서비스)와 local(Room DB, DAO) 등 구체적인 데이터 저장소 소스코드가 위치합니다.
+ Presentation Layer (UI & 상태)
+사용자가 보고 만지는 모든 요소와 그 화면의 상태를 관리하는 영역입니다.
+main: 앱의 전체 뼈대(Scaffold)와 이미지에서 보신 하단 내비게이션 바(BottomBar)를 관리합니다.
+[feature]: home, dm, alarm, mypage 등 기능 단위로 패키지를 구성합니다.
+Screen: Jetpack Compose로 작성된 UI 화면입니다.
+ViewModel: 화면에 필요한 데이터를 Domain 계층에 요청하고 UI 상태를 관리합니다.
+ Core & DI (공용 도구 & 조립 공장)
+앱 전체에서 공통으로 사용되는 유틸리티와 각 계층을 연결하는 접착제 역할입니다.
+core: 프로젝트 어디서든 쓸 수 있는 유틸리티, 확장 함수, 디자인 시스템 테마가 위치합니다.
+di: Hilt/Koin 설정을 통해 각 계층의 부품을 조립하고 의존성을 주입해주는 설정 파일들이 위치합니다.
+result: 네트워크 통신이나 비즈니스 로직의 실행 결과(성공·실패·예외)를 표준화된 형식으로 처리하기 위한 공통 응답 모델들을 모아놓은 곳
+ 개발 시 주의사항 (Checklist)
+의존성 금지: Domain 계층에서는 절대 Data나 Presentation 계층의 클래스를 참조하지 마세요.
+단일 책임: 하나의 UseCase는 오직 하나의 비즈니스 행위만 담당합니다.
+데이터 분리: 서버에서 내려주는 JSON 필드명이 바뀌더라도 Entity는 변하지 않아야 합니다. 반드시 Mapper에서 대응하세요.
+UI 상태: ViewModel은 Domain의 데이터를 받아 UiState로 가공하여 Screen에 전달합니다.
+계층 구조 예시 코드
+ 1. Domain 계층 (가장 순수한 규칙)
+어떠한 외부 라이브러리(Retrofit, Room 등)에도 의존하지 않는 앱의 핵심 비즈니스 로직입니다.
+① Entity: 데이터의 본질
+// domain/entity/Restaurant.kt
+data class Restaurant(
+    val id: String,
+    val name: String,
+    val category: String,
+    val rating: Double,
+    val imageUrl: String
+)
+​
+② Repository Interface: 데이터 통로의 약속
+// domain/repository/RestaurantRepository.kt
+interface RestaurantRepository {
+    suspend fun getRestaurantList(): Result<List<Restaurant>>
+}
+​
+③ UseCase: 단 하나의 미션
+// domain/usecase/GetRestaurantListUseCase.kt
+class GetRestaurantListUseCase @Inject constructor(
+    private val repository: RestaurantRepository
+) {
+    // 뷰모델에서 이 클래스를 함수처럼 호출할 수 있게 해줍니다.
+    suspend operator fun invoke(): Result<List<Restaurant>> {
+        return repository.getRestaurantList()
+    }
+}
+​
+ 2. Data 계층 (실무 구현체)
+도메인의 약속을 실제로 이행하고, 서버나 DB에서 데이터를 가져옵니다.
+① Remote Data Source (Retrofit Interface)
+// data/source/remote/RestaurantService.kt
+interface RestaurantService {
+    @GET("restaurants")
+    suspend fun fetchRestaurants(): List<RestaurantDto>
+}
+​
+② DTO (Data Transfer Object) & Mapper
+// data/model/RestaurantDto.kt
+data class RestaurantDto(
+    val resId: String,       // 서버 필드명은 다를 수 있음
+    val title: String,
+    val type: String,
+    val score: Double,
+    val thumbUrl: String
+)
+
+// data/mapper/RestaurantMapper.kt
+fun RestaurantDto.toEntity(): Restaurant {
+    return Restaurant(
+        id = resId,
+        name = title,
+        category = type,
+        rating = score,
+        imageUrl = thumbUrl
+    )
+}
+​
+③ Repository Implementation: 실제 구현
+// data/repository/RestaurantRepositoryImpl.kt
+class RestaurantRepositoryImpl @Inject constructor(
+    private val api: RestaurantService
+) : RestaurantRepository {
+    override suspend fun getRestaurantList(): Result<List<Restaurant>> {
+        return try {
+            val response = api.fetchRestaurants()
+            Result.success(response.map { it.toEntity() })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+​
+ 3. Presentation 계층 (UI와 사용자 반응)
+사용자에게 데이터를 보여주고 상호작용합니다.
+① UiState: 화면의 상태 정의
+// presentation/restaurant/RestaurantUiState.kt
+sealed interface RestaurantUiState {
+    object Loading : RestaurantUiState
+    data class Success(val data: List<Restaurant>) : RestaurantUiState
+    data class Error(val message: String) : RestaurantUiState
+}
+​
+② ViewModel: 화면의 뇌
+// presentation/restaurant/RestaurantViewModel.kt
+@HiltViewModel
+class RestaurantViewModel @Inject constructor(
+    private val getRestaurantListUseCase: GetRestaurantListUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<RestaurantUiState>(RestaurantUiState.Loading)
+    val uiState = _uiState.asStateFlow()
+
+    init { fetchRestaurants() }
+
+    fun fetchRestaurants() {
+        viewModelScope.launch {
+            _uiState.value = RestaurantUiState.Loading
+            getRestaurantListUseCase()
+                .onSuccess { list -> _uiState.value = RestaurantUiState.Success(list) }
+                .onFailure { _uiState.value = RestaurantUiState.Error("데이터를 가져오지 못했습니다.") }
+        }
+    }
+}
+​
+③ Screen (UI): 실제 보여지는 부분
+// presentation/restaurant/RestaurantScreen.kt (Compose 예시)
+@Composable
+fun RestaurantScreen(viewModel: RestaurantViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsState()
+
+    when (state) {
+        is RestaurantUiState.Loading -> CircularProgressIndicator()
+        is RestaurantUiState.Success -> {
+            LazyColumn {
+                items((state as RestaurantUiState.Success).data) { restaurant ->
+                    Text(text = "가게 이름: ${restaurant.name}")
+                }
+            }
+        }
+        is RestaurantUiState.Error -> Text(text = (state as RestaurantUiState.Error).message)
+    }
+}
+​
+ 정리: 계층 간의 의존성 방향
+이 모든 흐름은 UI → UseCase → Repository → Data Source 순서로 요청이 흘러가고, 데이터는 역순으로 돌아옵니다. 각 계층이 자기 할 일에만 집중하기 때문에, 나중에 서버를 교체하거나 UI를 바꿔도 서로에게 영향을 주지 않는 튼튼한 앱이 됩니다.
+도메인 예상 목록
+도메인을 나눌 때는 "무엇을 하는 서비스인가?"에 집중하여, 비즈니스 로직의 응집도를 높이는 것이 핵심입니다. 크게 6가지 도메인으로 구분할 수 있습니다.
+1. Auth & User (인증 및 계정) → 지은
+사용자의 가입, 로그인 및 계정의 전반적인 상태를 관리하는 도메인입니다.
+핵심 기능: 회원가입(소셜 포함), 로그인, 로그아웃, 프로필 관리(내 상태), 서비스 탈퇴.
+비즈니스 로직: 세션 유지 확인, 토큰 갱신, 프로필 정보 유효성 검사.
+2. Social & Relationship (친구 및 소셜)
+친구 관계를 맺고 끊으며, 외부 서비스(카카오톡)와 연결되는 소셜 접점을 관리합니다.
+핵심 기능: 친구 추가(UID), 친구 삭제, 친구 정보 조회, 카카오톡 UID/초대 링크 공유.
+비즈니스 로직: 친구 요청 수락/거절 프로세스, 공유 링크 생성 로직.
+3. Messaging (DM & 대화) → 유빈
+텍스트 기반의 실시간 소통을 담당합니다.
+핵심 기능: 대화방 목록 관리, 대화창 내부 메시지 관리, DM 송수신, 실시간 메시지 동기화.
+비즈니스 로직: 읽음 처리, 메시지 전송 실패 시 재시도, 로컬 DB(캐시)와 서버 데이터 동기화.
+4. Radio (무전 - PTT) → 우석
+BBip의 핵심 기능인 음성 기반 실시간 무전(Push-To-Talk)을 관리합니다.
+핵심 기능: 무전 송신, 무전 수신, 무전 유효 시간 관리(3시간 등).
+비즈니스 로직: 오디오 세션 제어, 수신 시 자동 재생 정책, 무전 만료 처리.
+5. Location (위치 및 지도)
+사용자와 친구의 위치를 추적하고 지도 위에 시각화하는 핵심 도메인입니다.
+핵심 기능: 내 위치 추적 및 공유 제어, 친구 위치 정보 수집, 지도 새로고침, 동적 마커 렌더링(폰/워치).
+비즈니스 로직: 위치 권한 체크, 위치 업데이트 주기 최적화, 거리 계산.
+6. Notification (알림) → 은신
+앱 내부 및 OS 레벨의 모든 알림 환경을 통합 관리합니다.
+핵심 기능: FCM 푸시 알림, 앱 내 노티피케이션 리스트, 워치 알림 동기화.
+비즈니스 로직: 알림 유형별 분기 처리(DM, 친구 요청, 시스템), 알림 읽음 시 자동 삭제 로직.
+ 워치(Watch) 개발 팁
+Watch 도메인을 따로 만들기보다는, 위의 6가지 도메인을 공유하되 Presentation(View/ViewModel)만 워치용으로 별도 구현하는 것이 코드 재사용 측면에서 훨씬 유리합니다. (예: LocationRepository는 폰과 워치에서 동일하게 사용)
+4인 분업 상세 설계
+1. [Member A] 실시간 음성 & 알림 인프라 (Core/PTT)
+앱의 가장 기술적인 난이도가 높은 '무전' 엔진과 백그라운드 처리를 담당합니다.
+주요 기능:
+PTT 엔진: 음성 녹음 및 스트리밍 전송 로직, 오디오 포커스 관리.
+Background Service: 앱이 꺼져있을 때도 무전을 수신할 수 있는 포그라운드 서비스 구현.
+FCM & Notification: 실시간 푸시 알림(무전/DM/친구 요청) 처리 및 채널 관리.
+Watch Core: 워치용 무전 송수신 및 알림 동기화 로직.
+핵심 도메인: VoiceChannel, Notification
+2. [Member B] 실시간 위치 & 지도 인터랙션 (LBS/Maps)
+사용자 경험의 중심인 '지도' 상에서의 데이터 시각화를 담당합니다.
+주요 기능:
+Dynamic Mapping: Google Maps SDK 연동, 실시간 친구 위치 마커 렌더링.
+Location Tracking: 배터리 효율을 고려한 위치 추적 로직 및 권한 처리.
+Interaction: 지도 새로고침, 내 위치 공유 ON/OFF 제어 로직.
+Watch Mapping: 워치 화면에서의 간단한 위치 확인 및 마커 렌더링.
+핵심 도메인: UserLocation, MapMarker
+3. [Member C] 메시징 & 소셜 시스템 (Social/DM)
+사용자 간의 관계 형성과 텍스트 소통 시스템을 구축합니다.
+주요 기능:
+DM System: 실시간 메시지 송수신 흐름(Firestore) 및 대화 목록 관리.
+Friend Management: 친구 추가/삭제, 카카오톡 초대 링크/UID 공유 연동.
+Interaction UI: 친구 정보 조회 화면 및 인터랙션 요소 개발.
+Watch DM: 워치에서 최근 메시지 확인 및 간단 답장 UI.
+핵심 도메인: ChatMessage, Friendship
+4. [Member D] 계정 인증 & 디자인 시스템 (Auth/Design)
+앱의 진입점과 전반적인 Look & Feel, 공통 아키텍처를 관리합니다.
+주요 기능:
+Authentication: Firebase 소셜 로그인(구글/카카오) 및 세션 유지 로직.
+Profile & My Page: 프로필 관리, 앱 설정 화면, 로그아웃 기능.
+Design System: 전체 앱에서 공통으로 사용할 Compose 테마, 버튼, 텍스트 스타일 가이드 구축.
+Navigation: 화면 간 이동 흐름(Compose Navigation) 및 워치/폰 페어링 초기 가이드.
+핵심 도메인: UserProfile, AuthSession
+부족한 화면 보충
+
+
+
+로고 제시안
+
+TMI
+클린 아키텍쳐 간소화 방식 제안
+"클린 아키텍처는 수단이지 목적이 아니다”
+1. 도입 배경
+강사님께 전달받은 샘플(likelion-ca)은 매우 훌륭한 설계 표준을 보여주지만, 우리 앱은 소규모 프로젝트이며 빠른 개발 속도가 중요합니다. 모든 기능을 정석대로 구현할 경우 보일러플레이트 코드가 과도하게 발생할 수 있어, 핵심 원칙은 지키되 구조는 간소화하여 진행하고자 합니다.
+2. 핵심 원칙: "이것만은 지킵시다"
+구조는 줄이더라도 아래 두 가지 원칙은 타협하지 않습니다.
+의존성 방향: 항상 외곽에서 중심(Domain)으로 향해야 합니다. (UI → Domain ← Data)
+관심사 분리: UI 로직, 비즈니스 로직, 데이터 소스 로직은 각각의 계층에 위치해야 합니다.
+3. 간소화된 3계층 구조
+계층 (Layer)
+주요 구성 요소
+역할
+UI (Presentation)
+Compose UI, ViewModel
+데이터를 화면에 그리고, 사용자의 입력을 처리합니다.
+Domain
+Entity (Model), Repository Interface
+앱의 핵심 데이터 모델과 동작을 정의합니다. (가장 순수한 영역)
+Data
+API, DB, Repository Implementation, Mapper
+실제로 데이터를 가져오고 저장하는 세부 구현을 담당합니다.
+4. 주요 간소화 전략 (정석 대비 변경점)
+ UseCase는 '선택 사항'으로 운영
+정석: 모든 기능마다 GetBookListUseCase, SearchBookUseCase 등 클래스 생성.
+간소화: 로직이 단순히 '데이터를 가져와서 보여주는 것'이라면 UseCase를 생략하고 ViewModel이 Repository를 직접 호출합니다.
+단, 여러 데이터 소스를 조합하거나 복잡한 계산 로직이 필요한 경우에만 UseCase를 만듭니다.
+ 도메인 모델(Entity) 중심의 통합
+정석: API용 DTO, 도메인용 모델, UI 전용 모델을 모두 별도로 생성하고 매번 변환(Mapping).
+간소화: 앱 내부에서 사용하는 도메인 모델(Entity)을 UI 계층까지 공통으로 사용합니다. 단, API 응답(DTO)은 반드시 Data 계층 내에서 도메인 모델로 변환하여 넘겨줍니다.
+ 패키지 구조의 단순화
+기능별로 계층을 너무 잘게 쪼개기보다, ui, domain, data라는 큰 틀 안에서 기능별 패키지를 구성하여 탐색 비용을 줄입니다.
+5. 기대 효과
+생산성 향상: 클래스 생성 및 코드 작성이 최소화되어 기능 구현 속도가 빨라집니다.
+유지보수성 유지: 핵심 인터페이스가 분리되어 있어, 나중에 데이터 소스(API)가 변경되더라도 UI 코드를 수정할 필요가 없습니다.
+학습 비용 감소: 팀원들이 아키텍처 구조를 이해하고 코드를 작성하는 데 드는 시간을 단축할 수 있습니다.
+6. 결론
+우리는 강사님의 샘플 프로젝트를 '가야 할 방향'으로 참고하되, 현재의 우리 수준과 일정에 맞춰 '가장 효율적인 경로'인 간소화 방식을 택하고자 합니다. 개발 과정에서 로직이 복잡해지는 부분은 언제든 정석대로 UseCase를 추가하며 유연하게 대응하겠습니다.
+클린 아키텍쳐 간소화 방식 가이드 라인
+1. 전체 데이터 흐름 (Data Flow)
+우리의 앱은 아래와 같은 단계를 거쳐 데이터를 보여줍니다.
+[Data] 서버에서 데이터 가져오기  [Domain] 우리 앱용 모델로 변환  [UI] 화면에 출력
+2. 계층별 상세 역할 및 규칙
+① Domain Layer (앱의 중심)
+가장 순수한 영역입니다. 안드로이드 지식이 없어도 이해할 수 있는 코드로만 구성합니다.
+Model (Entity): 앱 전체에서 공통으로 사용할 데이터 클래스입니다. (예: Restaurant)
+Repository Interface: "데이터가 필요해"라고 선언만 하는 곳입니다. 구현은 하지 않습니다.
+[간소화 포인트] UseCase는 만들지 않습니다. 로직이 정말 복잡해질 때만 나중에 추가합니다.
+② Data Layer (데이터의 원천)
+서버(Retrofit)나 로컬 DB(Room)에서 데이터를 가져오는 상세한 방법이 담깁니다.
+DTO (Data Transfer Object): 서버 응답 데이터 형태 그대로의 클래스입니다.
+Mapper: 서버 데이터(DTO)를 우리 앱 모델(Entity)로 변환해주는 함수입니다.
+Repository Implementation: Domain에 있는 인터페이스를 실제로 구현하는 곳입니다.
+[간소화 포인트] Mapper를 별도 클래스로 만들지 않고, DTO 내부의 확장 함수나 생성자로 간단히 처리합니다.
+③ UI Layer (사용자 접점)
+사용자에게 화면을 보여주고 입력을 받습니다.
+ViewModel: Repository를 주입받아 데이터를 요청하고, 화면의 상태(State)를 관리합니다.
+Compose/Activity: ViewModel이 주는 데이터를 화면에 그립니다.
+[간소화 포인트] ViewModel은 UseCase가 아닌 Repository 인터페이스를 직접 주입받습니다.
+분업 종류에 따른 장단점
+1. 화면(UI) 단위 분업
+방식: '로그인 화면', '지도 메인 화면', '설정 화면' 처럼 UI 페이지별로 한 명씩 맡는 방식
+장점:
+가시적인 성과: 담당한 화면이 완성되면 눈에 바로 보이기 때문에 진행 상황 파악이 쉽습니다.
+독립성: 서로 다른 화면을 개발할 때 UI 코드 수준에서의 충돌이 거의 없습니다.
+단점:
+중복 로직 발생: '친구 목록' 데이터가 지도에도 필요하고 DM 목록에도 필요한 경우, 각자 데이터를 가져오는 로직을 중복해서 짤 위험이 큽니다.
+아키텍처 파편화: 동일한 기능을 수행하는 Repository나 UseCase가 화면마다 제각각 구현될 수 있습니다.
+2. 기능(Feature) 단위 분업
+방식: '무전 기능', 'DM 기능', '위치 추적 기능'처럼 수직적으로 기능을 쪼개어 UI부터 DB까지 한 명이 담당하는 방식
+장점:
+완결성: 한 사람이 해당 기능의 UI, ViewModel, UseCase, Repository를 모두 만드므로 흐름을 완벽히 이해할 수 있습니다.
+책임 명확화: 특정 기능에 버그가 생겼을 때 담당자가 명확하여 유지보수가 빠릅니다.
+단점:
+계층 간 충돌: 여러 명이 동시에 Data 레이어의 RemoteDataSource나 LocalDatabase 파일을 건드릴 경우 Git 충돌(Conflict)이 빈번하게 발생할 수 있습니다.
+3. 도메인(Domain/Layer) 단위 분업
+방식: 한 명은 'UI/디자인 시스템', 한 명은 '비즈니스 로직(UseCase)', 한 명은 '데이터 연동(Firebase/API)'처럼 계층별로 나누는 방식
+장점:
+전문성 강화: 데이터 담당자는 쿼리 최적화에만 집중하고, UI 담당자는 Compose 애니메이션과 UX에만 집중할 수 있어 퀄리티가 올라갑니다.
+코드 일관성: 전체 앱의 데이터 흐름이 하나의 규칙으로 통일됩니다.
+단점:
+병목 현상: 데이터 레이어 담당자가 작업을 완료하지 않으면 UI 담당자가 실제 데이터를 연결해 테스트하기 어렵습니다. (인터페이스와 Mock 데이터 활용 필수)
+의사소통 비용: 작은 기능을 하나 만들 때도 계층 간 담당자끼리 계속 소통해야 합니다.
+ 방식별 비교 요약
+구분
+화면 단위
+기능 단위
+도메인(계층) 단위
+추천 상황
+프로토타입 개발 시
+가장 보편적인 팀 프로젝트
+고도의 전문성이 필요한 대규모 프로젝트
+Git 충돌 위험
+낮음
+중간 (Data 레이어 집중)
+높음 (공통 인터페이스 수정 시)
+코드 재사용성
+낮음
+중간
+매우 높음
+의사소통 필요도
+낮음
+중간
+매우 높음
+힐트 사용 가이드 라인
+안드로이드 개발에서 Hilt는 구글이 만든 의존성 주입(Dependency Injection, DI) 라이브러리입니다. 초보자 입장에서 DI라는 개념이 어렵게 느껴질 수 있지만, 핵심은 간단합니다. "내가 직접 객체를 만들지(new/init) 않고, 외부에서 필요한 것을 가져다 쓴다"는 것입니다.
+2단계: Hilt의 시작점 만들기
+Hilt를 사용하는 모든 앱은 @HiltAndroidApp 주석이 붙은 Application 클래스가 반드시 필요합니다. 이는 Hilt가 앱의 생명주기에 맞춰 의존성을 관리할 수 있게 해주는 '중앙 통제실' 역할을 합니다.
+@HiltAndroidApp
+class MyAwesomeApp : Application() { 
+    // 특별한 로직 없이 비워두어도 됩니다.
+}
+​
+주의: AndroidManifest.xml의 <application> 태그 안에 android:name=".MyAwesomeApp"을 꼭 등록해야 합니다.
+3단계: 클래스에 주입하기 (Injection)
+이제 액티비티나 뷰모델에서 객체를 직접 생성하지 않고 Hilt에게 "가져다줘!"라고 요청할 수 있습니다.
+안드로이드 컴포넌트 (Activity, Fragment 등)
+@AndroidEntryPoint를 붙여주면 Hilt가 해당 클래스에 의존성을 주입할 준비를 마칩니다.
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    // @Inject를 사용하면 Hilt가 알아서 레포지토리 객체를 넣어줍니다.
+    @Inject lateinit var repository: UserRepository 
+}
+​
+뷰모델 (ViewModel)
+ViewModel은 조금 더 특별하게 @HiltViewModel을 사용합니다.
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: UserRepository // 생성자로 주입받음
+) : ViewModel() { ... }
+​
+4단계: Hilt에게 객체 생성 방법 알려주기 (Module)
+Hilt가 UserRepository를 주입해주려면, 정작 그 객체를 어떻게 만드는지 알아야 합니다. 이때 Module을 사용합니다. 특히 Retrofit이나 Room처럼 내가 직접 수정할 수 없는 외부 라이브러리 객체를 만들 때 필수입니다.
+@Module
+@InstallIn(SingletonComponent::class) // 앱 전체에서 하나만 생성 (싱글톤)
+object NetworkModule {
+
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com")
+            .build()
+    }
+}
+​
+핵심 요약 가이드라인
+애플리케이션 클래스: @HiltAndroidApp (단 한 번!)
+안드로이드 클래스: @AndroidEntryPoint (Activity, Fragment 등에 사용)
+뷰모델: @HiltViewModel + @Inject constructor
+생성 방법 정의: 클래스 생성자에 @Inject constructor를 붙이거나, 외부 라이브러리라면 @Module 안에서 @Provides로 정의
+UseCase란?
+클린 아키텍처에서 유즈케이스(UseCase)란, 사용자가 앱에서 수행하려는 '하나의 구체적인 동작'이나 '비즈니스 로직의 최소 단위'를 클래스로 만든 것입니다.
+간소화 방식에서는 ViewModel이 Repository를 직접 부르지만, 정석 방식에서는 그 사이에 UseCase라는 "중개자"를 하나 더 두는 것입니다.
+1. UseCase의 역할: "무엇을 하는가?"
+UseCase는 데이터가 어디서 오는지(DB인지 서버인지)는 상관하지 않습니다. 오직 "이 기능이 어떤 비즈니스 규칙을 가지고 있는가?"에만 집중합니다.
+Repository: "데이터를 가져와라" (단순 심부름)
+UseCase: "데이터를 가져와서, 특정 조건에 맞는 것만 필터링하고, 정렬해서 줘" (지시 및 가공)
+2. 왜 UseCase를 추가하게 될까? (도입 타이밍)
+개발을 하다 보면 ViewModel이 너무 무거워지거나, 여러 ViewModel에서 똑같은 로직을 반복해야 할 때가 옵니다. 이때가 바로 UseCase를 만들 타이밍입니다.
+로직의 재사용성: '내 주변 맛집 찾기' 로직이 메인 화면에서도 쓰이고, 지도 화면에서도 쓰인다면? 로직을 복잡하게 복사하지 않고 GetNearbyRestaurantsUseCase 하나만 만들어 양쪽 ViewModel에 주입하면 됩니다.
+ViewModel의 다이어트: ViewModel은 UI 상태를 관리하느라 바쁩니다. 여기에 복잡한 계산이나 데이터 가공 로직까지 들어가면 코드를 읽기 힘들어집니다. 이 "복잡한 계산"만 쏙 뽑아 UseCase로 옮깁니다.
+단일 책임 원칙 (SRP): 하나의 클래스는 하나의 일만 해야 합니다. UseCase를 쓰면 "로그인하기", "장바구니 담기"처럼 클래스 이름만 봐도 이 코드가 무슨 일을 하는지 바로 알 수 있습니다.
+3. 코드 비교 (간소화 vs UseCase 추가)
+[간소화 방식] ViewModel이 직접 처리
+class RestaurantViewModel(private val repository: RestaurantRepository) : ViewModel() {
+    fun loadRestaurants() {
+        val data = repository.getRestaurants()
+        // 여기서 직접 필터링, 정렬 등 복잡한 로직 수행 (ViewModel이 무거워짐)
+        val filteredData = data.filter { it.rating > 4.0 }.sortedBy { it.distance }
+        _uiState.value = filteredData
+    }
+}
+​
+[UseCase 추가 방식] 로직을 별도 클래스로 분리
+// UseCase: 딱 이 비즈니스 로직만 담당
+class GetPremiumRestaurantsUseCase(private val repository: RestaurantRepository) {
+    operator fun invoke(): List<Restaurant> {
+        return repository.getRestaurants()
+            .filter { it.rating > 4.0 }
+            .sortedBy { it.distance }
+    }
+}
+
+// ViewModel: UseCase를 호출만 함 (가벼워짐)
+class RestaurantViewModel(private val getPremiumUseCase: GetPremiumRestaurantsUseCase) : ViewModel() {
+    fun loadRestaurants() {
+        _uiState.value = getPremiumUseCase()
+    }
+}
+​
+4. 요약:
+"처음부터 모든 기능에 UseCase를 만들면 클래스만 많아지고 관리가 힘들어요. 그래서 일단은 ViewModel-Repository로 빠르게 개발하되, **'이 로직은 너무 복잡해서 따로 빼고 싶다'**거나 **'여러 화면에서 똑같이 써야 한다'**는 생각이 들 때 그 부분만 UseCase로 독립시키면 됩니다."
+클린 아키텍쳐 정석 가이드 라인
+정석 모델의 핵심은 "철저한 격리"입니다. 각 계층은 서로의 존재를 최소한으로 알아야 하며, 모든 데이터 흐름은 중간 매개체를 거쳐야 합니다.
+1. 계층별 상세 역할 (4계층 구조)
+① Entity Layer (가장 안쪽)
+역할: 비즈니스 규칙의 핵심 데이터 모델입니다.
+특징: 외부 라이브러리, API DTO, DB Entity와 전혀 무관한 순수 Kotlin 클래스여야 합니다.
+② Domain Layer (핵심 로직)
+UseCase: 하나의 클래스가 딱 하나의 사용자 동작(예: CheckLoginStatusUseCase)만 담당합니다.
+Repository Interface: 데이터 소스에 접근하기 위한 추상적인 인터페이스입니다.
+특징: 어떠한 안드로이드 의존성도 가지지 않습니다. (순수 자바/코틀린 모듈 권장)
+③ Interface Adapter Layer (데이터 변환)
+ViewModel: UI 상태를 관리하지만, 비즈니스 로직은 유즈케이스에 위임합니다.
+Repository Implementation: 인터페이스를 실제로 구현하며, 여러 데이터 소스(Local, Remote)를 조율합니다.
+Mapper: 각 계층을 넘나들 때마다 데이터를 변환합니다. (DTO ↔ Entity, Entity ↔ UI Model)
+④ Frameworks & Drivers (가장 바깥쪽)
+UI: Compose, XML, Activity.
+Network/DB: Retrofit 서비스, Room DAO 등 실제 기술 구현체.
+2. 정석 코드 예시 (Hilt 기반)
+[Domain] 유즈케이스 중심 설계
+// 1. 유즈케이스: 단 하나의 책임만 가짐
+class GetSortedRestaurantUseCase @Inject constructor(
+    private val repository: RestaurantRepository
+) {
+    // invoke 연산자를 사용하여 함수처럼 호출 가능하게 함
+    suspend operator fun invoke(): List<Restaurant> {
+        return repository.getRestaurants()
+            .filter { it.isOpen }
+            .sortedByDescending { it.rating }
+    }
+}
+​
+[Data] 모델 분리 및 매핑
+// 2. Data 계층 전용 DTO
+data class RestaurantDto(val name: String, val open_now: Boolean)
+
+// 3. 리포지토리 구현: DTO를 가져와서 Entity로 변환하여 반환
+class RestaurantRepositoryImpl @Inject constructor(
+    private val remoteDataSource: RestaurantRemoteDataSource
+) : RestaurantRepository {
+    override suspend fun getRestaurants(): List<Restaurant> {
+        return remoteDataSource.getRestaurants().map { it.toDomain() }
+    }
+}
+​
+[UI] 유즈케이스 주입
+@HiltViewModel
+class RestaurantViewModel @Inject constructor(
+    private val getSortedRestaurantUseCase: GetSortedRestaurantUseCase // Repository가 아닌 UseCase 주입
+) : ViewModel() {
+    // 뷰모델은 유즈케이스가 주는 데이터를 받아서 UI 상태로 바꾸기만 함
+}
+​
+3. 정석 방식의 핵심 규칙 (Strict Rules)
+의존성 규칙: 안쪽 계층은 바깥쪽 계층을 절대 참조할 수 없습니다. (예: Domain은 Data나 UI를 몰라야 함)
+데이터 변환: 각 계층은 자신만의 데이터 모델을 가져야 하며, 경계를 넘을 때 반드시 Mapper를 통해 변환해야 합니다.
+단일 책임: 유즈케이스는 딱 하나의 비즈니스 행위만 설명해야 합니다.
+인터페이스 기반: 모든 계층 간 소통은 인터페이스를 통해 이루어지며, Hilt가 이를 연결합니다.
+클린 아키텍쳐란 무엇이고 왜 사용하는 것인가
+클린 아키텍처(Clean Architecture)는 소프트웨어의 관심사를 분리(Separation of Concerns)하여, 비즈니스 로직이 UI, 데이터베이스, 외부 프레임워크 등으로부터 독립되도록 설계하는 방법론입니다. 로버트 C. 마틴(엉클 밥)이 제안한 이 구조는 코드를 계층별로 나누어 유지보수와 테스트를 용이하게 만드는 것이 핵심입니다.
+1. 클린 아키텍처의 구조
+일반적으로 여러 개의 동심원 형태로 표현되며, 안쪽으로 갈수록 핵심 비즈니스 로직이 위치하고 바깥쪽으로 갈수록 세부적인 구현 사항이 위치합니다. 의존성 방향은 항상 바깥에서 안쪽을 향해야 합니다.
+주요 계층 구성
+엔티티 (Entities): 앱의 가장 핵심적인 비즈니스 규칙을 담고 있는 모델입니다. 외부의 어떤 변화(UI 변경, 데이터베이스 교체 등)에도 영향을 받지 않습니다.
+유즈케이스 (Use Cases): 앱의 비즈니스 로직을 수행합니다. 예를 들어 '사용자 로그인', '데이터 저장'과 같은 동작을 정의하며, 엔티티를 조작하여 흐름을 제어합니다.
+인터페이스 어댑터 (Interface Adapters): 유즈케이스나 엔티티가 사용하기 쉬운 형태로 데이터를 변환합니다. Android의 경우 ViewModel, Presenter 등이 여기에 속합니다.
+프레임워크 및 드라이버 (Frameworks & Drivers): 가장 바깥쪽 계층으로, 데이터베이스(Room, SQLite), 네트워크 라이브러리(Retrofit), UI(Jetpack Compose, XML) 등 도구적인 요소들이 위치합니다.
+2. 왜 사용하는가? (주요 장점)
+앱 개발 과정에서 클린 아키텍처를 도입하는 이유는 단순히 코드를 예쁘게 짜기 위함이 아니라, "변화에 유연하게 대처"하기 위해서입니다.
+프레임워크 독립성: UI 라이브러리를 변경하거나 데이터베이스를 바꾸더라도 핵심 로직(유즈케이스)은 수정할 필요가 없습니다.
+테스트 용이성: 비즈니스 로직이 UI나 DB와 분리되어 있기 때문에, 실제 기기나 서버 없이도 순수한 코드를 빠르게 테스트할 수 있습니다.
+병렬 개발 가능: 각 계층이 인터페이스로 연결되어 있어, UI가 완성되지 않아도 비즈니스 로직을 먼저 개발하거나 팀원들이 역할을 나누어 작업하기 수월합니다.
+유지보수성 향상: 코드의 위치가 명확하므로 특정 기능을 수정할 때 영향 범위를 파악하기 쉽고 버그 수정이 빨라집니다.
+3. 요약 및 주의사항
+클린 아키텍처는 대규모 프로젝트에서 강력한 힘을 발휘하지만, 소규모 앱에서는 오히려 과도한 엔지니어링(Over-engineering)이 될 수 있습니다. 클래스 수가 많아지고 구조가 복잡해지기 때문에, 프로젝트의 규모와 팀의 숙련도에 맞춰 적절한 수준으로 추상화하는 것이 중요합니다.
+Android 개발의 경우 보통 Data - Domain - UI 세 가지 계층으로 간소화하여 적용하는 경우가 많으며, 이는 유지보수 효율성과 개발 속도 사이의 균형을 잡는 좋은 방법이 됩니다.
+계층 구조가 중요한 이유
+구체적으로 코드가 어떻게 지저분해지는지, auth 계층이 없는 경우와 있는 경우를 비교해서 보여드릴게요. 카카오 로그인이 추가되는 상황을 가정해 보겠습니다.
+1. 계층이 없는 경우 (문제 발생)
+UserRepositoryImpl이 직접 Firebase SDK를 의존하고 있는 상태에서 카카오 기능을 추가하면, 하나의 클래스 안에 서로 다른 라이브러리 코드가 뒤섞이게 됩니다.
+class UserRepositoryImpl(
+    private val firebaseAuth: FirebaseAuth, // Firebase 의존성
+    private val kakaoUserClient: UserApiClient // Kakao 의존성 (추가됨)
+) : UserRepository {
+
+    override suspend fun login(type: LoginType): Result<User> {
+        return when (type) {
+            LoginType.FIREBASE -> {
+                // Firebase 로그인 로직 (SDK 직접 호출)
+                val result = firebaseAuth.signInWithEmailAndPassword(...)
+                // ... 성공 처리 로직
+            }
+            LoginType.KAKAO -> {
+                // Kakao 로그인 로직 (SDK 직접 호출)
+                // 여기에 카카오 전용 콜백, 에러 처리 등이 뒤섞임
+                kakaoUserClient.loginWithKakaoTalk(...)
+                // ... 또 다른 성공 처리 로직
+            }
+        }
+    }
+}
+​
+문제점: UserRepositoryImpl이 너무 많은 것을 압니다. Firebase가 망가지거나 Kakao SDK 버전이 올라가서 함수명이 바뀌면 이 레포지토리 코드를 직접 수정해야 합니다. 클래스 하나가 수백 줄로 늘어나는 원인이 됩니다.
+2. 계층이 있는 경우 (깔끔한 확장)
+데이터 소스(remote) 계층을 분리하면, 레포지토리는 "어떤 부품을 쓸지" 결정만 하고 실제 구현은 각자의 전문가(Source)에게 맡깁니다.
+[Remote Source 계층 - 각자 자기 일만 함]
+// Firebase 전용 전문가
+class FirebaseAuthSource(private val auth: FirebaseAuth) {
+    suspend fun login(): UserDto = auth.signInWithEmailAndPassword(...)
+}
+
+// Kakao 전용 전문가
+class KakaoAuthSource(private val client: UserApiClient) {
+    suspend fun login(): UserDto = client.loginWithKakaoTalk(...)
+}
+​
+[UserRepositoryImpl.kt - 수정 최소화]
+class UserRepositoryImpl(
+    private val firebaseSource: FirebaseAuthSource,
+    private val kakaoSource: KakaoAuthSource
+) : UserRepository {
+
+    override suspend fun login(type: LoginType): Result<User> {
+        val userDto = when (type) {
+            LoginType.FIREBASE -> firebaseSource.login()
+            LoginType.KAKAO -> kakaoSource.login()
+        }
+        return Result.success(userDto.toEntity()) // 공통 변환 로직만 수행
+    }
+}
+​
+ 왜 이 방식이 더 좋은가요?
+코드의 가독성: 레포지토리는 "로그인 타입에 따라 소스를 선택한다"는 비즈니스 흐름만 보여줍니다. 상세한 SDK 호출 코드가 없어서 읽기 편합니다.
+유지보수의 독립성: 카카오 로그인 로직에 버그가 생기면 KakaoAuthSource 파일만 열어보면 됩니다. 실수로 Firebase 코드를 건드릴 일이 아예 차단됩니다.
+테스트 용이성: 가짜(Mock) 객체를 만들어 테스트할 때도 "카카오 로그인 성공 상황"을 훨씬 쉽게 시뮬레이션할 수 있습니다.
+결론적으로, 계층을 나누는 것은 당장 코드를 몇 줄 더 쓰는 번거로움이 있지만, 새로운 기능(카카오, 네이버 로그인 등)이 들어올 때 기존 코드를 망가뜨리지 않고 안전하게 기능을 붙일 수 있는 '플러그인' 구조를 만드는 작업입니다.
+진행 상황 점검
+1차 진행 상황(9시)
+오전 브리핑 마침
+개발 사전 작업
+파이어베이스 ⇒ sha1 키 등록, json 파일 등록
+카카오 콘솔 → 해시 키 등록
+구글 지도 ⇒ 지문 등록
+깃허브 규칙 정하기
+PR 규칙 협의
+브런치 규칙 협의
+프로젝트 기초설정 마무리되면 깃에올리고 각자 내려받아 테스트
+강사님 피드백(10시)
+현재 워치의 기능이 많은걸로 보인다. (배터리 소모)
+구글 SDK를 사용해 지도 표시
+실시간 위치 표시 = 통신
+음성 발신/수신 = 통신
+DM 수신 = 통신
+음성 서버 전송하는데 지연이 발생할 수 있다.
+워치의 기능을 축소시키는 방향도 고려해 볼 수 있다.
+워치 수신의 경우 FCM을 사용을 고려해 보자.
+휴대폰이 백그라운드 상태에서 완전히 종료된 경우 통신 문제가 발생할 수 있다
+웨이러블 사용해서 통신하면 자동으로 깨우긴 할텐데 지연 발생 농후
+3차 진행 상황(15시 반)
+지은: 
+우석: 
+은신:
+유빈:
+강사님 피드백 (16시)
+
+정우석
+1일

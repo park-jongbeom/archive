@@ -1,0 +1,71 @@
+# DB
+
+역정규화 데이터는 Firebase Cloud Functions의 서버 리스너로 등록해서 관리
+
+읽기/쓰기 비율을 감안해서 정규화/역정규화 선택
+
+즉 상태 변경보다 조회가 압도적으로 많은 경우 역정규화
+
+## Users 컬렉션
+
+**[Collection: Users] → Get/Set**
+
+- **[Document: {uid}]**
+    - nickname: "홍길동" (String)
+    - profile_image_url: “http://~~” (String)
+    - status: "심심함" (String)
+    - is_sharing: true (Boolean)
+    - is_online: true (Boolean)
+    - fcm_token: "token_abc123" (String)
+    - last_active: 2026-05-07 19:00:00 (Timestamp)
+    - friendUids: [”uid1”, “uid2”] : (Array) ← 역정규화
+    - **[Sub-Collection: Friendships] → Silent Push**
+        - **[Document: {friend_uid}]**
+            - nickname: "홍길동" (String) - 역정규화
+            - profile_image_url: “http://~~” (String) - 역정규화
+            - status: "심심함" (String) - 역정규화
+            - is_online: true (Boolean)
+            - friendship_status: "ACCEPTED" (String)
+            - created_at: 2026-04-20 10:30:00 (Timestamp)
+- **[Collection: Live] → 실시간 구독**
+    - **[Document: {uid}]**
+        - profile_image_url: “http://~~” (String) → 역정규화
+        - is_sharing: true (Boolean) → 역정규화
+        - is_online: true (Boolean) → 역정규화
+        - location: [37.5665, 126.9780] (GeoPoint)
+        - updated_at: 2026-04-20 10:30:00 (Timestamp) → 마지막 업데이트
+- **[Collection: Notifications] → Get/Set //바로 못 읽은 경우**
+    - **[Document: {noti_id}]**
+        - **type**: "WALKIE" (String)
+        - **sender_id**: "sender_uid" (String)
+        - **sender_name**: "홍길동" (String)
+        - **content**: "음성 메시지가 도착했습니다." (String)
+        - **audio_url**: "https://firebasestorage.../audio.m4a" (String)
+        - **is_read**: false (Boolean)
+        - **created_at**: 2026-05-09 12:50:00 (Timestamp)
+- **[Collection: VoiceMessages] → 실시간 구독 //무전 바로 받은 경우**
+    - **[Document: {sender_uid}]**
+    - **sender_id**: "sender_uid_123" (String)
+    - **receiver_id**: "receiver_uid_456" (String)
+    - **voice_url**: "https://firebasestorage.../audio.m4a" (String)
+    - **duration**: 5 (Number)
+    - **is_read**: false (Boolean)
+    - **sent_at**: 2026-05-09 12:48:00 (Timestamp)
+
+---
+
+## DMs 컬렉션 (텍스트 메시지)
+
+**[Collection: DMs] → 실시간 구독**
+
+- **[Document: {room_id}]**
+    - participants: ["uid1", "uid2"] (Array)
+    - last_msg: "반가워요!" (String)
+    - updated_at: 2026-05-07 18:50:00 (Timestamp)
+    - unread_counts (Map): {"uid1": 0, "uid2": 3} → 채팅방 목록에 표시할 / 읽지 않은 메세지 개수
+    - **[Sub-Collection: Messages] → 실시간 구독**
+        - **[Document: {msg_id}]**
+            - sender_id: "uid1" (String)
+            - content: "반가워요!" (String)
+            - sent_at: 2026-05-07 18:50:00 (Timestamp)
+            - is_read: false (Boolean)

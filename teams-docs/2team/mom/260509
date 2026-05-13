@@ -1,0 +1,29 @@
+# 3.5차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## Navigation 참고 자료
+
+- 온보딩 화면(OnBoardingScreen.kt)
+    
+    → 로그인 화면 (SignInScreen.kt)
+    
+    → 학습 언어 선택 화면 (LanguageListScreen.kt)
+    
+    →  홈 화면 (대시보드 화면) (HomeScreen.kt)
+    
+- 홈 화면 (대시보드 화면) (HomeScreen.kt) , 대화 화면 (ChatScreen.kt), 교정 화면 (FeedbackScreen.kt), 학습 화면 (StudyScreen.kt), 통계 화면 (AnalyticsScreen.kt)
+    
+    → 홈 화면 (대시보드 화면) (HomeScreen.kt), 대화 화면 (ChatScreen.kt), 교정 화면 (FeedbackScreen.kt), 학습 화면 (StudyScreen.kt), 통계 화면 (AnalyticsScreen.kt)
+    
+- 홈 화면 (대시보드 화면) (HomeScreen.kt)
+    
+    → 학습 언어 선택 화면 (LanguageListScreen.kt), 마이페이지 화면 (MyPageScreen.kt)

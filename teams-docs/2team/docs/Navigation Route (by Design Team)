@@ -1,0 +1,87 @@
+# Navigation Route (by Design Team)
+
+---
+
+※ 학습 언어 선택 화면 (LanguageListScreen.kt) 은 홈 화면 (대시보드 화면) (HomeScreen.kt)에서 다이얼로그 처리 예정
+
+※ 로그인 화면은 온보딩화면(3장) 중 마지막 화면에 구글 로그인 버튼으로 대체 예정
+
+- 스플래시 화면
+    
+    → 온보딩 화면(OnBoardingScreen.kt)
+    
+
+- 온보딩 화면(OnBoardingScreen.kt)
+    
+    →  홈 화면 (대시보드 화면) (HomeScreen.kt)
+    
+
+- 홈 화면 (대시보드 화면) (HomeScreen.kt)
+    
+    → 마이페이지 화면 (MyPageScreen.kt)
+    
+    → 대화 화면 (ChatScreen.kt)
+    
+    → 교정 화면 (FeedbackScreen.kt)
+    
+    → 학습 화면 (StudyScreen.kt)
+    
+    → 통계 화면 (AnalyticsScreen.kt)
+    
+
+- 마이페이지 화면 (MyPageScreen.kt)
+    
+    → 홈 화면 (대시보드 화면) (HomeScreen.kt)
+    
+    → 온보딩 화면(OnBoardingScreen.kt) // 로그아웃 시
+    
+
+- 대화 화면 (ChatScreen.kt)
+    
+    → 홈 화면 (대시보드 화면)
+    
+    ~~→ 대화 화면 (ChatScreen.kt)~~
+    
+    → 교정 화면 (FeedbackScreen.kt)
+    
+    → 학습 화면 (StudyScreen.kt)
+    
+    → 통계 화면 (AnalyticsScreen.kt)
+    
+
+- 교정 화면 (FeedbackScreen.kt)
+    
+    → 홈 화면 (대시보드 화면)
+    
+    → 대화 화면 (ChatScreen.kt)
+    
+    ~~→ 교정 화면 (FeedbackScreen.kt)~~
+    
+    → 학습 화면 (StudyScreen.kt)
+    
+    → 통계 화면 (AnalyticsScreen.kt)
+    
+- 학습 화면 (StudyScreen.kt)
+    
+    → 홈 화면 (대시보드 화면)
+    
+    → 대화 화면 (ChatScreen.kt)
+    
+    → 교정 화면 (FeedbackScreen.kt)
+    
+    ~~→ 학습 화면 (StudyScreen.kt)~~
+    
+    → 통계 화면 (AnalyticsScreen.kt)
+    
+
+- 통계 화면 (AnalyticsScreen.kt)
+    
+    → 홈 화면 (대시보드 화면)
+    
+    → 대화 화면 (ChatScreen.kt)
+    
+    → 교정 화면 (FeedbackScreen.kt)
+    
+    → 학습 화면 (StudyScreen.kt)
+    
+    ~~→ 통계 화면 (AnalyticsScreen.kt)~~

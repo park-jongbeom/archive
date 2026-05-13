@@ -1,0 +1,97 @@
+# 5차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## 오늘의 안건
+
+- 개인 작업 들어가기
+- 
+- 
+
+---
+
+# 오전
+
+### 성호
+
+A-1 완료 
+
+### 정섭
+
+- [x]  Issue A-6 메인 잔류량 게이지 UI
+
+### 지희
+
+- [ ]  Issue A-2 DB 진행중
+
+ 클라우드 펑션 작동 안 해서 오늘 다시 손 볼 예정 ⇒ DB 구축 완료(오전 10시)
+
+저장된 DB와 프로젝트 연결 & 정상 작동 확인 예정
+
+→ DrinkDto(DB 필드명과 일치),DrinkItem 수정(안 쓰는 변수 삭제 및 이름 혼동 수정)
+
+→DrinkDao, DrinkRepositoryImpl, DrinkRemoteDataSource 수정
+
+### 제이
+
+- [x]  `core.ui.theme` 의 Color, AppTheme, Typography 파일 추가
+    - [x]  색상 추가로 뽑아내고 Color.kt파일 수정
+    - [x]  색상에 맞게 Theme 지정하기
+    - [x]  Typography는 기본 내용만 추가하기
+
+---
+
+# 오후
+
+### 성호
+
+A-1 완료 
+
+### 정섭
+
+- [x]  Issue A-6 메인 잔류량 게이지 UI
+
+### 지희
+
+- [x]  Issue A-2 DB 진행중
+
+저장된 DB와 프로젝트 연결 & 정상 작동 확인 완료
+
+### 제이
+
+- [ ]  A-4 작업 진행 완료 조건에 맞춰서 개발 진행
+    1. 네비게이션 구성
+        - [x]  AppNavHost.kt 생성 (presentation/navigation/)
+        - [x]  Route 정의 (Home, CaffeineInput)
+        - [x]  HomeScreen ↔ CaffeineInputScreen 이동 로직
+    2. 저장 성공 시 홈으로 이동
+        - [x]  CaffeineInputScreen에서 저장 성공 시 navigate(Home)
+        - [x]  SaveState.Success 감지 후 자동 이동
+    
+    3. MainActivity 연결
+    
+    - [x]  AppNavHost를 MainActivity setContent에 연결
+    
+    4. 직접 기입 UI 완성 **(여기까지하는게 목표)**
+    
+    - [x]  이름, 섭취 용량, 카페인 함량 입력
+    - [ ]  섭취 시간 picker
+    - [ ]  완료 버튼 → 저장 → 홈 이동
+    
+    5. 검색 탭 UI (더미 데이터)
+    
+    - [ ]  검색창 구현
+    - [ ]  더미 음료 데이터 검색 필터링
+    - [ ]  음료 선택 → 섭취 시간 picker → 저장 → 홈 이동
+
+### 미팅
+
+이슈 이름 적어두기…ㅠㅠ(그래도 잘했다!!)
