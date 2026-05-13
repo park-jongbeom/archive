@@ -1,0 +1,16 @@
+{
+  "$comment": "archive 프로젝트 전용 Claude Code 설정. 사용자 전역 ~/.claude/settings.json과 별개로 archive 작업 시에만 적용됨.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/token-leak-guard.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

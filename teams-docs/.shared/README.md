@@ -1,21 +1,73 @@
 # 공유 리소스 (`.shared/`)
 
-> 보조강사가 1~3팀 (또는 그 이상) 작업을 점검할 때 **공통으로 사용하는 자격증명·설정**을 한 곳에 모아 관리합니다.
+> 보조강사가 1~3팀 (또는 그 이상) 작업을 점검할 때 **공통으로 사용하는 자격증명 + 점검 메서드 + 양식**을 한 곳에 모아 관리합니다.
 > 팀별 폴더(`1team/`, `2team/`, `3team/`)에서 이 폴더를 참조하는 구조입니다.
 
 ---
 
-## 1. 폴더 구조
+## 1. 폴더 구조 (2026-05-13 개편)
 
 ```
 teams-docs/.shared/
-├── README.md           ← 본 문서 (공개 가능)
-└── .figma_token        ← Figma Personal Access Token (절대 커밋 금지, gitignored)
+├── README.md                        ← 본 문서 (registry + 보안 정책)
+├── .figma_token                     ← Figma 토큰 (gitignored, token-leak-guard 면제 패턴)
+├── daily_check_method.md            ← 일일 점검 방법론 (보조강사 관점 + 10AM/4PM 리듬)
+├── risk_taxonomy.md                 ← 위험 신호 R1~R14 + 워터폴 R-W1~R-W4
+├── meeting_prep_template.md         ← 회의 30분 전 작성 양식 (AM/PM 변형)
+└── premortem_template.md            ← 주1회 사전 부검 (금요일)
+
+<archive>/.claude/                   ← Claude Code 자동 활성화 자산 (옵션 2)
+├── settings.json                    ← PreToolUse hook 등록
+├── skills/
+│   ├── team-check-am/SKILL.md       ← /team-check-am 슬래시 명령
+│   └── team-check-pm/SKILL.md       ← /team-check-pm 슬래시 명령
+└── hooks/
+    ├── token-leak-guard.sh          ← bash wrapper (Python 자동 탐색)
+    └── token-leak-guard.py          ← 실제 시크릿 패턴 검사
 ```
 
 향후 추가 가능 (필요 시):
 - `.github_token` — GitHub PAT (현재는 미사용, WebFetch로 공개 정보만 조회)
 - `cron_config.yml` — 일일 체크 자동화 설정
+
+---
+
+## 0. 빠른 호출
+
+### 0-1. 슬래시 명령 (권장, 옵션 2 도입 후)
+
+| 슬래시 명령 | 동작 |
+|---|---|
+| `/team-check-am 1` | 1팀 오전 10시 미팅 사전 준비 (18시간 윈도우) |
+| `/team-check-am 2` | 2팀 동일 |
+| `/team-check-am 3` | 3팀 동일 (워터폴 톤) |
+| `/team-check-pm 1` | 1팀 오후 4시 미팅 사전 준비 (6시간 윈도우 + 오전 액션 진척) |
+| `/team-check-pm 2` | 2팀 동일 |
+| `/team-check-pm 3` | 3팀 동일 |
+
+Skill 정의: [`<archive>/.claude/skills/team-check-am/SKILL.md`](../../.claude/skills/team-check-am/SKILL.md), [`team-check-pm/SKILL.md`](../../.claude/skills/team-check-pm/SKILL.md)
+
+### 0-2. 자연어 발화 (대안)
+
+| 사용자 발화 | Claude 진입 절차 |
+|---|---|
+| "1팀 작업 현황 체크해줘" / "1팀 오전 미팅 준비" | [daily_check_method.md](./daily_check_method.md) → [1team/review/context.md](../1team/review/context.md) → [1team/review/team_specific_checks.md](../1team/review/team_specific_checks.md) → [meeting_prep_template.md AM 양식](./meeting_prep_template.md#1-am-양식-오전-10시-미팅용) |
+| "1팀 오후 미팅 준비" | 동일 흐름, PM 양식 |
+| "2팀 / 3팀 ..." | 동일 흐름, 해당 팀 폴더 |
+| "이번 주 1팀 pre-mortem" | [premortem_template.md](./premortem_template.md) |
+| "위험 신호 점검" | [risk_taxonomy.md § 4 명령](./risk_taxonomy.md#4-위험-신호-점검-명령-모음) |
+
+→ 슬래시 명령이 진입 절차 결정적·일관적이라 권장. 자연어 발화도 Skill 안 거치고 같은 결과 가능.
+
+### 0-3. 토큰 누출 사전 차단 (자동)
+
+`<archive>/.claude/hooks/token-leak-guard.sh` (+ `.py`) 가 PreToolUse 단계에서 Write/Edit/MultiEdit/NotebookEdit 호출 시 자동 검사:
+
+- 검출 시: 차단 + 마스킹된 토큰 위치 안내
+- 면제: `.figma_token`, `*.token`, `*.env`, `*.env.*`, `*.key`, `*.pem`, `*.jks`, `*.p12`, `credentials*`
+- 검출 패턴: Figma PAT, Google API key, Stripe, GitHub PAT, Slack, AWS access key, JWT, Anthropic API key, OpenAI API key, Private key blocks
+
+이 hook은 `<archive>/.claude/settings.json` 으로 자동 활성화. 별도 작업 불필요.
 
 ---
 
@@ -132,8 +184,32 @@ curl -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/gjhxpOboz1famP1h
 
 ## 5. 참조
 
-- 1팀 figma 가이드: [`../1team/figma/README.md`](../1team/figma/README.md)
-- 2팀 figma 가이드: `../2team/figma/README.md` (등록 후 생성)
-- 3팀 figma 가이드: `../3team/figma/README.md` (등록 후 생성)
-- 일일 체크 절차: [`../1team/review/daily_check_guide.md`](../1team/review/daily_check_guide.md)
+### 공통 메서드 (본 폴더)
+- [`./daily_check_method.md`](./daily_check_method.md) — 점검 방법론 (보조강사 관점 + 10AM/4PM)
+- [`./risk_taxonomy.md`](./risk_taxonomy.md) — 위험 신호 R1~R14 + R-W1~R-W4 (워터폴)
+- [`./meeting_prep_template.md`](./meeting_prep_template.md) — 회의 30분 전 양식 (AM/PM)
+- [`./premortem_template.md`](./premortem_template.md) — 주1회 사전 부검
+
+### 팀별 컨텍스트
+- 1팀 (Scoffee, 애자일): [`../1team/review/context.md`](../1team/review/context.md), [`team_specific_checks.md`](../1team/review/team_specific_checks.md), [`daily_check_guide.md`](../1team/review/daily_check_guide.md) (인덱스)
+- 2팀 (Umma, 애자일): [`../2team/review/context.md`](../2team/review/context.md), [`team_specific_checks.md`](../2team/review/team_specific_checks.md)
+- 3팀 (BBip, **워터폴**): [`../3team/review/context.md`](../3team/review/context.md), [`team_specific_checks.md`](../3team/review/team_specific_checks.md)
+
+### Figma 가이드
+- 1팀: [`../1team/figma/README.md`](../1team/figma/README.md)
+- 2팀: [`../2team/figma/README.md`](../2team/figma/README.md)
+- 3팀: [`../3team/figma/README.md`](../3team/figma/README.md)
+
+### 스냅샷 보관
+- 1팀: [`../1team/snapshots/`](../1team/snapshots/)
+- 2팀: [`../2team/snapshots/`](../2team/snapshots/)
+- 3팀: [`../3team/snapshots/`](../3team/snapshots/)
+
+### 외부 참조
 - Figma REST API 공식 문서: https://www.figma.com/developers/api
+- [Atlassian — Daily Standups](https://www.atlassian.com/agile/scrum/standups)
+- [Scrum.org — Going Beyond Three Questions](https://www.scrum.org/resources/blog/going-beyond-three-questions-daily-scrum)
+- [Parabol — Scrum Master Daily Checklist](https://www.parabol.co/blog/new-scrum-master-daily-checklist/)
+- [PMI — Early Warning Signs](https://www.pmi.org/learning/library/identifying-warning-signs-complex-projects-6259)
+- [Smartsheet — Phase-Gate Process](https://www.smartsheet.com/phase-gate-process)
+- [Parabol — Pre-mortem Questions](https://www.parabol.co/resources/pre-mortem-questions/)
