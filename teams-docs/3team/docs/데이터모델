@@ -88,3 +88,20 @@
 | sent_at | Timestamp | ISO 8601 | 메시지 전송 시각 |
 | is_read | Boolean | True / False | 읽음 처리 여부 |
 |  |  |  |  |
+
+### Send
+
+서버로 데이터 전송 시 사용할 엔티티
+
+| 필드명 | 데이터 타입 | 형식 | 비고 |
+| --- | --- | --- | --- |
+| type | String | Enum | 알림 타입 (WALKIE, DM, REQ) |
+| sender_id | String | UID | 발신자 고유 ID |
+| sender_name | String | String | 발신자 이름 (알림 리스트 표시용) |
+| audio_url | String? | URL | (WALKIE 전용) 재생할 음성 파일 주소 |
+| duration | Long? | Long | 음성메세지 길이 |
+| room_id | String? | UID1_UID2 | 메세지 알림 클릭시 대화창으로 이동 |
+| content | String? | String | 디엠일 경우 발신자가 입력한 내용(예: “어디야?”) |
+| is_read | Boolean | true/false | 읽음 처리 여부 |
+| created_at | Long | ISO 8601 | 데이터 생성 날짜 및 시간 |
+|  |  |  |  |
