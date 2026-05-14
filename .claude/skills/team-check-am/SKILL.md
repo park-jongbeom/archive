@@ -1,10 +1,13 @@
 ---
 name: team-check-am
-description: "1/2/3팀 오전 10시 미팅 사전 준비. 어제 16:00 ~ 오늘 09:30 변화량 점검 + AM 양식 작성 + 스냅샷 저장. 사용법: /team-check-am <팀번호> (1/2/3). 보조강사 관점."
+description: "1/2/3팀 오전 10시 미팅 사전 준비. 어제 16:00 ~ 오늘 09:30 변화량 점검 + AM 양식 v2 작성 + 스냅샷 저장 + 강사 사전 통지 의제 3건 압축. 사용법: /team-check-am <팀번호> (1/2/3). 보조강사 관점."
 effort: medium
 ---
 
-# team-check-am — 오전 10시 팀 미팅 사전 준비
+# team-check-am — 오전 10시 팀 미팅 사전 준비 (v2 양식)
+
+> **양식**: [meeting_prep_template_v2.md](../../../teams-docs/.shared/meeting_prep_template_v2.md) (2026-05-14부 정식 적용)
+> **v1 양식**: [meeting_prep_template.md](../../../teams-docs/.shared/meeting_prep_template.md) (참조용만 유지)
 
 ## 사용법
 
@@ -18,7 +21,7 @@ effort: medium
 
 ---
 
-## 절차 (순서 엄수)
+## 절차 (순서 엄수, v2 적용)
 
 ### Step 1. 인자 파싱
 
@@ -31,93 +34,133 @@ effort: medium
 
 ### Step 2. 컨텍스트 로드 (순서 엄수)
 
-다음 5개 파일을 **이 순서대로** 읽는다:
+다음 6개 파일을 **이 순서대로** 읽는다:
 
 1. `teams-docs/.shared/daily_check_method.md` — 점검 방법론 환기
-2. `teams-docs/<X>team/review/context.md` — 팀 컨텍스트
-3. `teams-docs/<X>team/review/team_specific_checks.md` — 팀 고유 점검 항목
-4. `teams-docs/.shared/risk_taxonomy.md` — 위험 신호 정량 기준
-5. `teams-docs/<X>team/snapshots/` 최신 파일 (어제 PM 또는 최근) — 변화 감지용 baseline
+2. `teams-docs/.shared/meeting_prep_template_v2.md` — **현재 적용 양식** (v2)
+3. `teams-docs/<X>team/review/context.md` — 팀 컨텍스트
+4. `teams-docs/<X>team/review/team_specific_checks.md` — 팀 고유 점검 항목 + Top 5
+5. `teams-docs/.shared/risk_taxonomy.md` — 공통 R-항목 정량 기준 (R1~R14 + R-attend·R-burn 신규 + 3팀 R-W1~W6)
+6. `teams-docs/<X>team/snapshots/<직전회차>.md` — 어제 PM 또는 직전 스냅샷 (carry-over 자동 import 기준)
 
-3팀의 경우: 워터폴 톤 유지 (Sprint, mock-first, MVP 다이어트 권고 ❌).
+추가로 팀별 메모리 참조:
+- 1팀: [team1_personnel_change_260512.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team1_personnel_change_260512.md), [team1_burn_attend_260514_am.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team1_burn_attend_260514_am.md)
+- 3팀: [team3_methodology.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team3_methodology.md) — **워터폴 톤 절대 유지 (Sprint/mock-first/MVP 다이어트 권고 ❌)**
 
-### Step 3. 데이터 수집
+### Step 3. 사전 점검 자동화 명령 (B1 — v2 §🔍)
 
-다음 명령들을 **병렬로** 실행:
+다음 명령들을 **병렬로** 실행. 결과는 §🚨 즉시 조치 + §🚦 R-항목 점검 칸에 직접 반영:
 
 ```bash
-# 3-1. Git 활동 (해당 팀 로컬 클론)
 cd <팀 로컬 경로>
 git fetch --all --prune 2>&1 | tail -3
 
-# 18시간 윈도우 (어제 16:00 ~ 오늘 09:30 근사)
+# 3-1. 18시간 윈도우 변화량
 git log --all --since="18 hours ago" --pretty=format:"%ai | %an | %h | %s"
 
-# 인물별 활동 (24h)
-git shortlog -sne --since="24 hours ago"
+# 3-2. 인물별 활동 (24h + 7일)
+git shortlog -sne --since="24 hours ago" origin/develop
+git shortlog -sne --since="7 days ago" origin/develop   # R-out / R-quiet 후보
 
-# 신규 TODO 추출
+# 3-3. 신규 TODO 추출
 git log --all --since="18 hours ago" -p | grep -E "^\+.*TODO" | head -20
 
-# 머지 충돌 흔적 (R6 점검)
+# 3-4. 머지 충돌 흔적 (R6)
 git log --all --since="24 hours ago" --grep="Merge branch 'develop' into"
 
-# 보안 점검 (R13/R14)
-git ls-files | grep -iE "google-services|\\.env$|\\.keystore$|\\.jks$"
-git ls-files | grep -E "^\\.idea/|^\\.vscode/" | wc -l
-```
+# 3-5. 보안 점검 (R13/R14) — v2 §🔍에 결과 직접 명시
+git ls-files | grep -iE "google-services|\\.env$|\\.keystore$|\\.jks$|\\.p12$|\\.pem$|-key\\.json$"
+git ls-files | xargs grep -lE "AIza[0-9A-Za-z_-]{30,}|sk_live_|figd_" 2>/dev/null
+git ls-files | grep -E "^\\.idea/|^\\.vscode/|\\.DS_Store|Thumbs\\.db" | wc -l
 
-```
-# 3-2. Figma (변화 감지용)
+# 3-6. Figma (변화 감지용)
 TOKEN=$(cat teams-docs/.shared/.figma_token | tr -d '\r\n ')
 curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/<fileKey>?depth=1"
-```
 
-```
-# 3-3. GitHub Issues/PR (WebFetch)
+# 3-7. GitHub Issues/PR (WebFetch)
 # Open issues: https://github.com/LIKELION-Android-BOOTCAMP-6th/<repo>/issues
 # Recent PRs: https://github.com/LIKELION-Android-BOOTCAMP-6th/<repo>/pulls?q=is%3Apr
 ```
 
-### Step 4. 진단
+### Step 4. 진단 (v2 우선순위)
 
 점검 항목 우선순위:
 
-**(a) Top 5 (반드시)** — `team_specific_checks.md § 1`의 Top 5
-**(b) 공통 위험 신호** — `risk_taxonomy.md`의 R1~R14 (+3팀의 경우 R-W1~R-W4) 정량 기준 적용
-**(c) 인물별 활동표** — `context.md` 팀 구성표 기반, 24h 누적 (commit/Issue/PR/댓글)
-**(d) PRD Must 매트릭스 갱신**
-**(e) Figma 변화** — lastModified 갱신 여부, 신규 섹션
+**(a) Top 5 (반드시)** — `team_specific_checks.md §1`의 팀별 Top 5
 
-### Step 5. AM 양식 작성
+**(b) 공통 R-항목** — `risk_taxonomy.md` 정량 기준:
+- People (6건): R1, R8, R-out, R-quiet, **R-attend** (신규 표준), **R-burn** (신규 표준)
+- Process (4건): R2, R3, R6, R-cycle
+- Alignment (3건): R4, R9, R12
+- Quality (2건): R5, R7
+- Hygiene (2건): R13, R14
+- Operations (3건): R10, R11, R-demo
+- 3팀 워터폴 추가 (4건): R-W1~R-W4
 
-`teams-docs/.shared/meeting_prep_template.md § 1 AM 양식`을 그대로 사용하여 작성. 채워야 할 섹션:
+**(c) 팀 특화 R-항목** — `team_specific_checks.md §6`:
+- 1팀: R-PO, R-burn-1 (= R-burn 1팀 임계값), R-MN, R-DL, R-Must7
+- 2팀: R-out-2, R-WIP, R-burn (2팀), R13-2
+- 3팀: R-W5, R-W6 추가
 
-1. 🟢 한 줄 요약
-2. 📊 18시간 변화 (어제 16:00 ~ 오늘 09:30)
-3. 🎯 오늘의 키 포인트
-4. 🟡 주의 항목 (강사가 놓칠 가능성 — 보조강사 시각)
-5. 🚨 즉시 조치 필요 (R1/R13/R-out 등 발견 시)
-6. 👤 인물별 활동표
-7. 📋 Issue↔PR 정합성
-8. 🎨 Figma 보드 변화
-9. 💡 보조강사 권장 액션 (회의에서 짚을 항목)
-10. 🔁 어제 PM carry-over 진척
+**(d) Carry-over 자동 import + 이행률**:
+- 직전 PM 스냅샷의 §🌙 내일 AM carry-over 표를 그대로 import
+- 회의-내 이행률 = 회의에서 다뤄진 N / 전체 M
+- **이월 2회+ 항목은 자동 🚨 격상** (§🚨 강사 사전 통지 1순위 후보)
+
+**(e) 인물별 24h 활동표** — `context.md` 팀 구성표 기반, commit/Issue/PR/머지/댓글 + **이전 회의 발화 ✅/❌**
+- **commit ≥ 1 + 발화 0** → R-quiet 자동 flag
+- **commit 0 + 발화 0 + 결석 사유 없음** → R-out 후보
+
+**(f) PRD Must 매트릭스 갱신** + **(g) Figma 변화** — `team_specific_checks.md §2`/`§4` 갱신
+
+### Step 5. AM 양식 v2 작성 (14개 섹션)
+
+`teams-docs/.shared/meeting_prep_template_v2.md §1 AM 양식` 사용. **순서 엄수**:
+
+1. **🔍 사전 점검 자동화 명령 결과** (B1 — Step 3 grep 결과 직접 명시)
+2. **🚨 즉시 조치 필요** (최상단 — 24h+ 정체 또는 보안/위생 critical. 없으면 "없음" 명시)
+3. **🚨 강사 사전 통지 의제 3건** (회의 5분 전 강사 채팅/1:1 전달 — 보조강사 마이크 SPOF 백업):
+   - **1번 의제는 "(회의 첫 안건 권유)" 명시** — B3
+   - **carry-over 2회+ 이월 항목은 자동 1순위 격상** — B2
+   - **회의 외 강사 1:1 별도 통지 항목** 별도 표기 (carry-over 2회+ 시) — B2
+4. 🟢 한 줄 요약 — 전체 신호등 + 어제 종료 후 핵심 변화 1문장
+5. 📊 18시간 변화 — **Finished (어제 PM 이후) / Will finish by when** (Patton/Gothelf 프레임)
+6. **🎯 오늘 끝낼 수 있는 작업 3개** (Walking the Board — 보드 오른쪽 → 왼쪽 순회)
+7. **🔁 Carry-over 자동 재출현 + 이행률 N/M%** — owner / 마감 / 회의에서 다뤘나 / 데이터 상태 / 이월 횟수 표
+8. 🚦 R-항목 점검 — Step 4 (b)(c) 정량 결과 (오늘 AM 상태 + 변화)
+9. 👤 인물별 24h 활동 + 회의 발화 정합성 — R-quiet / R-out / R-attend 자동 flag
+10. 📋 Issue↔PR 정합성 (1·2팀 애자일 / 3팀은 §13 Phase-gate)
+11. 🎨 FigJam/Design 보드 변화 — lastModified + 신규 페이지·섹션
+12. 💡 보조강사 권장 액션 (3건 압축, 좋은 점 1건 포함 원칙: 🟢 격려 → 🚨 critical → 🟡 환기)
+13. (3팀 한정) **🚧 Phase-gate Must Meet 6항목 헤더** — `3team/review/team_specific_checks.md §2-2` 자동 import, 충족률 N/6 명시
+14. (선택) 📚 근거 인용 — 신규 R-항목 도입시만 ([가이드 §N](../../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) 또는 [FAQ §N](../../../ta-guides/애자일_예제기반_FAQ.md))
 
 ### Step 6. 스냅샷 저장
 
-작성한 양식을 다음 경로로 저장:
 ```
 teams-docs/<X>team/snapshots/<YYMMDD>_am.md
 ```
 
 파일명 예: `260514_am.md` (2026-05-14 오전).
 
-### Step 7. 사용자에 보고
+### Step 7. 사용자에 보고 (강사 사전 통지 우선 노출)
 
-저장한 스냅샷 내용을 그대로 출력하되:
-- 🚨 즉시 조치 필요 항목이 있으면 **상단 강조**
-- 결과 끝에 회의 시작 5분 전 알림 + 회의 후 갱신 절차 1줄 안내
+사용자 출력 순서:
+
+1. **§🚨 강사 사전 통지 의제 3건** — **본문 최상단에 별도 박스로 강조** (사용자가 채팅 복사 후 회의 5분 전 강사에게 전달용)
+2. 🚨 즉시 조치 항목 — 별도 박스 강조
+3. 한 줄 요약 + 핵심 변화
+4. carry-over 이행률 + 2회+ 이월 자동 격상 항목
+5. 인물별 활동 요약
+6. 보조강사 권장 액션 3건
+7. 출력 끝 표준 멘트
+
+### Step 8. 회의 후 갱신 (회의 종료 후 5분, 사용자가 별도 호출)
+
+- §🚨 강사 사전 통지 3건 중 강사 발화한 항목 ✅ 표시
+- 미언급은 §🌙 내일 AM carry-over에 자동 이월 + 이월 횟수 +1
+- 회의 실제 시간 기록 (분/초)
+- 회의록(mom) 작성 트리거 조건 ([team-meeting-transcribe SKILL Step 6](../team-meeting-transcribe/SKILL.md) 참조)
 
 ---
 
@@ -126,21 +169,51 @@ teams-docs/<X>team/snapshots/<YYMMDD>_am.md
 ```
 ---
 ✅ 스냅샷 저장: teams-docs/<X>team/snapshots/<YYMMDD>_am.md
-회의 종료 후 결정사항을 issue_pr_matrix.md / team_specific_checks.md에 반영하세요.
-다음: 오후 4시 미팅 30분 전 `/team-check-pm <팀번호>` 호출.
+
+📋 회의 5분 전 (09:55) — §🚨 강사 사전 통지 의제 3건을 강사 채팅/1:1로 전달.
+   (보조강사 마이크 이슈 대비 백업 채널 — 마이크 가능시 회의 중 보완용으로만)
+
+⚠️ Carry-over 2회+ 이월 항목 N건 — 회의와 별개로 강사 1:1 별도 통지 권장 (B2).
+
+회의 후: 강사 발화 항목에 ✅ 표시 → §🌙 carry-over 이월 + /team-check-pm <팀번호> 호출.
 ```
 
 ---
 
 ## 주의 사항
 
-- **3팀은 워터폴** — Sprint/mock-first/MVP 다이어트 권고 금지. 워터폴 R-W 항목 우선 적용.
-- 토큰은 절대 출력 본문에 노출하지 말 것 (token-leak-guard hook이 차단하지만 사전 주의).
-- 양식이 길어지면 1팀 종합 진단 보고처럼 섹션을 압축하되, 인물별 활동표와 위험 신호는 절대 생략 금지.
-- 직전 스냅샷이 없으면 (첫 호출 등) "베이스라인 비교 없음" 명시.
+### 톤 / 운영 룰
+- **3팀은 워터폴** — Sprint/mock-first/MVP 다이어트 권고 ❌. 워터폴 R-W1~W6 우선 적용. [team3_methodology.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team3_methodology.md) 절대 준수.
+- **좋은 점부터 1건 이상** ([FAQ §10](../../../ta-guides/애자일_예제기반_FAQ.md) "❌ 칭찬만" 회피 + "좋은 점 먼저" 원칙).
+- **인물 비판 X / 코드·프로세스 비판 ✅** — "OO팀원 게으르다" ❌ / "OO팀원 commit 0 + Issue 댓글 0 = R-quiet" ✅.
+
+### v2 핵심 룰
+- **B1 사전 점검 명령**: Step 3 grep 결과를 §🔍에 직접 명시. 보조강사가 매번 명령 찾는 시간 절약.
+- **B2 carry-over 2회+ 격상**: 자동으로 §🚨 강사 사전 통지 1순위 + 회의 외 강사 1:1 별도 통지.
+- **B3 회의 첫 안건 권유**: §🚨 강사 사전 통지 1번 의제에 명시. 시뮬레이션 결과 결정적 효과.
+
+### 보안 / 위생
+- 토큰은 절대 출력 본문에 노출 X (token-leak-guard hook이 차단하지만 사전 주의).
+- 양식이 길어지면 압축하되, **인물별 활동표 + R-항목 점검 + carry-over 이행률**은 절대 생략 X.
+- 직전 스냅샷이 없으면 "베이스라인 비교 없음" 명시 + Week N 최소 Done만 헤더에 자동 import.
+
+---
 
 ## 참조
 
-- [.shared/daily_check_method.md](../../../teams-docs/.shared/daily_check_method.md)
-- [.shared/meeting_prep_template.md](../../../teams-docs/.shared/meeting_prep_template.md)
-- [.shared/risk_taxonomy.md](../../../teams-docs/.shared/risk_taxonomy.md)
+### 양식 / 점검 항목
+- [.shared/meeting_prep_template_v2.md](../../../teams-docs/.shared/meeting_prep_template_v2.md) — **현재 적용 양식** (2026-05-14부)
+- [.shared/meeting_prep_template.md](../../../teams-docs/.shared/meeting_prep_template.md) — v1 참조용
+- [.shared/daily_check_method.md](../../../teams-docs/.shared/daily_check_method.md) — 점검 방법론
+- [.shared/risk_taxonomy.md](../../../teams-docs/.shared/risk_taxonomy.md) — R-항목 정량 기준 (R-attend·R-burn 표준 포함)
+
+### 사내 가이드 (v2 §📚 근거 인용 기준)
+- [final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md](../../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) — 애자일 본 가이드
+- [ta-guides/애자일_예제기반_FAQ.md](../../../ta-guides/애자일_예제기반_FAQ.md) — 보조강사 FAQ (§9 안티패턴 식별표)
+
+### v2 설계 근거 (조사·분석·시뮬레이션)
+- [operation/docs/research/external_practices.md](../../../operation/docs/research/external_practices.md) — 외부 베스트 프랙티스
+- [operation/docs/research/current_pattern_gap.md](../../../operation/docs/research/current_pattern_gap.md) — gap 분석
+- [operation/docs/research/v2_simulation_results.md](../../../operation/docs/research/v2_simulation_results.md) — v2 효과 시뮬레이션
+- [operation/docs/research/template_v1_v2_diff.md](../../../operation/docs/research/template_v1_v2_diff.md) — v1↔v2 변경 요약
+- [operation/docs/meeting_template_v2_quick_apply.md](../../../operation/docs/meeting_template_v2_quick_apply.md) — 오늘 즉시 적용 가이드

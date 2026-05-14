@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C c:/Users/ibebu/bootcamp6_final/archive status --short)",
+      "Bash(git -C c:/Users/ibebu/bootcamp6_final/archive log --oneline -5)",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i 'teams-docs/1team/meeting/2026-05-14 1팀 오전미팅.mkv' -ar 16000 -ac 1 -c:a pcm_s16le -vn teams-docs/1team/meeting/260514_am.wav -y -loglevel error -stats)",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffprobe.exe' -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 teams-docs/1team/meeting/260514_am.wav)",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/buzz/whisper_cpp/whisper-cli.exe' -m /c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin -f teams-docs/1team/meeting/260514_am.wav -l ko -otxt -nt -of teams-docs/1team/meeting/260514_am_transcript -t 4 -p 1)",
+      "WebFetch(domain:www.atlassian.com)",
+      "WebFetch(domain:www.mountaingoatsoftware.com)",
+      "WebFetch(domain:hbr.org)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:geekbot.com)",
+      "Bash(awk '{print $NF, \"\\(\"$5\" bytes\\)\"}')"
+    ]
+  }
+}

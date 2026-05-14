@@ -1,10 +1,13 @@
 ---
 name: team-meeting-transcribe
-description: "각 팀 미팅 녹음(.mkv/.mp4/.wav 등)을 Buzz 번들 whisper로 transcribe 후, 회의 결과를 PM 스냅샷에 반영하고 1팀은 회의록(mom)까지 작성. 사용법: /team-meeting-transcribe <팀번호|all> [날짜 YYMMDD] [시간대 am|pm]. 보조강사 관점."
+description: "각 팀 미팅 녹음(.mkv/.mp4/.wav 등)을 Buzz 번들 whisper로 transcribe 후, 회의 결과를 v2 양식 스냅샷에 반영 (강사 사전 통지 ✅/❌ + carry-over 이행률 + 신호등 회고) + 회의록(mom) 작성. 사용법: /team-meeting-transcribe <팀번호|all> [날짜 YYMMDD] [시간대 am|pm]. 보조강사 관점."
 effort: medium
 ---
 
-# team-meeting-transcribe — 회의 녹음 변환 + 점검 문서 갱신
+# team-meeting-transcribe — 회의 녹음 변환 + 점검 문서 갱신 (v2 양식)
+
+> **양식**: [meeting_prep_template_v2.md](../../../teams-docs/.shared/meeting_prep_template_v2.md) (2026-05-14부 정식 적용)
+> **목적**: 회의 결과를 v2 양식 14개 섹션에 반영하여 carry-over 이행률 측정 + 신호등 align 추적
 
 ## 사용법
 
@@ -137,72 +140,113 @@ MODEL="/c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin"
 
 **all 모드**: 3개 팀을 순차 변환 (병렬은 CPU 경합으로 비효율). `run_in_background: true` 로 백그라운드 실행 + 완료 알림 대기.
 
-### Step 4. transcript 읽기 + 회의 분석
+### Step 4. transcript 읽기 + 회의 분석 (v2 metrics)
 
-생성된 `<YYMMDD>_<am|pm>_transcript.txt` 를 Read 도구로 읽고, 다음 7가지를 추출:
+생성된 `<YYMMDD>_<am|pm>_transcript.txt` 를 Read 도구로 읽고, 다음 **10가지**를 추출:
 
 1. **참여자 식별** — 이름·역할 (transcript는 화자 분리 안 됨 → 발화 내용으로 추정)
-2. **진척 보고** — 각 멤버 작업 영역 + Must 매핑
-3. **강사 지적 사항** — "왜", "이렇게 하셔야죠", "빼주세요" 등 지시어
-4. **합의 사항** — "알겠습니다", "그렇게 하겠습니다", "당분간 ~ 체제" 등 확정 표현
-5. **R-항목 발현** — google-services, 권한 이슈, 패키지 리팩토링, 부담 신호, 발언 0건 등
-6. **미합의 / 이월 항목** — 사전 체크리스트에 있었으나 회의에서 다뤄지지 않은 의제
-7. **인용할 핵심 발화** — 1~2개 (PM 스냅샷에 인용 블록으로 직접 삽입)
+2. **회의 분량** — 총 시간 (분/초) + Atlassian 권장(15분) 대비 % — v2 timebox 측정 지표
+3. **진척 보고** — 각 멤버 작업 영역 + Must 매핑
+4. **강사 지적 사항** — "왜", "이렇게 하셔야죠", "빼주세요" 등 지시어
+5. **합의 사항** — "알겠습니다", "그렇게 하겠습니다", "당분간 ~ 체제" 등 확정 표현
+6. **R-항목 발현** — google-services, 권한 이슈, 패키지 리팩토링, 부담 신호(R-burn), 결석·조퇴(R-attend), 발언 0건(R-quiet) 등
+7. **미합의 / 이월 항목** — 사전 체크리스트에 있었으나 회의에서 다뤄지지 않은 의제
+8. **🚨 강사 사전 통지 의제 3건 다뤄짐 여부** ⭐ v2 신규:
+   - 직전 스냅샷의 §🚨 강사 사전 통지 3건을 transcript 발화와 매칭
+   - 각 항목 ✅ (강사 발화로 다뤄짐) / ❌ (미언급)
+   - **회의-내 이행률 = ✅ 수 / 3**
+9. **🔁 Carry-over 이행률** ⭐ v2 신규:
+   - 직전 스냅샷의 §🔁 Carry-over 표를 transcript 발화와 매칭
+   - 각 항목 ✅ / ❌ + 이월 횟수 +1
+   - 회의-내 이행률 = ✅ 수 / 전체 carry-over 수
+   - **2회+ 이월 항목 식별** → 다음 회차 §🚨 강사 사전 통지 1순위 자동 격상
+10. **🚦 신호등 1단어 회고 결과** (PM only) ⭐ v2 신규:
+    - 회의 종료 직전 강사/보조강사/팀장의 색 + 1단어 발화 추출
+    - 같은 색이면 align ✅ / 다르면 내일 AM 1순위 자동 격상 + mom 기록
+11. **인용할 핵심 발화** — 1~2개 (스냅샷에 인용 블록으로 직접 삽입)
 
 **중요**: transcript는 음성 인식 오류 포함 (예: "PO" → "비야", "google-services" → "구글 서비스"). 추측이 큰 부분은 `?` 또는 `(추정)`으로 표기.
 
-### Step 5. PM/AM 스냅샷 갱신
+**회의 분량이 매우 짧음 (< 5분)** = 형식적 보고 우려. **§3-5 회의가 매우 짧을 때** 절차 적용.
 
-회의 **시간대(am/pm)**에 따라 다른 양식 적용:
+### Step 5. AM/PM 스냅샷 갱신 (v2 양식 14개 섹션)
 
-- **PM**: [.shared/meeting_prep_template.md §2 PM 양식](../../../teams-docs/.shared/meeting_prep_template.md) 기반 + 회의 결과 반영
-- **AM**: [.shared/meeting_prep_template.md §1 AM 양식](../../../teams-docs/.shared/meeting_prep_template.md) 기반
+회의 **시간대(am/pm)**에 따라 v2 양식 적용:
+
+- **AM**: [meeting_prep_template_v2.md §1 AM 양식](../../../teams-docs/.shared/meeting_prep_template_v2.md)
+- **PM**: [meeting_prep_template_v2.md §2 PM 양식](../../../teams-docs/.shared/meeting_prep_template_v2.md)
 
 이미 사전 체크리스트로 작성된 스냅샷이 있으면 **Write로 덮어쓰기** (회의 결과 추가 + 빈칸 채움). 없으면 새로 작성.
 
-핵심 섹션:
+#### 5-1. 회의 결과 반영 (각 섹션 갱신 위치)
 
-| 섹션 | 내용 |
+| v2 섹션 | 회의 후 갱신 내용 |
 |---|---|
-| 🟢 한 줄 요약 | 회의 핵심 1문장 |
-| 🔴 즉시 조치 항목 | 강사가 직접 지시한 R13/R-out 등 (인용 블록 포함) |
-| 📊 시간 변화 | 사전 수집된 git/Figma 데이터 |
-| ✅ 회의 발화에서 확인된 작업 분담 | 표 형식 |
-| 1. 사전 Top 5 점검 결과 | ✅/❌ + 회의 메모 |
-| 4. R-항목 점검 결과 | 회의 후 상태 갱신 |
-| 5. 인물별 활동 | commit + 회의 발화 + 신호 |
-| 7. 합의 사항 | 번호 매김 |
-| 8. 액션 아이템 | 표 (액션/담당/기한/검증) |
-| 9. 다음 회차 carry-over | 미합의·이월 항목 |
-| 10. 참조 | transcript 링크 포함 |
+| 🔍 사전 점검 자동화 명령 결과 | (사전 작성 그대로 유지) |
+| 🚨 즉시 조치 필요 | 회의에서 강사가 직접 발화한 즉시 조치 추가 (인용 블록) |
+| 🚨 강사 사전 통지 의제 3건 | **각 항목 옆에 ✅ (다뤄짐) / ❌ (미언급) 마킹** ⭐ v2 핵심 |
+| 🟢 한 줄 요약 | 회의 핵심 1문장 (사전 → 회의 후 갱신) |
+| 📊 변화 (Finished / Will finish) | 회의에서 청취한 Will finish by when 채움 |
+| 🎯 오늘 끝낼 수 있는 작업 3개 (AM only) | 회의 발화로 확정된 항목으로 갱신 |
+| ✅ 오전 회의 액션 아이템 진척 (PM only) | 오전 합의 → 현재 상태 검증 |
+| 🔁 Carry-over 자동 재출현 + 이행률 | **각 항목 ✅/❌ 마킹 + 이행률 N/M% 계산** ⭐ v2 핵심 |
+| 🚦 R-항목 점검 | 회의 후 상태 갱신 (오전 → 오후 변화 강조 PM only) |
+| 👤 인물별 활동 + 회의 발화 정합성 | **회의 발화 ✅/❌ 컬럼 채움 + R-quiet 자동 flag** |
+| 📋 Issue↔PR 정합성 (1·2팀) | 회의 발화 정합 |
+| 🎨 FigJam/Design 변화 | (사전 작성 그대로) |
+| 💡 보조강사 권장 액션 3건 | 회의 후 push 못한 항목 별도 메모 |
+| 🌙 내일 AM carry-over (PM only) | **미해결 + 새 발생 항목 자동 이월 + 이월 횟수 +1 + 2회+ 자동 🚨** ⭐ B2 |
+| 🚦 오늘 신호등 1단어 회고 (PM only) | **강사/보조강사/팀장 색 + 1단어 transcript 발화에서 추출. 색 align 여부 명시** ⭐ v2 신규 |
+| 🚧 Phase-gate Must Meet (3팀) | 회의에서 점검된 항목 충족률 갱신 |
+| 📚 근거 인용 | 신규 R-항목 도입시만 |
 
-### Step 6. 회의록 (mom) 작성 — 필요 시
+#### 5-2. 회의 분량 + 정량 지표 기록 (양식 헤더)
+
+v2 양식 헤더의 "회의 timebox 권장 / 실제 시간"에 **실제 회의 시간 (분:초)** 기록.
+1주 후 회고 시 v1 baseline(5'21") 대비 변화 추적용.
+
+### Step 6. 회의록 (mom) 작성 — 필요 시 (v2 트리거 확장)
 
 다음 조건 중 **하나라도** 충족하면 별도 회의록 작성:
 
 - 인원 변경 / PO·팀장 교체 / 부팀장 공백 결정
 - R13/R-out/R-demo 등 즉시 에스컬레이션 R-항목 발현
+- **R-attend (출결)** 신규 발현 — 결석·조퇴 사유 + 분담 합의 기록
+- **R-burn 본격 발현** — 강사 명시 경고 또는 본인 "힘들다" 발언 시
 - Decision Log 0건 상태에서 첫 결정 사항 발생
+- **🚦 신호등 회고에서 강사·보조강사·팀장 색이 불일치 (다음 AM 1순위 자동 격상)** ⭐ v2 신규
+- **carry-over 2회+ 이월 항목이 있는 경우** ⭐ v2 신규 (B2 — 회의 외 강사 1:1 통지 근거)
 - 1팀의 경우: 보조강사가 강사에게 별도 통지 필요한 사안
 
 경로: `teams-docs/<X>team/mom/<YYMMDD>_<am|pm>_minutes.md`
 
-양식 골격:
+양식 골격 (v2 반영):
 ```markdown
 # <팀명> 회의록 — <YYYY-MM-DD> <AM|PM>
 
-> 일시: ...
+> 일시: <시작> ~ <종료> (<N>분 <M>초)
 > 참여: ...
 > 원본: [meeting/<YYMMDD>_<am|pm>_transcript.txt](../meeting/...)
 > 작성: 보조강사 (transcript 기반 정리)
+> 양식: v2 ([meeting_prep_template_v2.md](../../.shared/meeting_prep_template_v2.md))
 
 ## 1. 진척 보고
 ## 2. 강사 지적 사항 (인용 포함)
 ## 3. 운영 체제 합의
 ## 4. 결정 사항 (Decision Log) — 표
-## 5. 액션 아이템 — 표
-## 6. 이월 항목
-## 7. 참조
+## 5. 액션 아이템 — 표 (액션 / 담당 / 기한 / 검증)
+## 6. 🚨 강사 사전 통지 의제 ✅/❌ 결과 (v2 신규)
+   - 1. (1순위) → ✅/❌ + 이행 결과 1줄
+   - 2. ... 3. ...
+## 7. 🔁 Carry-over 이행 결과 (v2 신규)
+   | 항목 | Owner | 회의에서 다뤘나? | 이월 횟수 | 다음 회차 |
+## 8. 🚦 신호등 회고 결과 (PM only, v2 신규)
+   - 강사: 🔴/🟡/🟢 + 1단어
+   - 보조강사: 동일
+   - 팀장/PO: 동일
+   - **Align? ✅ / ❌ (다음 AM 1순위 자동 격상)**
+## 9. 이월 항목 (다음 회차 §🚨 강사 사전 통지 후보)
+## 10. 참조
 ```
 
 ### Step 7. 임시 파일 정리
@@ -219,33 +263,59 @@ mkv 원본 / transcript / 모델은 유지 (다음 회차 재사용 / 추적 자
 회의에서 **다음 회차에도 적용될 패턴**을 발견하면 project 타입 메모리 저장:
 
 - 새 인원 변경 / 역할 교체
+- R-attend / R-burn 신규 발현 → 추후 회고 baseline
 - 반복적 R-항목 발현 패턴 (예: 적응 멤버 본인 발언 0건)
 - 보조강사 다음 회의 사전 통지 의제 후보
+- **신호등 align 불일치 패턴** ⭐ v2 신규 (강사·보조강사 시선 차이 추적)
 
-기존 메모리 (예: `team1_personnel_change_260512.md`)와 중복되면 **갱신**, 새 사안이면 **신규 파일** + `MEMORY.md` 인덱스 1줄 추가.
+기존 메모리 (예: `team1_personnel_change_260512.md`, `team1_burn_attend_260514_am.md`)와 중복되면 **갱신**, 새 사안이면 **신규 파일** + `MEMORY.md` 인덱스 1줄 추가.
 
-### Step 9. 사용자 보고
+### Step 9. 사용자 보고 (v2 정량 지표 포함)
 
 다음 골격으로 채팅 출력:
 
 ```markdown
 회의 분석 + 문서 갱신 완료. 총 <시간> 소요.
 
-## 회의 분석 핵심
+## 회의 분석 핵심 (v2 정량 지표)
 ### <팀명> (<분량>)
 - 🟢 ...
 - 🚨 ...
 - ❌ ...
+- 🚨 강사 사전 통지 의제 이행: N/3 (%)
+- 🔁 Carry-over 이행률: N/M (%)
+- 🚦 신호등 회고: 강사 X / 보조강사 Y / 팀장 Z (align ✅/❌)
+- 회의 시간: <분:초> (v1 baseline 5'21" 대비 N%)
 
 ## 생성·갱신된 문서
 | 파일 | 내용 |
 | ... | ... |
 
-## 다음 AM 강사 사전 통지 의제 (1줄)
-> "..."
+## 🚨 2회+ 이월 항목 (회의 외 강사 1:1 통지 권장 — B2)
+- {항목 1}
+- {항목 2}
+
+## 다음 회차 강사 사전 통지 의제 후보 (1순위 자동 격상)
+1. (회의 첫 안건 권유) {2회+ 이월 항목 또는 R-항목 critical}
+2. {신규 발현 R}
+3. {좋은 점 격려}
 ```
 
-**all 모드**: 3개 팀 모두 분석 → 종합 보고 + 팀별 핵심 의제 3건씩.
+**all 모드**: 3개 팀 모두 분석 → 종합 보고 + 팀별 v2 정량 지표 (이행률 / 회의 시간 / 신호등) 비교 표.
+
+### Step 10. 1주 운영 후 v2 효과 측정 (5/21 일요일 회고)
+
+매주 일요일 v2 효과 측정 ([template_v1_v2_diff.md §6](../../../operation/docs/research/template_v1_v2_diff.md) 참조):
+
+| 지표 | v1 baseline | 이번 주 측정값 | 목표 |
+|---|---|---|---|
+| 회의-내 carry-over 이행률 | 0% (1팀 0/7) | (transcribe 결과 누적) | ≥ 30% |
+| 회의 평균 시간 | 5'21" (4회) | (transcribe 결과 누적) | ≥ 7'00" (AM) |
+| 24h+ 정체 🚨 항목 | 1건 (R13) | (스냅샷 누적) | 0건 |
+| 강사 사전 통지 이행률 | — | (transcribe 결과) | 100% |
+| 신호등 align 비율 | — | (PM transcribe 누적) | ≥ 70% |
+
+→ 5/21 회고 시 본 표 채워서 v3 결정 (timebox 강제 도입 / 무기명 폼 도입 여부).
 
 ---
 
@@ -364,15 +434,36 @@ DEFAULT_THREADS=4
 
 ## 7. 참조
 
+### 자매 SKILL
 - [team-check-am SKILL](../team-check-am/SKILL.md) — AM 회의 사전 준비 (본 스킬은 회의 종료 후 진행)
 - [team-check-pm SKILL](../team-check-pm/SKILL.md) — PM 회의 사전 준비
-- [.shared/meeting_prep_template.md](../../../teams-docs/.shared/meeting_prep_template.md) — AM/PM 양식
-- [.shared/risk_taxonomy.md](../../../teams-docs/.shared/risk_taxonomy.md) — R-항목 분류
-- 외부 도구:
-  - [Buzz GitHub](https://github.com/chidiwilliams/buzz)
-  - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
-  - [Huggingface 모델](https://huggingface.co/ggerganov/whisper.cpp)
-- 본 스킬 적용 1회차 결과 (2026-05-13): [memory/team_check_meeting_insights_260513.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team_check_meeting_insights_260513.md)
+
+### 양식 / 점검 항목 (v2)
+- [.shared/meeting_prep_template_v2.md](../../../teams-docs/.shared/meeting_prep_template_v2.md) — **현재 적용 양식** (2026-05-14부)
+- [.shared/meeting_prep_template.md](../../../teams-docs/.shared/meeting_prep_template.md) — v1 참조용
+- [.shared/risk_taxonomy.md](../../../teams-docs/.shared/risk_taxonomy.md) — R-항목 분류 (R-attend·R-burn 표준 포함)
+- [.shared/daily_check_method.md](../../../teams-docs/.shared/daily_check_method.md) — 점검 방법론
+- [.shared/premortem_template.md](../../../teams-docs/.shared/premortem_template.md) — 주1회 사전 부검
+
+### 사내 가이드
+- [final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md](../../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md)
+- [ta-guides/애자일_예제기반_FAQ.md](../../../ta-guides/애자일_예제기반_FAQ.md) — §9 안티패턴 식별표
+
+### v2 설계 근거
+- [operation/docs/research/external_practices.md](../../../operation/docs/research/external_practices.md)
+- [operation/docs/research/current_pattern_gap.md](../../../operation/docs/research/current_pattern_gap.md)
+- [operation/docs/research/v2_simulation_results.md](../../../operation/docs/research/v2_simulation_results.md)
+- [operation/docs/research/template_v1_v2_diff.md](../../../operation/docs/research/template_v1_v2_diff.md)
+- [operation/docs/meeting_template_v2_quick_apply.md](../../../operation/docs/meeting_template_v2_quick_apply.md)
+
+### 메모리
+- [team_check_meeting_insights_260513.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team_check_meeting_insights_260513.md) — 본 스킬 적용 1회차 결과 + v2 supersede
+- [team1_burn_attend_260514_am.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team1_burn_attend_260514_am.md) — R-attend·R-burn 발현 baseline
+
+### 외부 도구
+- [Buzz GitHub](https://github.com/chidiwilliams/buzz)
+- [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+- [Huggingface 모델](https://huggingface.co/ggerganov/whisper.cpp)
 
 ---
 
@@ -381,3 +472,4 @@ DEFAULT_THREADS=4
 | 날짜 | 변경 |
 |---|---|
 | 2026-05-13 | 초안 작성 — Buzz 1.4.4 + ggml-medium 한국어 워크플로우 검증 (1·2·3팀 PM 회의 변환 1회차) |
+| 2026-05-14 | **v2 양식 적용** — Step 4 분석 7→10 항목 (강사 사전 통지 ✅/❌ + carry-over 이행률 + 신호등 회고 추가) / Step 5 v2 14개 섹션 매핑 / Step 6 mom 트리거 확장 (R-attend·R-burn·신호등 불일치·carry-over 2회+) / Step 9 v2 정량 지표 보고 / Step 10 1주 회고 측정 표 추가 |
