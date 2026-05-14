@@ -34,14 +34,22 @@ effort: medium
 
 ### Step 2. 컨텍스트 로드 (순서 엄수)
 
-다음 6개 파일을 **이 순서대로** 읽는다:
+다음 7개 파일을 **이 순서대로** 읽는다:
 
 1. `teams-docs/.shared/daily_check_method.md` — 점검 방법론 환기
-2. `teams-docs/.shared/meeting_prep_template_v2.md` — **현재 적용 양식** (v2)
+2. `teams-docs/.shared/meeting_prep_template_v2.md` — **현재 적용 양식** (v2.1)
 3. `teams-docs/<X>team/review/context.md` — 팀 컨텍스트
 4. `teams-docs/<X>team/review/team_specific_checks.md` — 팀 고유 점검 항목 + Top 5
 5. `teams-docs/.shared/risk_taxonomy.md` — 공통 R-항목 정량 기준 (R1~R14 + R-attend·R-burn 신규 + 3팀 R-W1~W6)
 6. `teams-docs/<X>team/snapshots/<직전회차>.md` — 어제 PM 또는 직전 스냅샷 (carry-over 자동 import 기준)
+7. **`teams-docs/<X>team/mom/<오늘날짜>*`** ⭐ v2.1 신규 — **사용자가 수기로 작성한 팀 회의록** (오늘 분담 cross-check 기준)
+   - 1팀 예: `260514 - 진행중` 같은 파일명. Glob으로 찾기: `ls teams-docs/<X>team/mom/ | grep <YYMMDD>`
+   - 파일 없으면 "오늘 mom 미작성" 명시 + §🗂️ 섹션에서 mom 컬럼 비워둠
+8. **`teams-docs/<X>team/backlog/backlog_<YYMMDD>_am.pdf`** ⭐ v2.2 신규 — **GitHub Project Kanban 보드 PDF** (사용자가 회의 40분 전 브라우저 인쇄로 추출)
+   - 폴더 README: [teams-docs/<X>team/backlog/README.md](../../../teams-docs/1team/backlog/README.md)
+   - **Read 도구**로 PDF 자동 파싱 (10페이지 이하는 `pages` 생략, 큰 경우 `pages: "1-5"`)
+   - PDF 없으면 사용자에 1회 알림: "회의 40분 전 Project 보드 PDF 인쇄 → backlog/ 폴더에 저장 권장. 없이 진행할까요?"
+   - 파싱 결과: 컬럼별 카드 수 (Backlog/Ready/In Progress/In Review/Done) + 각 카드 (#번호, 제목, assignee) + WIP 한도 위반 (한도 vs 현재)
 
 추가로 팀별 메모리 참조:
 - 1팀: [team1_personnel_change_260512.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team1_personnel_change_260512.md), [team1_burn_attend_260514_am.md](../../../../.claude/projects/c--Users-ibebu-bootcamp6-final-archive/memory/team1_burn_attend_260514_am.md)
@@ -80,6 +88,15 @@ curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/<fileKey>?dep
 # 3-7. GitHub Issues/PR (WebFetch)
 # Open issues: https://github.com/LIKELION-Android-BOOTCAMP-6th/<repo>/issues
 # Recent PRs: https://github.com/LIKELION-Android-BOOTCAMP-6th/<repo>/pulls?q=is%3Apr
+
+# 3-8. GitHub Project 보드 — PDF 추출 방식 (v2.2 확정)
+# 사용자가 회의 40분 전(09:20 / 15:20) 브라우저 인쇄로 PDF 저장:
+#   teams-docs/<X>team/backlog/backlog_<YYMMDD>_<am|pm>.pdf
+# Project URL (참고용):
+#   1팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/11/views/1
+#   2팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/12/views/1
+#   3팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/13/views/1
+# SKILL이 Read 도구로 PDF 직접 파싱 — token 불필요
 ```
 
 ### Step 4. 진단 (v2 우선순위)
@@ -113,6 +130,21 @@ curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/<fileKey>?dep
 
 **(f) PRD Must 매트릭스 갱신** + **(g) Figma 변화** — `team_specific_checks.md §2`/`§4` 갱신
 
+**(h) 🗂️ 보드 PDF + mom + commit 3중 cross-check** ⭐ v2.2:
+- **GitHub Project Kanban PDF 파싱** (`teams-docs/<X>team/backlog/backlog_<YYMMDD>_<am|pm>.pdf`):
+  - Read 도구로 PDF 텍스트 추출
+  - 컬럼별 카드 수 + WIP 한도 비교 (예: `In progress 7/3` = 한도 3 / 현재 7 = 4건 초과 → R-WIP 즉시 발현)
+  - 각 카드: `#번호`, `[Issue X-N]` 라벨, 제목, assignee 텍스트
+- 오늘 팀 수기 mom (`teams-docs/<X>team/mom/<YYMMDD>*`)에서 멤버별 분담 추출
+- 24h commit 영역(`git log --since="24 hours ago"` + 변경 파일 경로)과 정합
+- 정합성 신호 발현 시 §🚨 강사 사전 통지 후보 추가:
+  - 🚨🚨 **WIP 한도 초과** (보드 PDF의 컬럼 헤더 "N/M" 패턴에서 N > M) → **R-WIP 1순위 자동 격상**
+  - ⚠️ mom 있는데 보드 카드 X → 사용자에게 Issue 등록 권유 (R2)
+  - ⚠️ 보드 In Progress인데 commit 0 → R-stall 후보
+  - ⚠️ commit 있는데 mom 미매핑 → R9 Scope drift 후보
+  - ⚠️ mom 분담 미배정 멤버 → R-quiet 후보
+  - 🚨 단일 멤버 assign ≥ 4 → R8
+
 ### Step 5. AM 양식 v2 작성 (14개 섹션)
 
 `teams-docs/.shared/meeting_prep_template_v2.md §1 AM 양식` 사용. **순서 엄수**:
@@ -126,14 +158,15 @@ curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/<fileKey>?dep
 4. 🟢 한 줄 요약 — 전체 신호등 + 어제 종료 후 핵심 변화 1문장
 5. 📊 18시간 변화 — **Finished (어제 PM 이후) / Will finish by when** (Patton/Gothelf 프레임)
 6. **🎯 오늘 끝낼 수 있는 작업 3개** (Walking the Board — 보드 오른쪽 → 왼쪽 순회)
-7. **🔁 Carry-over 자동 재출현 + 이행률 N/M%** — owner / 마감 / 회의에서 다뤘나 / 데이터 상태 / 이월 횟수 표
-8. 🚦 R-항목 점검 — Step 4 (b)(c) 정량 결과 (오늘 AM 상태 + 변화)
-9. 👤 인물별 24h 활동 + 회의 발화 정합성 — R-quiet / R-out / R-attend 자동 flag
-10. 📋 Issue↔PR 정합성 (1·2팀 애자일 / 3팀은 §13 Phase-gate)
-11. 🎨 FigJam/Design 보드 변화 — lastModified + 신규 페이지·섹션
-12. 💡 보조강사 권장 액션 (3건 압축, 좋은 점 1건 포함 원칙: 🟢 격려 → 🚨 critical → 🟡 환기)
-13. (3팀 한정) **🚧 Phase-gate Must Meet 6항목 헤더** — `3team/review/team_specific_checks.md §2-2` 자동 import, 충족률 N/6 명시
-14. (선택) 📚 근거 인용 — 신규 R-항목 도입시만 ([가이드 §N](../../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) 또는 [FAQ §N](../../../ta-guides/애자일_예제기반_FAQ.md))
+7. **🗂️ 보드 In Progress + 분담 cross-check** ⭐ v2.1 — 3중 매칭표 (mom 분담 / 보드 In Progress / 24h commit) + 정합성 신호 (R-stall / R-quiet / R-WIP / R8)
+8. **🔁 Carry-over 자동 재출현 + 이행률 N/M%** — owner / 마감 / 회의에서 다뤘나 / 데이터 상태 / 이월 횟수 표
+9. 🚦 R-항목 점검 — Step 4 (b)(c) 정량 결과 (오늘 AM 상태 + 변화)
+10. 👤 인물별 24h 활동 + 회의 발화 정합성 — R-quiet / R-out / R-attend 자동 flag
+11. 📋 Issue↔PR 정합성 (1·2팀 애자일 / 3팀은 §14 Phase-gate)
+12. 🎨 FigJam/Design 보드 변화 — lastModified + 신규 페이지·섹션
+13. 💡 보조강사 권장 액션 (3건 압축, 좋은 점 1건 포함 원칙: 🟢 격려 → 🚨 critical → 🟡 환기)
+14. (3팀 한정) **🚧 Phase-gate Must Meet 6항목 헤더** — `3team/review/team_specific_checks.md §2-2` 자동 import, 충족률 N/6 명시
+15. (선택) 📚 근거 인용 — 신규 R-항목 도입시만 ([가이드 §N](../../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) 또는 [FAQ §N](../../../ta-guides/애자일_예제기반_FAQ.md))
 
 ### Step 6. 스냅샷 저장
 

@@ -39,15 +39,22 @@ AM과 동일. 팀별 경로 매핑은 [team-check-am SKILL](../team-check-am/SKI
 
 ### Step 2. 컨텍스트 로드 (순서 엄수)
 
-다음 7개 파일을 **이 순서대로** 읽는다:
+다음 8개 파일을 **이 순서대로** 읽는다:
 
 1. `teams-docs/.shared/daily_check_method.md`
-2. `teams-docs/.shared/meeting_prep_template_v2.md` — **현재 적용 양식** (v2)
+2. `teams-docs/.shared/meeting_prep_template_v2.md` — **현재 적용 양식** (v2.1)
 3. `teams-docs/<X>team/review/context.md`
 4. `teams-docs/<X>team/review/team_specific_checks.md`
 5. `teams-docs/.shared/risk_taxonomy.md` — R1~R14 + R-attend·R-burn 표준 + 3팀 R-W1~W4
 6. **`teams-docs/<X>team/snapshots/<오늘날짜>_am.md`** ← 오늘 AM 스냅샷 (가장 중요한 비교 기준 + carry-over 자동 import 원천)
-7. (전날 PM 스냅샷이 있으면 reference로 가볍게)
+7. **`teams-docs/<X>team/mom/<오늘날짜>*`** ⭐ v2.1 신규 — **사용자가 수기로 작성한 팀 회의록** (오늘 분담 cross-check 기준. 오전 회의 후 갱신됐을 수 있음)
+   - Glob: `ls teams-docs/<X>team/mom/ | grep <YYMMDD>`
+   - 파일 없으면 "오늘 mom 미작성" 명시 + §🗂️ 섹션에서 mom 컬럼 비워둠
+8. **`teams-docs/<X>team/backlog/backlog_<YYMMDD>_pm.pdf`** ⭐ v2.2 신규 — **GitHub Project Kanban 보드 PDF** (사용자가 PM 회의 40분 전 = 15:20 추출)
+   - Read 도구로 PDF 자동 파싱
+   - **오전 PDF(`backlog_<YYMMDD>_am.pdf`)도 같이 로드** → 오전 09:20 → 오후 15:20 보드 변화 비교 (5h+ 정체 카드 = R-stall 격상)
+   - PDF 없으면 사용자에 1회 알림
+9. (전날 PM 스냅샷이 있으면 reference로 가볍게)
 
 ⚠️ **오늘 AM 스냅샷이 없으면** 사용자에 알리고 다음 중 선택:
 - (a) AM 스냅샷 없이 진행 (직전 스냅샷과 비교)
@@ -80,6 +87,11 @@ git ls-files | grep -iE "google-services|\\.env$|\\.keystore$"
 TOKEN=$(cat teams-docs/.shared/.figma_token | tr -d '\r\n ')
 curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/<fileKey>?depth=1"
 # AM 스냅샷의 Figma lastModified와 비교 → 오전 회의 후 갱신 있었는지
+
+# 3-6. GitHub Project 보드 PDF 변화 추적 (v2.2)
+# AM PDF (backlog_<YYMMDD>_am.pdf) vs PM PDF (backlog_<YYMMDD>_pm.pdf) 비교
+# 오전 09:20 In Progress 카드가 오후 15:20에도 In Progress = 5h+ 정체 → R-stall
+# WIP 한도 위반이 오전 → 오후 악화되었는지 추적
 ```
 
 ### Step 4. 진단 (PM 핵심 우선순위 4가지)
@@ -103,6 +115,15 @@ AM 스냅샷의 §💡 보조강사 권장 액션 + §🚨 강사 사전 통지 
 
 **(d) 인물별 오전 활동** — AM에서 🚨/🟡 표시됐던 멤버가 오후 들어 변화 있었는지 + 오전 회의 발화 정합성
 
+**(e) 🗂️ 보드 PDF + mom + 오전 commit 3중 cross-check** ⭐ v2.2 — PM 변형:
+- **AM PDF + PM PDF 비교** (Read 도구로 둘 다 로드):
+  - 오전 09:20 → 오후 15:20 컬럼별 카드 수 변화 (예: In Progress 7→6 = 1건 finish / 7→8 = 1건 추가 시작)
+  - 오전 In Progress 카드가 오후에도 동일 = 5h+ 정체 → **R-stall 격상**
+  - WIP 한도 위반 (오전 → 오후) 악화 여부
+- 오늘 mom (오전 회의 후 갱신됐을 수 있음) + 오전 commit (6h 윈도우) 매칭
+- 오전 회의 합의 task가 보드에 안 올라옴 = R-action 미시작 직접 증거
+- AM §🗂️ 정합성 신호와 동일 (R-quiet / R-WIP / R8 등)
+
 ### Step 5. PM 양식 v2 작성 (14개 섹션)
 
 `teams-docs/.shared/meeting_prep_template_v2.md §2 PM 양식` 사용. **순서 엄수**:
@@ -115,18 +136,19 @@ AM 스냅샷의 §💡 보조강사 권장 액션 + §🚨 강사 사전 통지 
 4. 🟢 한 줄 요약 (오전 회의 후 변화)
 5. 📊 6시간 변화 — **Finished (오전 회의 후) / Will finish by when (오늘 일과 종료 = 18:00 기준)**
 6. **✅ 오전 회의 액션 아이템 진척** (Step 4-a 결과 표) ← 가장 중요
-7. **🔁 Carry-over 자동 재출현 + 이행률** (어제 PM + 오늘 AM 미해소 모두)
-8. 🚦 R-항목 점검 (오전 09:30 → 오후 15:30 변화 강조)
-9. 👤 인물별 오전 활동 + 오전 회의 발화 정합성
-10. 💡 보조강사 권장 액션 (3건 압축, 좋은 점 1건 포함)
-11. **🌙 내일 AM carry-over 자동 이월** (2회+ 격상 룰 적용 — 자동 🚨 표기)
-12. **🚦 오늘 신호등 1단어 회고** (회의 종료 직전 30초)
+7. **🗂️ 보드 In Progress + 분담 cross-check (PM 변형)** ⭐ v2.1 — Step 4-e 결과. 오전 → 오후 보드 변화 + 5h+ 정체 카드 식별
+8. **🔁 Carry-over 자동 재출현 + 이행률** (어제 PM + 오늘 AM 미해소 모두)
+9. 🚦 R-항목 점검 (오전 09:30 → 오후 15:30 변화 강조)
+10. 👤 인물별 오전 활동 + 오전 회의 발화 정합성
+11. 💡 보조강사 권장 액션 (3건 압축, 좋은 점 1건 포함)
+12. **🌙 내일 AM carry-over 자동 이월** (2회+ 격상 룰 적용 — 자동 🚨 표기)
+13. **🚦 오늘 신호등 1단어 회고** (회의 종료 직전 30초)
     - 강사: 🔴/🟡/🟢 + 1단어 (예: "🟢 진척", "🟡 부담", "🔴 정체")
     - 보조강사: 동일
     - (선택) 팀장/PO: 동일
     - **같은 색이면 align ✅. 다르면 내일 AM 의제 1순위 자동 격상**
-13. (3팀 한정) **🚧 Phase-gate Must Meet 6항목 충족률**
-14. (선택) 📚 근거 인용 — 신규 R-항목 도입시만
+14. (3팀 한정) **🚧 Phase-gate Must Meet 6항목 충족률**
+15. (선택) 📚 근거 인용 — 신규 R-항목 도입시만
 
 ### Step 6. 스냅샷 저장
 

@@ -1,6 +1,8 @@
 # 미팅 사전 준비 양식 v2 — 통합 체크리스트
 
-> **버전**: v2 (2026-05-14 작성, v1 [meeting_prep_template.md](./meeting_prep_template.md) 대체 후보)
+> **버전**: v2.2 (2026-05-14 작성, v1 [meeting_prep_template.md](./meeting_prep_template.md) 대체 후보)
+> **v2.1 추가** (2026-05-14 사용자 요구): §🗂️ 보드 In Progress + 분담 cross-check 신설
+> **v2.2 추가** (2026-05-14 사용자 요구): §🗂️ 데이터 source가 GitHub Project PDF (브라우저 인쇄, 회의 40분 전 추출)로 확정. 각 팀 `backlog/` 폴더에 보관. SKILL이 Read 도구로 PDF 자동 파싱.
 > **근거**: [external_practices.md](../../operation/docs/research/external_practices.md) (외부 베스트 프랙티스) + [current_pattern_gap.md](../../operation/docs/research/current_pattern_gap.md) (gap 분석) + 사내 [애자일 가이드](../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) / [FAQ](../../ta-guides/애자일_예제기반_FAQ.md)
 > **구조**: 공통 80% + 팀별 부록 20% — 단일 파일
 > **분량 목표**: 작성된 양식 1회분 A4 1.5장 이내, 회의 중 빠르게 참조 가능
@@ -28,6 +30,7 @@
 | 🚨 **강사 사전 통지 의제 3건** 칸 신설 | §2 | gap §3-2 (보조강사 마이크 SPOF) |
 | "Finished / Will finish by when" 프레임 | §4 | Phase1 §1-1 |
 | **Walking the Board** "오늘 끝낼 수 있는 작업 3개" (AM only) | §5 | Phase1 §1-2 |
+| **🗂️ 보드 In Progress + 분담 cross-check** (v2.1 신규) | AM/PM 본문 | 사용자 요구 2026-05-14 + 가이드 §7-1 |
 | **Carry-over 자동 재출현 + 이행률 N/M%** | §6 | Phase1 §4-3 |
 | **신호등 1단어 회고** (PM 마지막 1줄) | §13 (PM) | Phase1 §4-2 |
 | 주차별 최소 Done 1줄 헤더 자동 import | §0-3 | 가이드 §4-3 |
@@ -138,6 +141,43 @@ git shortlog -sne --since="7 days ago" origin/develop
 3. {Issue #N / 담당자}
 
 → 회의에서 강사가 발화 트리거: "오늘 끝낼 수 있는 게 뭐예요?"
+
+---
+
+## 🗂️ 보드 In Progress + 분담 cross-check (v2.1 신규)
+
+> **목적**: GitHub Project 보드의 "지금 진행 중 카드" + 팀이 수기 작성한 mom 분담 + 실제 24h commit 활동 = **3중 정합성 점검**.
+> **근거**: [애자일 가이드 §7-1 보드 상태 규칙](../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md), 사용자 요구 (2026-05-14)
+
+### 1) 데이터 수집 source
+
+- **팀 수기 회의록**: `teams-docs/<X>team/mom/<오늘날짜>*` (사용자가 노션 미러를 수기로 작성)
+- **GitHub Project 보드 PDF** ⭐ v2.2 — `teams-docs/<X>team/backlog/backlog_<YYMMDD>_<am|pm>.pdf` (사용자가 회의 40분 전 브라우저 인쇄로 추출)
+  - 1팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/11/views/1
+  - 2팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/12/views/1
+  - 3팀: https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/13/views/1
+  - SKILL이 Read 도구로 PDF 자동 파싱 → 컬럼별 카드 + assignee 텍스트 추출
+- **24h commit 활동**: `git shortlog -sne --since="24 hours ago"` + diff 영역
+
+### 2) 3중 매칭표
+
+| 멤버 | mom 오늘 분담 (수기) | 보드 In Progress 카드 (assignee) | 24h commit / 영역 | 정합성 |
+|---|---|---|---|---|
+| {이름} | {task 1줄} | #N {제목} | N건 / {파일 영역} | ✅ / ⚠️ |
+
+### 3) 정합성 신호 (사내 가이드 § 근거)
+
+| 신호 | 해석 | 근거 §  |
+|---|---|---|
+| ✅ **3중 일치** | mom 분담 = 보드 카드 = commit 영역 — 정상 | — |
+| ⚠️ **mom 있는데 보드 카드 X** | Issue 미등록 (R2 패턴) — 사용자에게 mom → Issue 등록 권유 | [가이드 §6](../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) Issue 분리 |
+| ⚠️ **보드 In Progress인데 24h commit 0** | 카드 정체 (R-stall 후보) — PM에서 5h+ 시 청취 | [가이드 §15-1](../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) 진행이 안 될 때 |
+| ⚠️ **commit 있는데 mom 분담 미매핑** | 분담 외 작업 (R9 Scope drift 후보) | [가이드 §4-4](../../final-project/docs/애자일/01_애자일_팀프로젝트_가이드.md) Won't |
+| ⚠️ **mom 분담 미배정 멤버** | R-quiet 후보 — 의도적 발언 기회 권유 | [risk_taxonomy.md R-quiet](./risk_taxonomy.md) |
+| 🚨 **보드 In Progress 전체 ≥ 5건 누적** | R-WIP (특히 단일 인물 assign 4건+ 시 R8 leading) | [risk_taxonomy.md R8/R-WIP](./risk_taxonomy.md) |
+
+→ 신호 발현 시 §🚨 강사 사전 통지 또는 §💡 보조강사 권장 액션에 반영.
+→ **3팀(워터폴)**: "보드 In Progress" 대신 "현재 단계 산출물 진행 중 항목" + "정합성 신호"는 R-W3 (명세-구현 비동기)와 매핑.
 
 ---
 
@@ -288,6 +328,20 @@ git shortlog -sne --since="6 hours ago" origin/develop
 | {액션1} | {담당} | 합의 | 진행중/완료/미시작 | 🟢/🟡/🚨 |
 
 → **미시작 비율 ≥ 50%** = R-action (PM에서 다시 한번 push 필요).
+
+---
+
+## 🗂️ 보드 In Progress + 분담 cross-check (PM 변형)
+
+> **PM 변형**: AM 양식 §🗂️와 동일 구조. 추가로 **오전 보드 → 오후 보드 변화**를 추적.
+
+| 멤버 | 오전 mom 분담 | 보드 In Progress (15:30 현재) | 오전 commit / 영역 | 정합성 + 변화 |
+|---|---|---|---|---|
+| {이름} | {task} | #N {제목} (오전 09:30 → 오후 변경 여부) | N건 | ✅ / ⚠️ |
+
+→ 정합성 신호 (R-stall / R-quiet / R-WIP / R8 등)는 AM §🗂️와 동일. PM은 추가로:
+- **오전 In Progress 카드가 오후에도 동일 위치** = 5h+ 정체 → R-stall 격상
+- **오전 회의에서 합의된 task가 보드에 안 올라옴** = R-action 미시작 직접 증거
 
 ---
 

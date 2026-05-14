@@ -5,7 +5,7 @@
 
 ---
 
-## 1. 오늘 PM 즉시 적용 변경 3건 (5분 내 추가 가능)
+## 1. 오늘 PM 즉시 적용 변경 4건 (5~10분 내 추가 가능)
 
 ### 변경 1 — 🚨 강사 사전 통지 의제 3건 (보조강사 마이크 SPOF 백업) ⭐⭐⭐
 
@@ -23,14 +23,18 @@
 
 **팀별 오늘 PM 사전 통지 예시**:
 
-#### 1팀 (carry-over 누적 11건 — 가장 critical)
+#### 1팀 (carry-over 누적 11건 + 🚨 R-WIP 즉시 발견)
 ```
-[1팀 PM 사전 통지]
-1. (회의 첫 안건) 🚨 R13 google-services.json 36h+ 정체 — 강사 5/13 16:05 직접 지시 사항. 즉시 검증 + 데드라인 명시 권유
-2. 🚨 R-burn-1 분담 — 정섭 결석 + 손지희 "너무 힘들어요" 발언. 작업 일부 이제이 분담 권유
-3. 🟢 이제이 PR #27 회의 직전 머지 — 본인 발화 기회 (R-quiet 강화)
-(carry-over 잔여 PO 역할 / 부팀장 / Must 압축은 별도 1:1 통지 권장)
+[1팀 PM 사전 통지 — 2026-05-14 16:00, 갱신본 v2.2]
+1. (회의 첫 안건) 🚨🚨 R-WIP 즉시 발현 — Kanban In Progress 7/3 (한도 4건 초과).
+   #8, #19, #20, #26, #28, #29, #32 동시 진행 중. Backlog 0 / Ready 0 = 흐름 막힘.
+   어제 강사님 "백로그 단위 조정" 지시 미이행. "Stop starting, start finishing" 권유.
+2. 🚨 R13 google-services.json 36h+ 정체 — 어제 직접 지시. 검증 + 데드라인 명시
+3. 🚨 R-burn-1 분담 — 정섭 결석 + 손지희 "너무 힘들어요". 작업 일부 이제이 분담 권유
+(carry-over 잔여 PO 역할 / 부팀장 / Must 압축은 회의 외 강사 1:1 별도 통지)
 ```
+
+> **참고**: 위 R-WIP는 스크린샷 vision 분석 결과 (assignee 추정). 사용자가 backlog PDF를 추출해서 `teams-docs/1team/backlog/backlog_260514_pm.pdf` 저장하면 SKILL이 assignee까지 정확히 매칭 가능.
 
 #### 2팀 (AM 녹음 없음 → PM에서 AM 의제 자가 진술 1분 권유)
 ```
@@ -60,7 +64,31 @@
 
 오늘 PM은 보조강사 마이크 이슈 가능성 있으므로 **채팅으로 색 + 1단어 입력** 백업.
 
-### 변경 3 — 🔁 Carry-over 자동 이월 룰 + 이행률 표 (PM 양식에 1표 추가) ⭐
+### 변경 3 — 🗂️ 보드 PDF + mom + commit 3중 cross-check (v2.2 확정 ⭐⭐)
+
+**언제**: PM 회의 **40분 전 = 15:20** (PDF 추출) + PM 양식 작성 시 (15:30)
+
+**1회 셋업 완료**: 각 팀에 `teams-docs/<X>team/backlog/` 폴더 생성됨. 자세한 절차는 각 폴더의 [README.md](../../teams-docs/1team/backlog/README.md) 참조.
+
+**매 회의 사용자 작업** (~30~40초/팀):
+1. GitHub Project 보드 URL 열기 (1팀 11 / 2팀 12 / 3팀 13)
+2. Ctrl+P → PDF로 저장
+3. 파일명: `backlog_260514_pm.pdf`
+4. 경로: `teams-docs/<X>team/backlog/backlog_260514_pm.pdf`
+
+**SKILL 자동 처리** (`/team-check-pm <팀번호>` 호출 시):
+- Read 도구로 PDF 자동 파싱 → 컬럼별 카드 수 + assignee + WIP 한도 검증
+- §🗂️ 3중 매칭표 (mom 분담 / PDF 카드 / 6h commit) 자동 채움
+- WIP 한도 초과 시 §🚨 강사 사전 통지 1순위 자동 격상
+
+**🚨 오늘 1팀 즉시 발견** (스크린샷 vision 분석 결과 — PDF 받으면 정확 매칭 가능):
+- **In Progress 7/3** (한도 3 / 현재 7 = 4건 초과) → **R-WIP 즉시 발현**
+- Backlog 0 / Ready 0 / In Progress 7 / In Review 3 / Done 2 = **흐름 막힘 패턴** (start 많음 / finish 적음)
+- 어제 PM "백로그 단위 조정" 강사 지시 미이행 직접 증거
+
+→ 1팀 PM 사전 통지 의제 1번을 **R-WIP로 교체** 권장 (아래 §1 1팀 예시 갱신본 참조)
+
+### 변경 4 — 🔁 Carry-over 자동 이월 룰 + 이행률 표 (PM 양식에 1표 추가) ⭐
 
 **언제**: PM 양식 작성 시 (15:30)
 **어디**: PM 스냅샷 §🔁 Carry-over 섹션

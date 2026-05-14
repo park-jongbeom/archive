@@ -11,7 +11,17 @@
       "WebFetch(domain:hbr.org)",
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:geekbot.com)",
-      "Bash(awk '{print $NF, \"\\(\"$5\" bytes\\)\"}')"
+      "Bash(awk '{print $NF, \"\\(\"$5\" bytes\\)\"}')",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(gh project *)",
+      "Bash(curl -sIL \"https://github.com/orgs/LIKELION-Android-BOOTCAMP-6th/projects/11/views/1\")",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffprobe.exe' -v error -show_entries format=duration,size -show_entries stream=codec_type,codec_name -of default=noprint_wrappers=1 '/c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13 22-45-48.mkv')",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i '/c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13 22-45-48.mkv' -ar 16000 -ac 1 -c:a pcm_s16le -vn /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48.wav -y -loglevel error -stats)",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/buzz/whisper_cpp/whisper-cli.exe' -m /c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin -f /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48.wav -l ko -otxt -of /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48_transcript -t 4 -p 1 -pp)",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48.wav -af volumedetect -f null -)",
+      "Bash(awk -F': ' '{sum+=$2} END {print \"총 무음:\", sum, \"초\"}')",
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i '/c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13 22-45-48.mkv' -vn -af volumedetect -f null -)"
     ]
   }
 }
