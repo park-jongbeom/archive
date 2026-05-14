@@ -21,7 +21,13 @@
       "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/buzz/whisper_cpp/whisper-cli.exe' -m /c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin -f /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48.wav -l ko -otxt -of /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48_transcript -t 4 -p 1 -pp)",
       "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i /c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13_22-45-48.wav -af volumedetect -f null -)",
       "Bash(awk -F': ' '{sum+=$2} END {print \"총 무음:\", sum, \"초\"}')",
-      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i '/c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13 22-45-48.mkv' -vn -af volumedetect -f null -)"
+      "Bash('/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe' -i '/c/Users/ibebu/bootcamp6_final/archive/external/2026-05-13 22-45-48.mkv' -vn -af volumedetect -f null -)",
+      "Bash(grep -iE \"google-services|\\\\.env$|\\\\.keystore$\")",
+      "Bash(\"/c/Program Files \\(x86\\)/Buzz/_internal/ffprobe.exe\" -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"c:/Users/ibebu/bootcamp6_final/archive/external/녹화_2026_05_13_22_33_24_241.mp4\")",
+      "Bash(\"/c/Program Files \\(x86\\)/Buzz/_internal/ffmpeg.exe\" -i \"c:/Users/ibebu/bootcamp6_final/archive/external/녹화_2026_05_13_22_33_24_241.mp4\" -ar 16000 -ac 1 -c:a pcm_s16le -vn \"c:/Users/ibebu/bootcamp6_final/archive/external/녹화_2026_05_13_22_33_24_241.wav\" -y -loglevel error -stats)",
+      "Bash(\"/c/Program Files \\(x86\\)/Buzz/_internal/buzz/whisper_cpp/whisper-cli.exe\" -m \"/c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin\" -f \"c:/Users/ibebu/bootcamp6_final/archive/external/녹화_2026_05_13_22_33_24_241.wav\" -l ko -otxt -nt -of \"c:/Users/ibebu/bootcamp6_final/archive/external/녹화_2026_05_13_22_33_24_241_transcript\" -t 4 -p 1)",
+      "Bash(tee \"c:/Users/ibebu/bootcamp6_final/archive/external/whisper_progress.log\")",
+      "PowerShell(Test-Path \"$env:USERPROFILE\\\\.android\\\\debug.keystore\")"
     ]
   }
 }

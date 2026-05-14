@@ -12,7 +12,7 @@
 
 ## 오늘의 안건
 
-- 원화: 재훈님에게 모닝콜 따르릉 따르릉
+- 원화: 재훈님에게 모닝콜 따르릉 따르릉 - 실패 ㅋㅋ
 - 명준: 로그인 시도 androidx.credentials.exceptions.NoCredentialException: No credentials available
 
 ## 시간 별 활동
@@ -46,7 +46,7 @@
 - 정원화:
     - [SYS-REALTIME-INFRA](https://www.notion.so/SYS-REALTIME-INFRA-35b73873401a807a8063e6da1914af97?pvs=21), [FLOW-AI-CHAT](https://www.notion.so/FLOW-AI-CHAT-35973873401a80918d55e9f150ee42e7?pvs=21) 팀장과 같이 재검토
     - [Docs] 개발시 Hilt를 통한 Mock Data/ Real Data 전환 가이드 작성
-    - PR 템플릿 md 문서 추가
+    - PR 템플릿 md 문서 추가 및 보완
     - SYS-CORRECTION-INFRA 초안 작성
     - 3팀 팀장, 장지은님 고민상담
 
@@ -60,20 +60,56 @@
     - 노션 트러블슈팅 페이지 활성화 + 작성
     - DASH-001 화면 구현 진행중 (DASH-002에 공유 필요)
 
-- 정재훈:
+- 정재훈: Dash -002
+- **1. 컴포넌트 뼈대 및 파라미터 정의 로직**
+- **2. 유효성 검사(방어) 및 빈 화면(Empty) 분기 로직**
+- **3. 데이터 가공 및 정상 화면 출력 로직**
+- **4. 중복 클릭 방지 (Debounce) 로직**
+- **5. 화면 배치 및 가짜 데이터(Dummy) 주입 로직**
 
 ### 오늘 할(한) 일
 
 - 공통:
 
-- 박재민:
+- 박재민: ChatRepo 구현체 완성 최종적으로는 RT-001 완성 후 이슈 작성
 
 - 정원화:
+    - 재훈님 push 코드 리뷰 및 피드백 & 미공지 지각 이슈 갈구기
+        - 코드 리뷰 - 원화
+            - NavHost는 이 작업의 수정 지점이 아니고, **DashboardScreen이 전역 상태에서 읽어온 summary와 selectedLearningLanguage를 받아 렌더링하는 구조**
+            - FLOW_DASHBOARD는 UserLangPref와 selectedLearningLanguage를 preload한 뒤, 그 언어의 DashSummary를 읽는다
+            - 코드 모델에서도 GlobalLangState.selectedLang와 currentDashSummary()가 이미 그 역할을 하고 있다.
+            즉, NavHost가 값을 “만드는 곳”이 아니라, 화면 쪽 상태 owner가 값을 “읽어서 내려주는 곳”이다
+            - LangCode.code 기준으로 비교해야 한다.
+            name.lowercase() 비교는 문서 계약에도, 도메인 모델에도 맞지 않는다
+            - 요약
+                - NavHost는 건드리지 않는다
+                - RecentConversationCard의 데이터 해석만 고친다
+                - 카드가 DashSummary[selectedLearningLanguage]를 올바르게 읽고, 언어 코드를 화면에 잘못 노출하지 않게 만든다
+                - 비교는 LangCode.code 기준으로 한다
+            - 참고
+                - 상태 소유: GlobalLangState / UserLangPref / ObserveDashSummaryUseCase
+                - 화면 진입 데이터 조립: Dashboard 쪽 상위 상태층
+                - 카드 렌더링: RecentConversationCard
+                - 라우팅: NavHost
+            
+        - 코드 리뷰 - 재민
+            - 데이터는 ViewModel에서 내려주세요
+            (ex summary, selectedLearningLanguage 등) 지금처럼 NavHost에서 직접 주입하면 테스트 용이성이 떨어지고 관심사 분리에 위반 됩니다. 
+            NavHost는 네비게이션 로직만 담당해야합니다. ps. 주석도 많이 달아주세요
+            - RecentConversationCard.kt에서 컴포즈에서는 Early return을 쓰지 않는 것이 권장 구조입니다.
+            조건 하나만 안맞아도 앱이 터지기 때문에 해당 return 문들은 없애시고 error 처리를 하는 함수를 Screen 단에 만드시는 게 좋습니다. 
+            그리고 지금 Card 2개가 if문으로 분기를 주신 건 좋은 데 더 좋은 방법은 Card 하나 내부에 조건문을 다는겁니다. 
+            코드가 중복되기 때문에 한번 수정해보시길 권합니다.
+    - Hilt를 통한 Mock Data/ Real Data 전환 가이드 공지
+    - SYS-CORRECTION-INFRA 초안 검토 및 보완, Issue 초안 작성
+    - FLOW-CORRECTION, Issue 초안 작성
 
-- 김명준: **AUTH-001 Google 로그인 구현** 진행 중 오늘 안에 001 완료 원함
+- 김명준: **AUTH-001 Google 로그인 구현** 진행 중 로그인까지 완료
 
-- 김태환: DASH-001 AC 개수 기준 75% 이상 완료
-
+- 김태환: AC 개수 기준 75% 이상 완료
+    - DASH-001, DASH-002, DASH-006 착수 시 필요한 요소 화면 반영 완료
+    
 - 정재훈:
 
 ### 내일 할 일
