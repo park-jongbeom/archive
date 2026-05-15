@@ -1,0 +1,590 @@
+# 8차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## 오늘의 안건
+
+- 
+
+## 오전 활동
+
+- 공통:
+
+- 박재민:
+
+- 정원화:
+
+- 김명준:
+
+- 김태환:
+
+- 정재훈:
+
+## 오후 활동
+
+- 공통:
+
+- 박재민:
+
+- 정원화:
+
+- 김명준:
+
+- 김태환:
+
+- 정재훈:
+
+## **진행 상황 점검**
+
+### 어제 한 일
+
+- 공통:
+
+- 박재민: RT-001에 대한 단위 테스트 코드 작성 및 테스트 /테스트 범위:
+    - ChatRepositoryImplTest ← 얘는 사실 제대로 못해보긴함 테스트 통과 못헀는데 이게 테스트 코드를 잘못짜서 그런듯
+        
+        ```kotlin
+        package com.example.umma.data.repository
+        
+        import com.example.umma.MainDispatcherRule
+        import com.example.umma.domain.model.learningstate.LangCode
+        import com.example.umma.domain.model.learningstate.TurnSpeaker
+        import com.example.umma.domain.model.realtime.AIEvent
+        import com.example.umma.domain.model.realtime.AIState
+        import com.google.firebase.ai.FirebaseAI
+        import com.google.firebase.ai.LiveGenerativeModel
+        import com.google.firebase.ai.type.*
+        import io.mockk.*
+        import kotlinx.coroutines.ExperimentalCoroutinesApi
+        import kotlinx.coroutines.flow.MutableSharedFlow
+        import kotlinx.coroutines.launch
+        import kotlinx.coroutines.test.advanceUntilIdle
+        import kotlinx.coroutines.test.runTest
+        import org.junit.Assert.assertTrue
+        import org.junit.Rule
+        import org.junit.Test
+        
+        /**
+         * [ChatRepositoryImpl]의 서버 메시지 파싱 및 이벤트 발행 로직을 검증하는 단위 테스트입니다.
+         */
+        @OptIn(ExperimentalCoroutinesApi::class, PublicPreviewAPI::class)
+        class ChatRepositoryImplTest {
+        
+            @get:Rule
+            val mainDispatcherRule = MainDispatcherRule()
+        
+            private val firebaseAI: FirebaseAI = mockk()
+            private val liveSession: LiveSession = mockk()
+            
+            private val repository = ChatRepositoryImpl(firebaseAI)
+        
+            /**
+             * 서버로부터 자막 메시지를 받았을 때 Partial 이벤트가 발생하고, 
+             * 턴이 완료되었을 때 Final 이벤트가 발생하는지 테스트합니다.
+             */
+            @Test
+            fun `should emit Partial and then Final transcription when turn is complete`() = runTest {
+                // Given
+                val serverFlow = MutableSharedFlow<LiveServerMessage>()
+                val aiEvents = mutableListOf<AIEvent>()
+                
+                // 사용장님 가이드에 따른 Mock 설정
+                val mockLiveModel = mockk<Any>() // 실제 타입을 명시하지 않고 Any로 받아서 mockk 처리
+                every { firebaseAI.liveModel(any(), any(), any()) } returns mockLiveModel as LiveGenerativeModel
+                coEvery { (mockLiveModel as Any).let { 
+                    // connect가 확장 함수일 수 있으므로 유연하게 Mocking
+                    mockLiveModel.connect() 
+                } } returns liveSession
+                
+                every { liveSession.receive() } returns serverFlow
+                coEvery { liveSession.isClosed() } returns false
+        
+                // Repository 시작
+                repository.startSession(LangCode.EN, "Instruction")
+                
+                val collectJob = launch {
+                    repository.observeAIEvent().collect { aiEvents.add(it) }
+                }
+        
+                // When: 자막 데이터 유입
+                val mockText = "Hello AI"
+                val partialMessage = mockk<LiveServerContent> {
+                    every { inputTranscription } returns mockk { every { text } returns mockText }
+                    every { outputTranscription } returns null
+                    every { content } returns null
+                    every { turnComplete } returns false
+                    every { interrupted } returns false
+                }
+                serverFlow.emit(partialMessage)
+        
+                // When: 턴 완료 유입
+                val completeMessage = mockk<LiveServerContent> {
+                    every { inputTranscription } returns null
+                    every { outputTranscription } returns null
+                    every { content } returns null
+                    every { turnComplete } returns true
+                    every { interrupted } returns false
+                }
+                serverFlow.emit(completeMessage)
+                
+                advanceUntilIdle()
+        
+                // Then
+                assertTrue(aiEvents.any { it is AIEvent.PartialTranscription && it.text == mockText })
+                assertTrue(aiEvents.any { it is AIEvent.FinalTranscription && it.text == mockText && it.role == TurnSpeaker.USER })
+                assertTrue(aiEvents.any { it is AIEvent.StateChanged && it.state == AIState.IDLE })
+        
+                collectJob.cancel()
+            }
+        
+            /**
+             * 서버로부터 오디오 데이터가 유입되었을 때 AudioResponse 이벤트가 발생하는지 테스트합니다.
+             */
+            @Test
+            fun `should emit AudioResponse when server content has inline data`() = runTest {
+                // Given
+                val serverFlow = MutableSharedFlow<LiveServerMessage>()
+                val aiEvents = mutableListOf<AIEvent>()
+                val mockAudio = byteArrayOf(0, 1, 2)
+        
+                val mockLiveModel = mockk<Any>()
+                every { firebaseAI.liveModel(any(), any(), any()) } returns mockLiveModel as LiveGenerativeModel
+                coEvery { mockLiveModel.connect() } returns liveSession
+                
+                every { liveSession.receive() } returns serverFlow
+                coEvery { liveSession.isClosed() } returns false
+        
+                repository.startSession(LangCode.EN, "Instruction")
+                val collectJob = launch {
+                    repository.observeAIEvent().collect { aiEvents.add(it) }
+                }
+        
+                // When: 오디오 파트 유입
+                val mockAudioPart = mockk<InlineDataPart> {
+                    every { inlineData } returns mockAudio
+                }
+                val audioMessage = mockk<LiveServerContent> {
+                    every { inputTranscription } returns null
+                    every { outputTranscription } returns null
+                    every { content } returns mockk {
+                        every { parts } returns listOf(mockAudioPart)
+                    }
+                    every { turnComplete } returns false
+                    every { interrupted } returns false
+                }
+                
+                serverFlow.emit(audioMessage)
+                advanceUntilIdle()
+        
+                // Then
+                val audioEvent = aiEvents.find { it is AIEvent.AudioResponse } as? AIEvent.AudioResponse
+                assertTrue(audioEvent != null)
+                assertTrue(audioEvent?.audio?.contentEquals(mockAudio) == true)
+        
+                collectJob.cancel()
+            }
+        }
+        
+        /**
+         * 컴파일러가 connect()를 인식하게 하기 위한 임시 가짜 확장 함수/인터페이스 선언
+         * (실제 라이브러리 타입을 정확히 모를 때 테스트용으로만 사용)
+         */
+        @OptIn(PublicPreviewAPI::class)
+        private suspend fun Any.connect(): LiveSession = throw UnsupportedOperationException()
+        
+        ```
+        
+    - BuildPromptUseCaseTest → 통과
+        
+        ```kotlin
+        package com.example.umma.domain.usecase.chat
+        
+        import com.example.umma.domain.model.learningstate.ExternalMetrics
+        import com.example.umma.domain.model.learningstate.InternalMetrics
+        import com.example.umma.domain.model.learningstate.LangCode
+        import com.example.umma.domain.model.learningstate.LangState
+        import com.example.umma.domain.model.learningstate.VocabLevel
+        import org.junit.Assert.assertTrue
+        import org.junit.Test
+        
+        /**
+         * [BuildPromptUseCase]에 대한 단위 테스트 클래스입니다.
+         */
+        class BuildPromptUseCaseTest {
+        
+            private val buildPromptUseCase = BuildPromptUseCase()
+        
+            /**
+             * 영어와 초보자 레벨(A1)이 주어졌을 때 올바른 프롬프트가 생성되는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return prompt containing English and A1 when provided`() {
+                // Given
+                val langCode = LangCode.EN
+                val langState = createMockLangState(VocabLevel.A1)
+        
+                // When
+                val result = buildPromptUseCase(langCode, langState)
+        
+                // Then
+                assertTrue("Prompt should contain 'English'", result.contains("English"))
+                assertTrue("Prompt should contain 'A1'", result.contains("A1"))
+            }
+        
+            /**
+             * 일본어와 중급자 레벨(B1)이 주어졌을 때 올바른 프롬프트가 생성되는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return prompt containing Japanese and B1 when provided`() {
+                // Given
+                val langCode = LangCode.JA
+                val langState = createMockLangState(VocabLevel.B1)
+        
+                // When
+                val result = buildPromptUseCase(langCode, langState)
+        
+                // Then
+                assertTrue(result.contains("Japanese"))
+                assertTrue(result.contains("B1"))
+            }
+        
+            /**
+             * 학습 상태(langState)가 null인 경우 기본값(Beginner)으로 생성되는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return default level Beginner when langState is null`() {
+                // Given
+                val langCode = LangCode.KO
+        
+                // When
+                val result = buildPromptUseCase(langCode, null)
+        
+                // Then
+                assertTrue(result.contains("Korean"))
+                assertTrue(result.contains("Beginner"))
+            }
+        
+            private fun createMockLangState(level: VocabLevel): LangState {
+                return LangState(
+                    lang = LangCode.EN,
+                    external = ExternalMetrics(
+                        vocabularyLevel = level,
+                        grammarAccuracy = 0.0,
+                        expressionRange = 0,
+                        fluencyScore = 0.0,
+                        naturalnessScore = 0.0
+                    ),
+                    internal = InternalMetrics.initial().copy(vocabularyLevel = level)
+                )
+            }
+        }
+        
+        ```
+        
+    - StartSessionUseCaseTest → 통과
+        
+        ```kotlin
+        package com.example.umma.domain.usecase.chat
+        
+        import com.example.umma.domain.model.learningstate.LangCode
+        import com.example.umma.domain.model.learningstate.UserLangPref
+        import com.example.umma.domain.repository.ChatRepository
+        import com.example.umma.domain.repository.LearningStateRepo
+        import io.mockk.*
+        import kotlinx.coroutines.flow.flowOf
+        import kotlinx.coroutines.test.runTest
+        import org.junit.Assert.assertEquals
+        import org.junit.Assert.assertTrue
+        import org.junit.Test
+        
+        /**
+         * [StartSessionUseCase]에 대한 단위 테스트 클래스입니다.
+         */
+        class StartSessionUseCaseTest {
+        
+            private val chatRepository: ChatRepository = mockk()
+            private val learningStateRepo: LearningStateRepo = mockk()
+            private val buildPromptUseCase: BuildPromptUseCase = mockk()
+        
+            private val startSessionUseCase = StartSessionUseCase(
+                repository = chatRepository,
+                learningStateRepo = learningStateRepo,
+                buildPromptUseCase = buildPromptUseCase
+            )
+        
+            /**
+             * 사용자 설정이 존재하는 경우, 프롬프트를 빌드하고 세션을 성공적으로 시작하는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return success when user preferences exist`() = runTest {
+                // Given
+                val selectedLang = LangCode.EN
+                val userPref = UserLangPref.initial(nativeLang = LangCode.KO, primaryLang = selectedLang)
+                val expectedPrompt = "Mocked Prompt"
+                val expectedSessionId = "session_123"
+        
+                every { learningStateRepo.observeUserPref() } returns flowOf(userPref)
+                every { learningStateRepo.observeLangState(selectedLang) } returns flowOf(null)
+                every { buildPromptUseCase(selectedLang, any()) } returns expectedPrompt
+                coEvery { chatRepository.startSession(selectedLang, expectedPrompt) } returns Result.success(expectedSessionId)
+        
+                // When
+                val result = startSessionUseCase()
+        
+                // Then
+                assertTrue(result.isSuccess)
+                assertEquals(expectedSessionId, result.getOrNull())
+            }
+        
+            /**
+             * 사용자 설정이 존재하지 않는 경우(null), failure를 반환하는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return failure when user preferences are missing`() = runTest {
+                // Given
+                every { learningStateRepo.observeUserPref() } returns flowOf(null)
+        
+                // When
+                val result = startSessionUseCase()
+        
+                // Then
+                assertTrue(result.isFailure)
+                assertEquals("User preferences not found", result.exceptionOrNull()?.message)
+            }
+        
+            /**
+             * Repository에서 세션 시작이 실패한 경우, 해당 에러를 그대로 반환하는지 테스트합니다.
+             */
+            @Test
+            fun `invoke should return failure when repository fails to start session`() = runTest {
+                // Given
+                val selectedLang = LangCode.EN
+                val userPref = UserLangPref.initial(nativeLang = LangCode.KO, primaryLang = selectedLang)
+                val errorMsg = "Network Error"
+        
+                every { learningStateRepo.observeUserPref() } returns flowOf(userPref)
+                every { learningStateRepo.observeLangState(selectedLang) } returns flowOf(null)
+                every { buildPromptUseCase(selectedLang, any()) } returns "Some Prompt"
+                coEvery { chatRepository.startSession(any(), any()) } returns Result.failure(Exception(errorMsg))
+        
+                // When
+                val result = startSessionUseCase()
+        
+                // Then
+                assertTrue(result.isFailure)
+                assertEquals(errorMsg, result.exceptionOrNull()?.message)
+            }
+        }
+        
+        ```
+        
+    - ChatViewModelTest → 통과
+        
+        ```kotlin
+        package com.example.umma.presentation.chat
+        
+        import com.example.umma.MainDispatcherRule
+        import com.example.umma.data.source.local.AudioPlayer
+        import com.example.umma.data.source.local.AudioRecorder
+        import com.example.umma.domain.model.learningstate.TurnSpeaker
+        import com.example.umma.domain.model.realtime.AIEvent
+        import com.example.umma.domain.usecase.chat.ObserveAIEventUseCase
+        import com.example.umma.domain.usecase.chat.SendAudioDataUseCase
+        import com.example.umma.domain.usecase.chat.StartSessionUseCase
+        import com.example.umma.domain.usecase.chat.StopSessionUseCase
+        import io.mockk.*
+        import kotlinx.coroutines.ExperimentalCoroutinesApi
+        import kotlinx.coroutines.flow.MutableSharedFlow
+        import kotlinx.coroutines.test.advanceUntilIdle
+        import kotlinx.coroutines.test.runTest
+        import org.junit.Assert.assertEquals
+        import org.junit.Assert.assertTrue
+        import org.junit.Rule
+        import org.junit.Test
+        
+        /**
+         * [ChatViewModel]의 UI 상태 관리 및 이벤트 반응 로직을 검증하는 단위 테스트입니다.
+         */
+        @OptIn(ExperimentalCoroutinesApi::class)
+        class ChatViewModelTest {
+        
+            @get:Rule
+            val mainDispatcherRule = MainDispatcherRule()
+        
+            private val startSessionUseCase: StartSessionUseCase = mockk()
+            private val observeAIEventUseCase: ObserveAIEventUseCase = mockk()
+            private val sendAudioDataUseCase: SendAudioDataUseCase = mockk()
+            private val stopSessionUseCase: StopSessionUseCase = mockk()
+            private val audioRecorder: AudioRecorder = mockk()
+            private val audioPlayer: AudioPlayer = mockk()
+        
+            /**
+             * 의존성들이 주입된 ViewModel을 생성합니다.
+             */
+            private fun createViewModel() = ChatViewModel(
+                startSessionUseCase = startSessionUseCase,
+                observeAIEventUseCase = observeAIEventUseCase,
+                sendAudioDataUseCase = sendAudioDataUseCase,
+                stopSessionUseCase = stopSessionUseCase,
+                audioRecorder = audioRecorder,
+                audioPlayer = audioPlayer
+            )
+        
+            /**
+             * 초기 상태가 IDLE이고 데이터가 비어 있는지 확인합니다.
+             */
+            @Test
+            fun `initial state should be IDLE and empty`() {
+                val viewModel = createViewModel()
+                val state = viewModel.uiState.value
+        
+                assertEquals(SessionState.IDLE, state.sessionState)
+                assertTrue(state.lastTranscription.isEmpty())
+            }
+        
+            /**
+             * 대화 시작 시 세션이 성공적으로 열리면 READY 상태로 전이되는지 테스트합니다.
+             */
+            @Test
+            fun `startChat should transition from LOADING to READY on success`() = runTest {
+                // Given
+                val aiEventFlow = MutableSharedFlow<AIEvent>()
+                val expectedSessionId = "session_123"
+                coEvery { startSessionUseCase() } returns Result.success(expectedSessionId)
+                every { observeAIEventUseCase() } returns aiEventFlow
+                every { audioRecorder.startRecording() } returns MutableSharedFlow() // Recorder mock
+        
+                val viewModel = createViewModel()
+        
+                // When
+                viewModel.startChat()
+                
+                // Initialized 이벤트 발생 시뮬레이션
+                aiEventFlow.emit(AIEvent.Initialized(expectedSessionId))
+                advanceUntilIdle()
+        
+                // Then
+                assertEquals(SessionState.READY, viewModel.uiState.value.sessionState)
+                assertEquals(expectedSessionId, viewModel.uiState.value.activeSessionId)
+            }
+        
+            /**
+             * 실시간 자막 이벤트가 수신되었을 때 UI 상태가 업데이트되는지 테스트합니다.
+             */
+            @Test
+            fun `uiState should update lastTranscription when PartialTranscription event occurs`() = runTest {
+                // Given
+                val aiEventFlow = MutableSharedFlow<AIEvent>()
+                coEvery { startSessionUseCase() } returns Result.success("session_123")
+                every { observeAIEventUseCase() } returns aiEventFlow
+                every { audioRecorder.startRecording() } returns MutableSharedFlow()
+        
+                val viewModel = createViewModel()
+                viewModel.startChat()
+                aiEventFlow.emit(AIEvent.Initialized("session_123"))
+        
+                // When
+                val mockTranscription = "Hello, how are you?"
+                aiEventFlow.emit(AIEvent.PartialTranscription(mockTranscription, TurnSpeaker.AI))
+                advanceUntilIdle()
+        
+                // Then
+                assertEquals(mockTranscription, viewModel.uiState.value.lastTranscription)
+            }
+        
+            /**
+             * 에러 이벤트 발생 시 세션이 중단되고 ERROR 상태로 전이되는지 테스트합니다.
+             */
+            @Test
+            fun `session should transition to ERROR when AIEvent Error occurs`() = runTest {
+                // Given
+                val aiEventFlow = MutableSharedFlow<AIEvent>()
+                coEvery { startSessionUseCase() } returns Result.success("session_123")
+                every { observeAIEventUseCase() } returns aiEventFlow
+                every { audioRecorder.startRecording() } returns MutableSharedFlow()
+                coEvery { stopSessionUseCase() } just Runs
+                every { audioPlayer.stopPlaying() } just Runs
+        
+                val viewModel = createViewModel()
+                viewModel.startChat()
+                aiEventFlow.emit(AIEvent.Initialized("session_123"))
+        
+                // When
+                val errorMsg = "Network Failure"
+                aiEventFlow.emit(AIEvent.Error(errorMsg))
+                advanceUntilIdle()
+        
+                // Then
+                assertEquals(SessionState.ERROR, viewModel.uiState.value.sessionState)
+                assertEquals(errorMsg, viewModel.uiState.value.errorMessage)
+            }
+        }
+        
+        ```
+        
+    
+- 정원화:
+    - SYS-CORRECTION-INFRA, FLOW-CORRECTION, Issue 작성 완료
+
+- 김명준: 001 AC Initial Setup 완료 후 사용자 프로필과 학습 상태 초기값 저장은 AUTH-004 기준으로 위임된다. **진행중**
+
+- 김태환
+    - DASH-001 AC 12 개 中 6 개 완료
+        - Dashboard 진입 시 UserLangPref preload가 수행된다.
+        - selectedLearningLanguage가 확인된다.
+        - Local Cache 기반으로 Dashboard가 빠르게 렌더링된다.
+        - 현재 선택 언어 기준 Dashboard 카드 데이터가 정상 출력된다.
+        - 신규 사용자는 Empty Dashboard UI가 출력된다.
+        - Loading 상태 중 Skeleton UI가 표시된다.
+
+- 정재훈:  점검의 시간
+- 
+
+### 오늘 할(한) 일
+
+- 공통:
+
+- 박재민:
+    - RT-001과 연계되는 RT-002에 대한 문서를 공략하고 RT-002 구현 시작 시간 남으면 RT-003 문서 공략 후 구현
+    - RT-002와 001 연계 테스트 코드 작성
+
+- 정원화:
+
+- 김명준: AUTH-001 “Initial Setup 완료 후 사용자 프로필과 학습 상태 초기값 저장은 AUTH-004 기준으로 위임된다.” 진행중
+
+- 김태환
+    - DASH-001 완료 → PR
+    - PR 수정
+    - DASH-006 착수
+
+- 정재훈: 스스로가 메타인지를 통한 작업의 문제점 분석을 바탕으로 다시 문서 읽는 시간 가지기
+
+### 내일 할 일
+
+- 공통:
+
+- 박재민:
+
+- 정원화:
+
+- 김명준:
+
+- 김태환:
+
+- 정재훈:
+
+### 발생한 문제
+
+- 
+
+### 고려 사항
+
+-

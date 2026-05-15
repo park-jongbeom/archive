@@ -1,0 +1,88 @@
+# 9차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## 출결현황
+
+- [x]  장지은
+- [x]  정우석
+- [x]  서은신
+- [x]  이유빈
+
+## 논의사항
+
+- DB
+    - DMs에 created_at 사용 여부 → 현재는 안 씀
+    - 문서명이 uid인 경우 엔티티에 id를 저장할 필요가 있는지 (유저 제외, live, vm) ⇒ 지금은 삭제 추후에 필요하면 넣기
+    - 음성메세지 길이 int? long ⇒ int 초단위로만 저장됨
+- 기능명세서
+    - [실시간 내 위치 추적](https://www.notion.so/35873873401a8030910dfd3884e23bca?pvs=21) [사용자 위치 받아오기](https://www.notion.so/35a73873401a8012b876d7619c06e721?pvs=21) 둘이 합치는 거 어케 생각하는지 ⇒ 사용자 위치 받아오기를 기준으로 작업하기
+    - [F-Social-04 (수정 필요)](https://www.notion.so/F-Social-04-35d73873401a800196a6e5e815918980?pvs=21)
+        - 카카오톡 공유 api 활용해서 uid 카톡 공유하는 거 수정 필요 < 추후에 하기
+- **⭐백 컴포넌트 사용시 문제 사항**
+    - 하단바와 안의 아이템이 겹쳐 보이는 현상 해결법
+        
+        ⇒ 백그라운드 바로 아래 자식 모디파이어에 아래 코드 추가하기
+        
+        ```kotlin
+        BackgroundBox(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
+                        //⬇️이거 추가하기 
+                        //네비게이션바 + 하단바 패딩 주기
+                        .navigationBarsPadding().padding(bottom = 68.dp)
+                )
+        ```
+        
+
+![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A486afb02-9ebc-48b3-8cae-3fb13227378f%3A870d8c56-9068-4b1b-83f3-6c14f968e879.png?table=block&id=36073873-401a-8059-b935-f4af98151ff8&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1030&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+
+[공통 컴포넌트 사용 가이드](https://www.notion.so/35673873401a81319213fc3b97ccf0cc?pvs=21) 업데이트 완료했습니다!
+
+**증분 업데이트**: Firestore 서버는 이전 스냅샷과 비교하여 변경된 데이터(Diff)만 골라 패킷으로 보냅니다.
+friend_accepted
+
+## **진행 상황 점검**
+
+- 디비, 데이터모델 점검 완료
+    
+    본인이 맡은 기능의 엔티티 확인 부탁드립니닷
+    
+    [데이터 모델](https://www.notion.so/35673873401a8107a8e6c6134cf6ed15?pvs=21) 
+    
+- 유빈 : 마이페이지 화면 구성, addFriend 누르면 다이얼로그 뜸
+- 은신 : 알림 처리 변경된 거 수정,
+- 우석 : 클라이언트 작업 + 서버 코드 활용할 수 있게 추가함
+- 지은 : 문서 작업 디비 데이터모델 콘솔이랑 맞추기, pr 템플릿 생성 및 가이드 문서 작성
+
+### 할일(9시)
+
+- 지은:  ui 변경하기
+- 우석: 충돌 해결
+- 은신: ui 변경하기
+- 유빈: UI 디자인 변경
+
+### 강사님 피드백(10시)
+
+- 
+
+### 진행 상황(15시 반)
+
+- 지은:
+- 우석:
+- 은신:
+- 유빈:
+
+## 강사님 피드백 (16시)
+
+-
