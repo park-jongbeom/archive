@@ -1,5 +1,3 @@
-# 9차 회의록
-
 ---
 
 <aside>
@@ -45,7 +43,7 @@
         ```
         
 
-![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A486afb02-9ebc-48b3-8cae-3fb13227378f%3A870d8c56-9068-4b1b-83f3-6c14f968e879.png?table=block&id=36073873-401a-8059-b935-f4af98151ff8&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1030&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A486afb02-9ebc-48b3-8cae-3fb13227378f%3A870d8c56-9068-4b1b-83f3-6c14f968e879.png?table=block&id=36073873-401a-8059-b935-f4af98151ff8&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1060&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
 
 [공통 컴포넌트 사용 가이드](https://www.notion.so/35673873401a81319213fc3b97ccf0cc?pvs=21) 업데이트 완료했습니다!
 
@@ -74,7 +72,18 @@ friend_accepted
 
 ### 강사님 피드백(10시)
 
+- 친구추가 디비에 있는 유아이디값 사용하면 안됨 추천 코드 같은 걸 사용해야 함 보안 취약
 - 
+
+#### 백로그 사용 방안 변경
+
+- 기존 : 기능 단위
+    - 장점 : 후에 백로그 내용 수정하기 편하다
+    - 단점 : 한 백로그에 여러 풀리가 연결되어 코드 추적하기 어렵다
+- 수정 : 작업 단위
+    - 기능 ID : **`F-Auth-01 회원가입 → F-Auth-01-01 회원가입 ui`** 로 변경
+    - 내용엔 어떤 것을 작업하고, 어떻게 동작해야 하는지를 작성
+    - Related에 관련 기능명세서 링크 첨부하기
 
 ### 진행 상황(15시 반)
 
