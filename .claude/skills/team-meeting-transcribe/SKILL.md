@@ -213,6 +213,29 @@ MODEL="/c/Users/ibebu/AppData/Local/Buzz/Buzz/Cache/models/ggml-medium.bin"
 v2 양식 헤더의 "회의 timebox 권장 / 실제 시간"에 **실제 회의 시간 (분:초)** 기록.
 1주 후 회고 시 v1 baseline(5'21") 대비 변화 추적용.
 
+#### 5-3. HTML 자동 변환 (사용자 인지용) ⭐ v2.3
+
+스냅샷 MD 갱신 직후 **반드시** HTML 자동 변환 실행. transcribe로 회의 결과(✅/❌ 마킹, 신호등 회고, 인용)가 추가됐으므로 HTML도 즉시 갱신해야 사용자가 변화를 확인할 수 있다.
+
+```bash
+PYTHON="/c/Users/ibebu/AppData/Roaming/uv/python/cpython-3.14-windows-x86_64-none/python.exe"
+cd c:/Users/ibebu/bootcamp6_final/archive/teams-docs
+
+# 단일 팀
+"$PYTHON" .shared/html/md_to_html.py <X>team/snapshots/<YYMMDD>_<am|pm>.md
+
+# all 모드: 처리한 모든 팀 변환 + 코호트 대시보드 갱신
+for team in 1team 2team 3team; do
+  [ -f "$team/snapshots/<YYMMDD>_<am|pm>.md" ] && "$PYTHON" .shared/html/md_to_html.py "$team/snapshots/<YYMMDD>_<am|pm>.md"
+done
+"$PYTHON" .shared/html/generate_dashboard.py <YYMMDD> <am|pm>
+```
+
+→ 생성: `<X>team/snapshots/<YYMMDD>_<am|pm>.html` (MD 옆) + `.shared/html/dashboard.html` (all 모드 시).
+→ **MD는 source of truth, HTML은 사용자 읽기 전용**. Claude는 계속 MD로 편집·검색.
+→ 회의 결과 반영(✅/❌ 마킹, 신호등, 인용)이 자동으로 HTML 최상단 "🎯 이번 회의에서 확인할 사항" 박스에 노출.
+→ 변환 실패 시 사용자에 1회 알림 후 MD만으로 진행. 상세: [teams-docs/.shared/html/README.md](../../../teams-docs/.shared/html/README.md).
+
 ### Step 6. 회의록 (mom) 작성 — 필요 시 (v2 트리거 확장)
 
 다음 조건 중 **하나라도** 충족하면 별도 회의록 작성:
@@ -394,6 +417,7 @@ transcript 길이 < 1KB이면 형식적 진척 보고 가능성. PM 스냅샷의
 
 ✅ 스냅샷 갱신: snapshots/<YYMMDD>_<am|pm>.md
 ✅ 회의록 (생성된 경우): mom/<YYMMDD>_<am|pm>_minutes.md
+✅ HTML 변환: snapshots/<YYMMDD>_<am|pm>.html (브라우저로 열기) + .shared/html/dashboard.html (all 모드 시 코호트 비교)
 ✅ 메모리 (생성된 경우): memory/<file>.md
 
 다음 회차: 내일 09:30 `/team-check-am <팀번호>` 호출 시 본 스냅샷이 비교 기준.
@@ -484,3 +508,4 @@ DEFAULT_THREADS=4
 | 2026-05-14 | **v2 양식 적용** — Step 4 분석 7→10 항목 (강사 사전 통지 ✅/❌ + carry-over 이행률 + 신호등 회고 추가) / Step 5 v2 14개 섹션 매핑 / Step 6 mom 트리거 확장 (R-attend·R-burn·신호등 불일치·carry-over 2회+) / Step 9 v2 정량 지표 보고 / Step 10 1주 회고 측정 표 추가 |
 | 2026-05-14 | **v2.1 보드 cross-check 추가** — Step 4 분석 10→11 항목 (사용자 수기 mom + 보드 In Progress + 24h commit 3중 정합성) / Step 5 §🗂️ 섹션 매핑 / Step 6 mom 트리거에 "정합성 신호 ≥ 3건" 추가 |
 | 2026-05-14 | **v2.2 보드 PDF source 확정** — token 없이 자동화 불가 결정 → 사용자가 회의 40분 전 GitHub Project 보드를 브라우저 인쇄로 PDF 추출 → `teams-docs/<X>team/backlog/backlog_<YYMMDD>_<am\|pm>.pdf`에 저장 → Read 도구로 자동 파싱. WIP 한도 위반 자동 검증 추가 (R-WIP 1순위 자동 격상) |
+| 2026-05-18 | **v2.3 HTML 자동 변환 통합** — Step 5-3 신설 (스냅샷 갱신 직후 `md_to_html.py` 호출 + all 모드 시 `generate_dashboard.py`). MD source of truth + HTML 사용자 읽기 전용 분리. 최상단 "🎯 이번 회의에서 확인할 사항" 박스로 빠른 인지. 공통 템플릿: [teams-docs/.shared/html/snapshot_template.html](../../../teams-docs/.shared/html/snapshot_template.html). 자매 스킬 team-check-am Step 6-1 / team-check-pm Step 6-1 동시 통합 |

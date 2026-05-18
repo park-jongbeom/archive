@@ -176,6 +176,22 @@ teams-docs/<X>team/snapshots/<YYMMDD>_am.md
 
 파일명 예: `260514_am.md` (2026-05-14 오전).
 
+### Step 6-1. HTML 자동 변환 (사용자 인지용) ⭐ v2.3
+
+스냅샷 저장 직후 **반드시** HTML 자동 변환 실행. MD는 source of truth, HTML은 사용자 읽기 전용 (Claude는 계속 MD로 작업).
+
+```bash
+PYTHON="/c/Users/ibebu/AppData/Roaming/uv/python/cpython-3.14-windows-x86_64-none/python.exe"
+cd c:/Users/ibebu/bootcamp6_final/archive/teams-docs
+"$PYTHON" .shared/html/md_to_html.py <X>team/snapshots/<YYMMDD>_am.md
+# all 모드 또는 3팀 모두 처리 시:
+"$PYTHON" .shared/html/generate_dashboard.py <YYMMDD> am
+```
+
+→ 생성: `<X>team/snapshots/<YYMMDD>_am.html` (MD 옆) + `.shared/html/dashboard.html` (가장 최근).
+→ 사용자는 HTML로 인지: 최상단 "🎯 이번 회의에서 확인할 사항" 박스 + 정량 지표 카드 + 펼침 섹션.
+→ 변환 실패 시 사용자에 1회 알림 후 MD만으로 진행. 상세: [teams-docs/.shared/html/README.md](../../../teams-docs/.shared/html/README.md).
+
 ### Step 7. 사용자에 보고 (강사 사전 통지 우선 노출)
 
 사용자 출력 순서:
@@ -202,6 +218,7 @@ teams-docs/<X>team/snapshots/<YYMMDD>_am.md
 ```
 ---
 ✅ 스냅샷 저장: teams-docs/<X>team/snapshots/<YYMMDD>_am.md
+✅ HTML 변환: teams-docs/<X>team/snapshots/<YYMMDD>_am.html (브라우저로 열기) + .shared/html/dashboard.html
 
 📋 회의 5분 전 (09:55) — §🚨 강사 사전 통지 의제 3건을 강사 채팅/1:1로 전달.
    (보조강사 마이크 이슈 대비 백업 채널 — 마이크 가능시 회의 중 보완용으로만)

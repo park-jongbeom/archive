@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3팀 (BBip) 시스템 다이어그램 검증 보고서 — 2026-05-18</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  .quote { border-left: 4px solid #6366f1; padding: 0.75rem 1rem; background: #eef2ff; margin: 0.5rem 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+  details > summary { cursor: pointer; padding: 0.75rem 1rem; background: #f3f4f6; border-radius: 8px; font-weight: 600; user-select: none; }
+  details > summary:hover { background: #e5e7eb; }
+  details[open] > summary { background: #e0e7ff; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  details > div { padding: 1rem; background: #fafbfc; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+  th { background: #f3f4f6; padding: 0.5rem; text-align: left; border: 1px solid #d1d5db; font-weight: 600; }
+  td { padding: 0.5rem; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .badge-green { background: #d1fae5; color: #065f46; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-yellow { background: #fef3c7; color: #92400e; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-red { background: #fee2e2; color: #991b1b; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-star { background: #fef3c7; color: #b45309; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  ul, ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+  ul li { list-style: disc; margin: 0.25rem 0; }
+  ol li { list-style: decimal; margin: 0.25rem 0; }
+  h1, h2, h3, h4 { font-weight: 700; margin: 0.75rem 0 0.5rem; line-height: 1.3; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.25rem; }
+  h3 { font-size: 1.1rem; color: #374151; }
+  h4 { font-size: 1rem; color: #4b5563; }
+  p { margin: 0.5rem 0; line-height: 1.6; }
+  code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.85em; }
+  pre { background: #1f2937; color: #f9fafb; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 0.5rem 0; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  a { color: #4f46e5; text-decoration: underline; }
+  a:hover { color: #3730a3; }
+  strong { color: #111827; font-weight: 700; }
+  hr { border: 0; border-top: 1px solid #e5e7eb; margin: 1rem 0; }
+  blockquote { border-left: 4px solid #d1d5db; padding-left: 1rem; color: #4b5563; margin: 0.5rem 0; }
+  .severity-crit { border-left: 5px solid #dc2626; background: #fef2f2; }
+  .severity-warn { border-left: 5px solid #f59e0b; background: #fffbeb; }
+  .severity-info { border-left: 5px solid #3b82f6; background: #eff6ff; }
+  .principle-box { background: #ecfdf5; border: 2px solid #10b981; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <!-- ===== 헤더 ===== -->
+  <header class="mb-6">
+    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+      <h1 class="text-2xl font-bold text-gray-900">3팀 (BBip) 시스템 다이어그램 검증 보고서</h1>
+      <span class="text-sm text-gray-500">2026-05-18 · Week 3 D1 (워터폴)</span>
+    </div>
+    <div class="text-sm text-gray-600">
+      작성자: 정우석 부팀장 (Mermaid 코드 · 5장) · 보조강사 검증 ·
+      5/26 개발 완료 일정 명시 ⭐⭐⭐ 후 첫 검증
+    </div>
+  </header>
+
+  <!-- ===== 정량 지표 카드 ===== -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white rounded-lg p-3 border-l-4 border-blue-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">다이어그램 수</div>
+      <div class="text-lg font-bold text-gray-900">5 장 (Mermaid)</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-red-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">🚨 Critical 이슈</div>
+      <div class="text-lg font-bold text-gray-900">3 건</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-yellow-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">⚠️ 검토 권장</div>
+      <div class="text-lg font-bold text-gray-900">7 건</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-purple-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">💡 cosmetic</div>
+      <div class="text-lg font-bold text-gray-900">3 건</div>
+    </div>
+  </section>
+
+  <!-- ===== 종합 평가 박스 ===== -->
+  <section class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-5 mb-6 shadow-md">
+    <h2 class="text-xl font-bold text-green-900 mb-3 flex items-center gap-2 border-b-2 border-green-200 pb-2">
+      <span class="text-2xl">🟢</span> 종합 평가 <span class="badge-star">⭐</span>
+    </h2>
+    <div class="space-y-3 text-sm">
+      <p>
+        워터폴 변형 + 5/26 개발 완료 일정 압박 상황에서,
+        <strong>5개 핵심 도메인(인앱/FCM 분기, 인증, 홈/지도, 알림, DM)</strong>
+        전체를 sequence + flowchart 혼합으로 그렸다.
+      </p>
+      <div class="principle-box">
+        <p class="font-bold mb-2">🟢 핵심 원칙 — 강사 5/18 PM 피드백 정합 ⭐⭐⭐</p>
+        <p class="text-sm">
+          <strong>"모든 쓰기(Write) 작업과 타인 정보의 접근은 '서버(Cloud Functions)'를 통해서만 수행한다"</strong>
+          — 이 원칙이 5장 전체에 일관되게 흐름.
+        </p>
+      </div>
+      <p>
+        <strong>2팀 대비 강점</strong>:
+        Mermaid 코드라 <strong>Git diff 추적 가능</strong> + PR 리뷰 가능
+        (2팀 PNG는 변경 추적 안 됨). 워터폴 + 칸반 운영에 큰 자산 ⭐.
+      </p>
+      <p class="text-xs text-gray-600">
+        ※ 본 검증은 구현 전 합의가 필요한 모순 / 누락 위주.
+        R-W1 Must Meet 6항목 중 1·2번(Figma UI / DB 스키마) 부분 충족 보조 자료.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 다이어그램 인벤토리 ===== -->
+  <h2>📋 다이어그램 인벤토리</h2>
+  <section class="mb-6">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>제목</th>
+          <th>형태</th>
+          <th>다루는 도메인</th>
+          <th>평가</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>DM · 친추 · 무전 인앱 / FCM 분기처리</td>
+          <td>sequence (3 rect)</td>
+          <td>DMs / Friendships / VoiceMessages</td>
+          <td><span class="badge-red">🚨 분기 충돌 · 권한 모순</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>계정인증 도메인</td>
+          <td>flowchart</td>
+          <td>Auth · Users / Live 생성</td>
+          <td><span class="badge-yellow">⚠️ 닉네임 충돌 · 기존 유저 로딩</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>홈화면 도메인</td>
+          <td>flowchart (subgraph 3)</td>
+          <td>위치 권한 · 지도 · PTT · DM</td>
+          <td><span class="badge-yellow">⚠️ FG 분기 빈틈 · PTT 막다른 골목</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>인앱 알림 도메인</td>
+          <td>flowchart</td>
+          <td>Notifications · 읽음 / 삭제</td>
+          <td><span class="badge-yellow">⚠️ FRIEND 두 케이스 누락</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>DM 도메인</td>
+          <td>flowchart (subgraph 2)</td>
+          <td>DMs · unread_counts</td>
+          <td><span class="badge-yellow">⚠️ 방 개설 plot 부재</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- ===== 🚨 Critical 이슈 ===== -->
+  <h2>🚨 Critical (구현 전 반드시 합의 권장)</h2>
+
+  <div class="severity-crit rounded-lg p-4 mb-4">
+    <h3>1. d1 ① DM 메시지 ↔ d5 DM 도메인 — <strong>"온라인 / 다른 화면" 분기 두 다이어그램에서 충돌</strong></h3>
+    <ul class="text-sm">
+      <li>
+        <strong>d1 상단 sequence</strong>:
+        "분기 2 (온라인 / 다른 화면) → Notifications 생성 → 라이브 리스너로 즉시 알림 수신"
+        — <strong>푸시 없음</strong>.
+      </li>
+      <li>
+        <strong>d5 하단 DM flowchart</strong>:
+        <code>ServerSaveInactive</code> 단일 분기에서
+        "Notifications 생성 + <strong>오프라인 푸시 발송</strong>" 묶음 —
+        <strong>온 / 오프 구분 없이 푸시 발송</strong>.
+      </li>
+    </ul>
+    <p class="text-sm">
+      같은 시나리오를 두 다이어그램이 다르게 그림.
+      <strong>온라인 - 다른화면 사용자에게 FCM을 쏘는지 안 쏘는지</strong> 합의 필수.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      d5의 <code>ServerCheckOpponent</code>를 3분기로 쪼개기
+      (대화방 내 / 온라인 - 다른화면 / 오프라인) — d1 sequence와 동일 구조로.
+    </p>
+  </div>
+
+  <div class="severity-crit rounded-lg p-4 mb-4">
+    <h3>2. d1 ③ 음성 메시지 — <strong>"수신자 본인이 자기 문서 삭제" 권한 모순</strong></h3>
+    <p class="text-sm">
+      "재생 완료 후
+      <code>Receiver -&gt;&gt; FS: 해당 문서 삭제 (휘발성 유지)</code>"
+      라고 클라이언트가 직접 Firestore에 delete 호출.
+    </p>
+    <p class="text-sm">
+      그런데 강사 5/18 PM 피드백:
+      <span class="quote inline-block">"모든 쓰기(Write) 작업과 타인 정보의 접근은 '서버(Cloud Functions)'를 통해서만 수행한다"</span>
+    </p>
+    <p class="text-sm">
+      <code>VoiceMessages/{receiver_uid}</code> 문서는 수신자 본인 소유라
+      보안 규칙상 self-delete 허용은 가능하지만,
+      <strong>"쓰기는 무조건 서버"</strong> 원칙과 충돌하는 예외.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>: 둘 중 하나 결정:
+    </p>
+    <ul class="text-sm">
+      <li>
+        (a) 예외 명시 — "본인 소유 문서의 read / delete만 클라이언트 허용" 룰을 다이어그램 주석에 박기
+      </li>
+      <li>
+        (b) <code>deleteVoiceMessage</code> Callable 함수 경유로 통일
+      </li>
+    </ul>
+  </div>
+
+  <div class="severity-crit rounded-lg p-4 mb-4">
+    <h3>3. d1 ③ 음성 메시지 — <strong>오프라인 트리거 조건 <code>updated_at 체크</code>가 모호</strong></h3>
+    <p class="text-sm">
+      "수신자 오프라인 →
+      <code>FS-&gt;&gt;CF: 트리거 작동 (updated_at 체크)</code>"
+    </p>
+    <p class="text-sm">
+      Firestore 트리거는 문서 생성 / 수정 즉시 발화하는데,
+      <strong>"오프라인일 때만 FCM 보내고 온라인이면 안 보낸다"는 판정을 트리거 시점에 어떻게 하나?</strong>
+    </p>
+    <ul class="text-sm">
+      <li>
+        <strong>옵션 A</strong>: 트리거가 무조건 발화 →
+        CF가 <code>Live/{uid}</code> 조회해서 분기 (d1 ① DMs 패턴과 동일)
+      </li>
+      <li>
+        <strong>옵션 B</strong>: 클라이언트가 N초 내 삭제 안 하면 onUpdate 트리거 →
+        위험 (race condition, 재생 끝나기 전 삭제 vs FCM)
+      </li>
+    </ul>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      d1 ① DMs와 동일하게 트리거 즉시 <code>Live/{uid}</code> 조회 분기로 통일.
+      "updated_at 체크" 표현 자체가 혼란.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ===== ⚠️ 검토 권장 ===== -->
+  <h2>⚠️ 검토 권장</h2>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>4. d2 계정인증 — <strong>소셜 로그인 후 닉네임 충돌 처리 누락</strong></h3>
+    <p class="text-sm">
+      이메일 가입 → <code>UpdateRealNickname</code>으로 "진짜 닉네임"으로 즉시 덮어쓰기.
+      소셜 가입 → <code>ParseNickname</code>이 만든 임시 닉네임 그대로 두고
+      <code>FetchToken</code>으로 넘어감.
+    </p>
+    <p class="text-sm">
+      그런데 임시 닉네임(이메일 ID 또는 소셜 프로필명)이
+      <strong>이미 다른 유저가 쓰고 있으면?</strong>
+      닉네임 unique 제약이 있다면 BatchCommit 자체가 실패.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      <code>ParseNickname</code> 다음에
+      "중복 확인 → 충돌 시 suffix 부여" 분기 추가,
+      또는 "닉네임 unique 제약 없다" 결정 주석.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>5. d2 계정인증 — <code>AuthCheck "로그인 정보 확인됨"</code> 경로의 데이터 동기화 빈틈</h3>
+    <p class="text-sm">
+      기존 회원 로그인 시
+      <code>AuthCheck → FetchToken → UpdateFCM → ...</code>
+      으로 바로 점프.
+    </p>
+    <p class="text-sm">
+      그런데 <strong>앱 재설치 / 기기 변경한 기존 회원</strong>은
+      Users / Live 문서가 이미 존재하지만 로컬 캐시가 비어있음 →
+      다이어그램 어디에도 "기존 유저 프로필 / Live 로딩" 단계가 없음.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      <code>AuthCheck "확인됨"</code> →
+      <code>LoadExistingProfile (Users + Live 조회)</code> →
+      <code>FetchToken</code> 순서로 한 노드 추가.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>6. d3 홈화면 — Foreground 모드의 <code>BgFriendSync</code> 누락</h3>
+    <p class="text-sm">
+      <code>StartBgService</code> 분기는
+      <code>BgUserSync</code> + <code>BgFriendSync</code> + <code>WearableListener</code>
+      3종 모두 시작.
+    </p>
+    <p class="text-sm">
+      <code>StartFgMode</code> 분기는 <code>FgSync</code> 하나만 —
+      <strong>친구 위치 리스너는?</strong> 친구 마커가 지도에 안 뜨는 모드?
+    </p>
+    <p class="text-sm">
+      명시적으로 "포그라운드에선 친구 위치 끔" 결정이면 OK, 아니면 빠진 것.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      FgSync에서도 친구 리스너는 onResume 시 작동한다는 표기 추가,
+      또는 "포그라운드는 내 위치만" 결정을 다이어그램 주석으로 명시.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>7. d3 홈화면 — <strong>무전(PTT) 권한 거부 후 흐름 막다른 골목</strong></h3>
+    <p class="text-sm">
+      <code>MicPermRequest -- "거부됨" --&gt; ClosePopup</code>
+      — 권한 거부 시 그냥 팝업 닫음.
+    </p>
+    <p class="text-sm">
+      사용자가 "왜 거부했나? 다시 누르면 또 거부 다이얼로그?" →
+      <strong>이미 거부한 권한은 OS가 다이얼로그 안 띄움.</strong>
+      설정 이동 유도 필요.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      <code>PermCheck</code> 최상단의
+      <code>ShowEmptyState → GoToSettings</code>
+      패턴과 동일하게,
+      마이크 거부도 "설정에서 권한 허용 필요" 안내 → 설정 이동 노드 추가.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>8. d4 인앱 알림 — <code>FRIEND_ACCEPTED</code> vs <code>FRIEND_REQUEST</code> 구분 없음</h3>
+    <p class="text-sm">
+      친구 알림 흐름은
+      <code>UserAction -- "친구 수락 알림 클릭"</code>
+      단일 케이스만 그려짐.
+    </p>
+    <p class="text-sm">
+      그런데 d1 ② 친구 요청 sequence에서는
+      <strong>요청 송신자가 받는 알림</strong> +
+      <strong>수락한 후 송신자가 받는 알림</strong>
+      두 종류가 모두 생길 수 있음.
+    </p>
+    <p class="text-sm">
+      요청 받은 사람이 누르면 → 친구 목록? 요청 대기 목록? 결정 필요.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      FRIEND_REQUEST(받음, 수락 대기) vs FRIEND_ACCEPTED(보냈는데 상대 수락)
+      두 케이스로 분기 추가. 진입 화면도 다름.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>9. d4 인앱 알림 — <code>PlayAudio</code> 후 휘발성 원칙 충돌</h3>
+    <p class="text-sm">
+      d1 ③에서 "재생 완료 시 문서 삭제 (휘발성 유지)" → VoiceMessages 자체는 삭제.
+    </p>
+    <p class="text-sm">
+      그런데 d4는 <code>AudioEnd: "목록에서는 지워지지 않고 유지"</code> →
+      Notifications 문서는 유지.
+    </p>
+    <p class="text-sm">
+      두 문서가 다른 컬렉션이라 양립 가능하지만 —
+      <strong>VoiceMessages 삭제됐는데 Notification에 "재생 버튼"이 다시 보이면?</strong>
+      <code>ValidState → PlayAudio</code> 재시도 시 원본 없음 에러.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      <code>CheckValidity</code>에 "원본 VoiceMessages 존재 여부" 체크도 포함.
+      또는 재생 후 <code>Notifications</code> 항목에 <code>played: true</code> 플래그 표시.
+    </p>
+  </div>
+
+  <div class="severity-warn rounded-lg p-4 mb-4">
+    <h3>10. d5 DM 도메인 — <code>unread_counts</code> 초기값 누락 명시</h3>
+    <p class="text-sm">
+      다이어그램 위 주석에:
+    </p>
+    <ul class="text-sm">
+      <li>"1:1채팅방 개설 시 unread_counts 값 넣어주기"</li>
+      <li>"읽지 않은 알림 필드값 변경 처리 필요 → API 구현 필요 &lt;&lt; 바로작업"</li>
+    </ul>
+    <p class="text-sm">
+      이걸 다이어그램 본문에는 안 넣고 위 주석으로만 둠.
+      <strong>방 개설 plot 자체가 다이어그램에 없음</strong> =
+      채팅방 생성 트리거(=친구 추가? 첫 메시지?)가 어디서 들어오는지 불명.
+    </p>
+    <p class="text-sm">
+      💡 <strong>권장</strong>:
+      DM flowchart 앞단에 "대화방 최초 생성 (양쪽 unread_counts: 0 초기화)" 노드 추가,
+      또는 별도 짧은 sequence 1장.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ===== 💡 cosmetic ===== -->
+  <h2>💡 작은 일관성 권장 (cosmetic, but matters)</h2>
+
+  <div class="severity-info rounded-lg p-4 mb-4">
+    <h3>11. 분기 패턴 통일</h3>
+    <p class="text-sm">
+      d1 ① DMs는 <code>Live/{uid}</code> 조회로 3분기,
+      d1 ③ VoiceMessages는 트리거 즉시 푸시 →
+      <strong>두 분기 패턴이 다름</strong>.
+      가능하면 동일 패턴(Live 조회 → 3분기)으로 통일하면 서버 함수 재사용 가능.
+    </p>
+  </div>
+
+  <div class="severity-info rounded-lg p-4 mb-4">
+    <h3>12. 한국어 표기 통일</h3>
+    <p class="text-sm">
+      d5 DM 도메인 flowchart의 한자 혼용("메세지" vs "메시지") 통일.
+    </p>
+  </div>
+
+  <div class="severity-info rounded-lg p-4 mb-4">
+    <h3>13. PTT Hold 중 인터럽트 핸들링</h3>
+    <p class="text-sm">
+      d3 홈화면 <code>holdPTT → release</code> 흐름에서
+      Hold 중에 전화 등 인터럽트 들어오면? —
+      인터럽트 핸들링 노드 추가 권장(워치 사용 시 더 중요).
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ===== R-W1 6항목 충족 보조 평가 ===== -->
+  <h2>🎯 R-W1 Must Meet 6항목 충족 보조 평가</h2>
+  <section class="mb-6">
+    <p class="text-sm text-gray-600 mb-2">
+      본 5장 다이어그램이 R-W1 Must Meet 6항목 충족에 얼마나 기여하는지 평가
+      (PM 단번에 점검 시 참고용).
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>R-W1 항목</th>
+          <th>본 다이어그램 보강 정도</th>
+          <th>여전히 필요한 산출물</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Figma UI 모든 Must 화면 와이어프레임</td>
+          <td><span class="badge-yellow">△ 간접 (사용자 흐름만)</span></td>
+          <td>Figma UI 5종 (회원가입 / 로그인 / DM / 알림 / 무전)</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>DB 스키마 다이어그램</td>
+          <td><span class="badge-yellow">△ 부분 (컬렉션 이름만)</span></td>
+          <td>필드 단위 ERD (Users / Live / DMs / Friendships / Notifications / VoiceMessages)</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>음성 무전 시퀀스 다이어그램</td>
+          <td><span class="badge-green">✅ d1 ③로 부분 충족</span></td>
+          <td>단 d1 ③ 권한 모순 + 트리거 모호 해소 필요</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>위치 공유 데이터 흐름</td>
+          <td><span class="badge-yellow">△ d3 홈화면 일부 커버</span></td>
+          <td>친구 위치 sync 주기 / Geohash / 거리 계산 흐름</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>워치 UI 5종 명세</td>
+          <td><span class="badge-red">❌ 미커버</span></td>
+          <td>워치 별도 명세 필요</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>권한 요청 시점 명시 (마이크 / 위치)</td>
+          <td><span class="badge-green">✅ d3로 부분 충족</span></td>
+          <td>단 d3 PTT 막다른 골목 해소 필요</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-orange-700 mt-3">
+      ⚠️ <strong>충족률 보조 평가</strong>: 본 5장 다이어그램이
+      <strong>2/6 ✅ + 3/6 △</strong> 커버.
+      PM 회의 / 1:1에서 단번에 점검 시 1·2·4·5번 추가 산출물 확인 필수.
+    </p>
+  </section>
+
+  <hr>
+
+  <!-- ===== 액션 아이템 ===== -->
+  <h2>🎯 정우석 부팀장 + 장지은 팀장에게 전달할 액션 아이템</h2>
+  <section class="mb-6">
+    <details open>
+      <summary>📌 우선순위 정리</summary>
+      <div>
+        <ol class="text-sm">
+          <li>
+            <strong>🚨 P0 (오늘 ~ 내일)</strong>:
+            d1 ① / d5 DM 온/오프 분기 패턴 합의 →
+            서버 함수 작성 전 결정 필수.
+            FCM 발송 정책이 바뀌면 비용 / 사용자 경험 크게 영향.
+          </li>
+          <li>
+            <strong>🚨 P0 (서버 함수 구현 전)</strong>:
+            d1 ③ 음성 메시지 self-delete 권한 정책 결정 +
+            트리거 조건 명확화.
+            현재 모호한 상태로 구현 시 race condition + 보안 룰 충돌 위험.
+          </li>
+          <li>
+            <strong>⚠️ P1 (이번 주)</strong>:
+            d2 닉네임 충돌 / 기존 유저 로딩 + d4 친구 알림 두 케이스 분리.
+            <span class="quote inline-block">"문서 정리해서 내용 공유해라" (강사 5/18 PM 피드백) 톤 적용</span>
+          </li>
+          <li>
+            <strong>⚠️ P1 (5/26 마감 전)</strong>:
+            d3 FG 분기 + PTT 권한 거부 막다른 골목 +
+            d5 방 개설 plot 추가.
+          </li>
+          <li>
+            <strong>🎯 R-W1 추가 작업 (PM / 1:1 합의 필요)</strong>:
+            <ul>
+              <li>Figma UI 5종 통합 (#1)</li>
+              <li>DB 필드 단위 ERD (#2)</li>
+              <li>위치 공유 / Geohash 흐름 (#4)</li>
+              <li>워치 UI 5종 명세 (#5)</li>
+            </ul>
+            → R-W1 8회차 이월 방지를 위해 PM 회의 / 1:1에서 분담 결정 필수.
+          </li>
+          <li>
+            <strong>💡 P2 (시간 날 때)</strong>:
+            분기 패턴 통일 + 표기 통일 + PTT 인터럽트 노드.
+          </li>
+        </ol>
+        <p class="text-sm text-orange-700 mt-3">
+          ⚠️ 단 <strong>R-burn 정우석 케어 절대 필수</strong>
+          (5/15~17 새벽 02:48+04:48 commit + 셀프 머지 87.5% sentinel).
+          본 추가 작업은 <strong>장지은 / Theo / yubin과 분담</strong>으로 진행 권장.
+          "아픔이 안 된다" (2팀 5/15 PM 톤) 적용.
+        </p>
+      </div>
+    </details>
+  </section>
+
+  <hr>
+
+  <!-- ===== 2팀과 비교 ===== -->
+  <h2>🔄 2팀 다이어그램과 비교 (코호트 신호)</h2>
+  <section class="mb-6">
+    <table>
+      <thead>
+        <tr>
+          <th>축</th>
+          <th>2팀 (Umma)</th>
+          <th>3팀 (BBip)</th>
+          <th>승</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>형식</td>
+          <td>Notion PNG 8장</td>
+          <td>Mermaid 코드 5장</td>
+          <td>3팀 ⭐ (Git diff 추적)</td>
+        </tr>
+        <tr>
+          <td>커버리지</td>
+          <td>학습 도메인 위주 (AI/SRS/Correction/Stats)</td>
+          <td>실시간 통신 도메인 위주 (DM/무전/알림)</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>서버 책임 분리</td>
+          <td>△ Firebase batch / sync 표기 혼재</td>
+          <td>✅ "쓰기는 무조건 서버" 일관</td>
+          <td>3팀 ⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td>에러 / sync 분기</td>
+          <td>✅ Rollback + Retry 일관 (d1 제외)</td>
+          <td>△ 권한 / 트리거 조건 모호 다수</td>
+          <td>2팀 ⭐</td>
+        </tr>
+        <tr>
+          <td>강사 피드백 정합</td>
+          <td>✅ "훌륭합니다" 직접 격려 (5/18 AM)</td>
+          <td>✅ "쓰기는 서버" 원칙 정합 (5/18 PM)</td>
+          <td>양팀 동시 sentinel ⭐</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-blue-700 mt-3">
+      📌 <strong>코호트 관찰</strong>: 양팀 모두 5/18에 다이어그램 도식화 작업이 정점에 도달.
+      2팀 = 학습 도메인 깊이 ⭐ / 3팀 = 통신 도메인 + Git 추적 가능 ⭐⭐.
+      <strong>1팀에 양팀 사례 공유 권장</strong>
+      (1팀 회의 형태 작동 X 6일차 + 다이어그램 산출물 미확인).
+    </p>
+  </section>
+
+  <hr>
+
+  <!-- ===== 참조 ===== -->
+  <h2>📚 참조</h2>
+  <section class="mb-6 text-sm">
+    <ul>
+      <li>
+        다이어그램 원본:
+        <a href="../mom/260518 - 진행중">teams-docs/3team/mom/260518 - 진행중</a>
+        (11차 회의록 · Mermaid 5장)
+      </li>
+      <li>
+        AM 회의록:
+        <a href="../mom/260518_am_minutes.md">teams-docs/3team/mom/260518_am_minutes.md</a>
+        — 5/26 개발 완료 일정 명시 ⭐⭐⭐
+      </li>
+      <li>
+        PM 스냅샷:
+        <a href="../snapshots/260518_pm.md">teams-docs/3team/snapshots/260518_pm.md</a>
+        — R-W1 7회차 이월 + R-burn 정우석
+      </li>
+      <li>
+        팀 검증 룰:
+        <a href="./team_specific_checks.md">teams-docs/3team/review/team_specific_checks.md</a>
+        §2-3 Must Meet 6항목
+      </li>
+      <li>
+        메모리: team3_methodology.md ·
+        team3_may26_deadline_signal_260518.md ·
+        team3_pm_260515_signals.md
+      </li>
+    </ul>
+  </section>
+
+  <footer class="text-xs text-gray-500 text-center mt-8 pt-4 border-t border-gray-200">
+    보조강사 작성 · 2026-05-18 · Mermaid 코드 기반 검증 (사용자 직접 제공)
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코호트 대시보드 — 2026-05-18 PM</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: #f3f4f6; padding: 0.75rem; text-align: left; border: 1px solid #d1d5db; font-weight: 600; }
+  td { padding: 0.75rem; border: 1px solid #e5e7eb; vertical-align: top; }
+  .team-card { transition: transform 0.15s; }
+  .team-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 mb-1">📊 코호트 대시보드</h1>
+    <div class="text-sm text-gray-600">2026-05-18 PM · 안드로이드 부트캠프 6기 · 3/3팀 스냅샷 적재</div>
+  </header>
+
+  <!-- ===== 정량 지표 비교 표 ===== -->
+  <section class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-gray-200">
+    <h2 class="text-xl font-bold mb-3 text-gray-900 border-b-2 border-gray-200 pb-2">📊 v2 정량 지표 비교</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>지표</th>
+          <th>1팀 Scoffee</th>
+          <th>2팀 Umma</th>
+          <th>3팀 BBip (워터폴)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="font-semibold">회의 시간</td><td>5&#x27;59</td><td>8&#x27;55</td><td>4&#x27;24</td></tr>
+        <tr><td class="font-semibold">사전 통지 이행률</td><td>0.5/3</td><td>2.5/3</td><td>1/3</td></tr>
+        <tr><td class="font-semibold">Carry-over 이행률</td><td>미측정</td><td>미측정</td><td>4/13 = 30.8%.</td></tr>
+        <tr><td class="font-semibold">신호등 회고</td><td>❌ 5일 연속</td><td>❌</td><td>❌</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== 팀별 카드 ===== -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+
+    <div class="team-card bg-white rounded-xl p-5 shadow-sm border-t-4 border-blue-500">
+      <div class="flex items-baseline justify-between mb-3">
+        <h3 class="text-lg font-bold text-blue-900">1팀 Scoffee</h3>
+        <a href="../1team/snapshots/260518_pm.html" class="text-xs text-blue-600 hover:text-blue-800 underline">상세 →</a>
+      </div>
+      <div class="text-xs text-gray-500 mb-3">Week 3 D1</div>
+      <div class="text-sm mb-4 text-gray-700 leading-relaxed">🟡 <strong>양면 baseline 견고화</strong> = 🟢⭐⭐ <strong>데이터 채널 자체 책임 회복 사실 확정</strong> (보드 PDF: #20·#26 In review 진입 + Done 3→6 + In progress 5/3→2/3 호전) <strong>| 🚨🚨🚨 회의 채널 작동 X 6일차 임계 돌파 + In review 8/5 악화 + 오후 6h 신규 commit 3건 둔화</strong> (정섭/손지희 오후 신규 코드 0건). <strong>PM 회의가 회의 채널 회복 마지막 시험대</strong> — 작동 …</div>
+      <div class="text-xs font-semibold text-gray-500 mb-2 border-t pt-3">🚨 강사 사전 통지 의제 결과</div>
+      <div class="space-y-2 mb-3">
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-blue-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">1.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**(회의 첫 안건 절대 권유 — B3)** 🚨🚨🚨 **AM 회의 형태 작동 X 6일차 임계 돌파 — 강사 직접 발화로 회의 형태 재정의 결정 1줄 절대 필수**. 5/13~5/18 6일 연속 실질 발화 ~30초~2분 패턴. 슬랙/노…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-blue-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">2.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">🟢⭐⭐⭐ **3명 직접 호명 격려 + R-stall 자체 회수 사실 확정 명시 인정** (AM 누락분 회복) — (a) **정섭 R-stall #20·#26 자체 회수 ⭐⭐⭐** (보드 PDF로 사실 확정: 5/15 PM In pro…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-blue-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">3.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">🚨🚨 **6회차 임박 7건 → 오늘 17:00 이후 1:1 30분 일정 회의 중 절대 확정** + **R3 셀프 머지 80% + R2 Closes 0/4 → 코드 리뷰 정례화 결정** (이제이 mom 자생 메모 ⭐⭐ 활용) + **I…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div></div>
+    </div>
+
+    <div class="team-card bg-white rounded-xl p-5 shadow-sm border-t-4 border-green-500">
+      <div class="flex items-baseline justify-between mb-3">
+        <h3 class="text-lg font-bold text-green-900">2팀 Umma</h3>
+        <a href="../2team/snapshots/260518_pm.html" class="text-xs text-green-600 hover:text-green-800 underline">상세 →</a>
+      </div>
+      <div class="text-xs text-gray-500 mb-3">Week 3 D1</div>
+      <div class="text-sm mb-4 text-gray-700 leading-relaxed">🟢⭐⭐ <strong>2팀 회복 baseline 견고화 + Sprint 1 → Sprint 2 운영 패턴 완전 정착 유지</strong> = 데이터 채널 (AM 직후 박재민 AC 1~10 마감 + 태환 LearningStateRepo 원복) + 회의 채널 (AM 사전 통지 83.3% v2 최고치 + Sprint 2 완전 이행 사이클) <strong>여전히 견고</strong>. <strong>단 정원화 자기 비난 케어 절대 1순위 (1:1)</strong> + 오후 페이스 둔화 청취 + R3/R2 통합 결정. P…</div>
+      <div class="text-xs font-semibold text-gray-500 mb-2 border-t pt-3">🚨 강사 사전 통지 의제 결과</div>
+      <div class="space-y-2 mb-3">
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-green-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">1.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**(회의 시작 5분 전 1:1 절대 필수 — 의제 0번)** 🚨🚨 **정원화 자기 비난 케어 + 정재훈 1:1 면담 결과** — AM에서 정원화 &quot;원하님도 시스템 인프라 같이 구축&quot; 분담 추가 명시 + AM 회의 미언급. 5/16 …</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ 이행</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-green-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">2.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**(회의 첫 안건 절대 권유 — B3)** 🟢⭐⭐⭐ **4명 직접 호명 격려 (AM 명시 인정 미시 회복) — 박재민 AC 1~10 ⭐⭐⭐ + 태환 R13 자체 해소 ⭐⭐⭐ + 정원화 Sprint 2 완전 이행 사이클 ⭐⭐⭐ + 김…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ 이행</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-green-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">3.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">🚨 **오후 페이스 둔화 청취 (6h 신규 commit 0건) + R3 100% + R2 0/3 + R14 12건** — Sprint 2 이슈 템플릿(5/18 09:47)에 **Closes #N 룰 + 페어 리뷰 룰** 통합 결정 권…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ 이행</span>
+                    </div>
+                  </div>
+                </div></div>
+    </div>
+
+    <div class="team-card bg-white rounded-xl p-5 shadow-sm border-t-4 border-purple-500">
+      <div class="flex items-baseline justify-between mb-3">
+        <h3 class="text-lg font-bold text-purple-900">3팀 BBip (워터폴)</h3>
+        <a href="../3team/snapshots/260518_pm.html" class="text-xs text-purple-600 hover:text-purple-800 underline">상세 →</a>
+      </div>
+      <div class="text-xs text-gray-500 mb-3">Week 3 D1</div>
+      <div class="text-sm mb-4 text-gray-700 leading-relaxed">🟢⭐⭐⭐ <strong>3팀 PM 단계 진척 가시화 견고화</strong> = AM 사전 통지 16.7% (5/26 일정 명시 부분 보강 ⭐⭐⭐) → PM 보드 Done 6→<strong>10 (+4 ⭐⭐⭐)</strong> + Backlog 7→6 + Ready 3→0 + Server&amp;Client 43→50 + zzing 회원가입 #6 마감 + 장지은 PR #107 머지 + 템플릿 갱신 R2 정착 신호 ⭐ \| 🚨 정우석/Theo/yubin 오전 0건 (R-burn 자제 vs R-quie…</div>
+      <div class="text-xs font-semibold text-gray-500 mb-2 border-t pt-3">🚨 강사 사전 통지 의제 결과</div>
+      <div class="space-y-2 mb-3">
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-purple-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">1.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**(회의 첫 안건 절대 권유 — B3)** 🟢⭐⭐⭐ **4명 직접 호명 격려 + 5/26 일정 명시 강사 직접 인정 + 보드 단계 진척 가시화 ⭐⭐⭐** — (a) **장지은** PR #107 머지 + Issue/PR 템플릿 갱신 …</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-purple-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">2.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**🚨🚨 R-W1 Must Meet 6항목 단번에 점검 + 설계 종료 선언 결정 (8회차 임박 방지) + R-burn 정우석 자제 권유** — (a) **6항목 1줄씩** PM에서 점검 (Figma UI 5건 ✅ 추정 + DB 스키마…</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xs bg-gray-50 rounded p-2 border-l-2 border-purple-400">
+                  <div class="flex items-start gap-2">
+                    <span class="font-bold text-gray-500">3.</span>
+                    <div class="flex-1">
+                      <div class="text-gray-800">**🚨 워치 분담 + bbipit/ 1줄 기록 + R-W3 Firebase 후속 + Theo/yubin R-quiet 회귀 청취** — (a) **워치 분담 결정 1줄** (큰 기능 담당자 = 정우석 vs 분담, 5/15 PM 합의 …</div>
+                      <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800">❌ 미언급</span>
+                    </div>
+                  </div>
+                </div></div>
+    </div>
+
+  </section>
+
+  <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-center">
+    생성: 2026-05-18 17:35 · 데이터 source: <code>teams-docs/&lt;X&gt;team/snapshots/260518_pm.md</code>
+  </footer>
+
+</div>
+
+</body>
+</html>
