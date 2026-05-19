@@ -1,0 +1,90 @@
+# 12차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## 출결현황
+
+~~✅장지은~~
+
+~~✅정우석~~
+
+~~✅서은신~~
+
+~~✅이유빈~~
+
+## 논의사항
+
+- 
+
+## **진행 상황 점검**
+
+### 할일(9시)
+
+- 지은: 카카오 로그인 구현
+- 우석: 랜더링 마커 클릭 이벤트, 워치 데이터 수신 및 마커 표시, 워치 마커 클릭 이벤트
+- 은신:
+- 유빈: ~~토스트메세지 컴포넌트 생성하라는 코멘트에 맞춰 수정~~, Dm 사진 전송할 수 있도록 구현 예정, 마이페이지 UI 재구성, 친구 페이지 UI 재구성
+
+### 강사님 피드백(10시)
+
+- 
+
+### 진행 상황(15시 반)
+
+- 지은:
+- 우석:
+- 은신:
+- 유빈:
+
+## 강사님 피드백 (16시)
+
+- 
+
+# 협의사항
+
+#### observeNotificationList → getNotificationList
+
+기존에 구현해둔 API를 사용하지 않을 경우 삭제해주세요.
+
+```kotlin
+override fun observeNotificationList(userId: String): Flow<List<Notification>> {
+        return callbackFlow {
+            val query = firestore.collection("Notifications")
+                .document(userId)
+                .collection("Notification")
+                .orderBy("created_at", Query.Direction.DESCENDING)
+
+            val listener = query.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    val items = snapshot.documents.mapNotNull { doc ->
+                        val dto = doc.toObject(NotificationDto::class.java)
+                        dto?.toEntity(doc.id)
+                    }
+                    trySend(items)
+                    Log.d("NotificationRepo", "실시간 알림 스트림 갱신: ${items.size}건")
+                }
+            }
+
+            awaitClose { listener.remove() }
+        }
+    }
+```
+
+### DB → Live데이터 유저 프로필 항목 제거
+
+이미 친구들 정보를 리스너로 관리 중이기 때문에 불필요한 데이터 발생
+
+#

@@ -51,7 +51,7 @@
   <header class="mb-6">
     <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
       <h1 class="text-2xl font-bold text-gray-900">3팀 (BBip) 시스템 다이어그램 검증 보고서</h1>
-      <span class="text-sm text-gray-500">2026-05-18 · Week 3 D1 (워터폴)</span>
+      <span class="text-sm text-gray-500">2026-05-18 작성 · 2026-05-19 v2 재검증</span>
     </div>
     <div class="text-sm text-gray-600">
       작성자: 정우석 부팀장 (Mermaid 코드 · 5장) · 보조강사 검증 ·
@@ -59,22 +59,44 @@
     </div>
   </header>
 
-  <!-- ===== 정량 지표 카드 ===== -->
+  <!-- ===== v2 재검증 배너 ===== -->
+  <section class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 mb-6 shadow-sm">
+    <div class="flex items-start gap-3">
+      <span class="text-2xl">🔄</span>
+      <div class="text-sm space-y-2">
+        <p class="font-bold text-emerald-900">v2 재검증 (2026-05-19)</p>
+        <p class="text-emerald-900">
+          5/19 정우석 부팀장이 Mermaid 5종을 최신 버전으로 <code>teams-docs/3team/systemflow/systemflows</code>에 재링크함에 따라,
+          보조강사가 Mermaid 코드 텍스트 정밀 분석 (line-by-line diff)으로 전수 재검증함.
+        </p>
+        <p class="text-emerald-900">
+          <strong>결과: 5/18 1차 검증 13건 (Critical 3 + Warning 7 + Cosmetic 3) 전체 사실관계 유효 ⭐⭐</strong>.
+          작은 변화 2건만 식별 (BatchCommit "오류 시 자동 취소" 문구 추가 / "메세지→메시지" 부분 통일).
+        </p>
+        <p class="text-xs text-emerald-800">
+          💡 2팀(PNG·v2에서 4건 정정 필요)과 대조 → <strong>Mermaid 코드 + Git diff 추적의 검증 신뢰도 우위 sentinel</strong>.
+          정우석 부팀장 작성 정확도 ⭐⭐ 강사 "쓰기는 서버" 원칙 정합 + 텍스트 검증 100% 통과.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 정량 지표 카드 (v2 변동 없음) ===== -->
   <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
     <div class="bg-white rounded-lg p-3 border-l-4 border-blue-500 shadow-sm">
       <div class="text-xs text-gray-500 mb-1">다이어그램 수</div>
       <div class="text-lg font-bold text-gray-900">5 장 (Mermaid)</div>
     </div>
     <div class="bg-white rounded-lg p-3 border-l-4 border-red-500 shadow-sm">
-      <div class="text-xs text-gray-500 mb-1">🚨 Critical 이슈</div>
+      <div class="text-xs text-gray-500 mb-1">🚨 Critical <span class="text-[10px] text-gray-400">(v2 유지)</span></div>
       <div class="text-lg font-bold text-gray-900">3 건</div>
     </div>
     <div class="bg-white rounded-lg p-3 border-l-4 border-yellow-500 shadow-sm">
-      <div class="text-xs text-gray-500 mb-1">⚠️ 검토 권장</div>
+      <div class="text-xs text-gray-500 mb-1">⚠️ 검토 권장 <span class="text-[10px] text-gray-400">(v2 유지)</span></div>
       <div class="text-lg font-bold text-gray-900">7 건</div>
     </div>
     <div class="bg-white rounded-lg p-3 border-l-4 border-purple-500 shadow-sm">
-      <div class="text-xs text-gray-500 mb-1">💡 cosmetic</div>
+      <div class="text-xs text-gray-500 mb-1">💡 cosmetic <span class="text-[10px] text-gray-400">(v2 일부 완화)</span></div>
       <div class="text-lg font-bold text-gray-900">3 건</div>
     </div>
   </section>
@@ -101,6 +123,12 @@
         <strong>2팀 대비 강점</strong>:
         Mermaid 코드라 <strong>Git diff 추적 가능</strong> + PR 리뷰 가능
         (2팀 PNG는 변경 추적 안 됨). 워터폴 + 칸반 운영에 큰 자산 ⭐.
+      </p>
+      <p>
+        <strong>v2 재검증 sentinel</strong>:
+        2팀(5/19 PNG 재검증에서 1차 4건 정정 필요)과 대조하면,
+        3팀은 Mermaid 텍스트 정밀 분석으로 <strong>1차 검증 13건 전체 사실관계 유효</strong>.
+        <span class="quote inline-block">"형식이 검증 신뢰도를 결정한다" — 5/19 코호트 신호</span>
       </p>
       <p class="text-xs text-gray-600">
         ※ 본 검증은 구현 전 합의가 필요한 모순 / 누락 위주.
@@ -168,7 +196,13 @@
   <h2>🚨 Critical (구현 전 반드시 합의 권장)</h2>
 
   <div class="severity-crit rounded-lg p-4 mb-4">
-    <h3>1. d1 ① DM 메시지 ↔ d5 DM 도메인 — <strong>"온라인 / 다른 화면" 분기 두 다이어그램에서 충돌</strong></h3>
+    <h3>1. d1 ① DM 메시지 ↔ d5 DM 도메인 — <strong>"온라인 / 다른 화면" 분기 두 다이어그램에서 충돌</strong>
+      <span class="badge-red ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L319-323): d5 <code>ServerCheckOpponent</code>는 여전히 2분기 (대화중 / 방 밖) ·
+      <code>ServerSaveInactive</code>에 "오프라인 푸시 알림 발송" 묶음 유지. d1 ① 3분기 패턴과 여전히 충돌.
+    </p>
     <ul class="text-sm">
       <li>
         <strong>d1 상단 sequence</strong>:
@@ -194,7 +228,12 @@
   </div>
 
   <div class="severity-crit rounded-lg p-4 mb-4">
-    <h3>2. d1 ③ 음성 메시지 — <strong>"수신자 본인이 자기 문서 삭제" 권한 모순</strong></h3>
+    <h3>2. d1 ③ 음성 메시지 — <strong>"수신자 본인이 자기 문서 삭제" 권한 모순</strong>
+      <span class="badge-red ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L70): <code>Receiver->>FS: 재생 완료 후 해당 문서 삭제 (휘발성 유지)</code> 그대로.
+    </p>
     <p class="text-sm">
       "재생 완료 후
       <code>Receiver -&gt;&gt; FS: 해당 문서 삭제 (휘발성 유지)</code>"
@@ -223,7 +262,13 @@
   </div>
 
   <div class="severity-crit rounded-lg p-4 mb-4">
-    <h3>3. d1 ③ 음성 메시지 — <strong>오프라인 트리거 조건 <code>updated_at 체크</code>가 모호</strong></h3>
+    <h3>3. d1 ③ 음성 메시지 — <strong>오프라인 트리거 조건 <code>updated_at 체크</code>가 모호</strong>
+      <span class="badge-red ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L72): <code>FS-->>CF: 트리거 작동 (updated_at 체크)</code> 그대로.
+      d1 ① DMs 패턴(<code>Live/{uid}</code> 조회 후 분기)과 여전히 일관성 안 맞음.
+    </p>
     <p class="text-sm">
       "수신자 오프라인 →
       <code>FS-&gt;&gt;CF: 트리거 작동 (updated_at 체크)</code>"
@@ -255,7 +300,13 @@
   <h2>⚠️ 검토 권장</h2>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>4. d2 계정인증 — <strong>소셜 로그인 후 닉네임 충돌 처리 누락</strong></h3>
+    <h3>4. d2 계정인증 — <strong>소셜 로그인 후 닉네임 충돌 처리 누락</strong>
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지 (약간 완화)</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L133): <code>BatchCommit</code>에 "<strong>(오류 시 전체 자동 취소)</strong>" 문구 신규 추가됨.
+      트랜잭션 원자성 의도는 명시되었으나 닉네임 unique 충돌 자체의 사전 회피 분기(suffix 부여 등)는 여전히 없음.
+    </p>
     <p class="text-sm">
       이메일 가입 → <code>UpdateRealNickname</code>으로 "진짜 닉네임"으로 즉시 덮어쓰기.
       소셜 가입 → <code>ParseNickname</code>이 만든 임시 닉네임 그대로 두고
@@ -275,7 +326,13 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>5. d2 계정인증 — <code>AuthCheck "로그인 정보 확인됨"</code> 경로의 데이터 동기화 빈틈</h3>
+    <h3>5. d2 계정인증 — <code>AuthCheck "로그인 정보 확인됨"</code> 경로의 데이터 동기화 빈틈
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L146): <code>AuthCheck -- "로그인 정보 확인됨 (기존 회원)" --> FetchToken</code> 그대로.
+      기존 유저 프로필 / Live 로딩 단계는 여전히 누락.
+    </p>
     <p class="text-sm">
       기존 회원 로그인 시
       <code>AuthCheck → FetchToken → UpdateFCM → ...</code>
@@ -295,7 +352,13 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>6. d3 홈화면 — Foreground 모드의 <code>BgFriendSync</code> 누락</h3>
+    <h3>6. d3 홈화면 — Foreground 모드의 <code>BgFriendSync</code> 누락
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L184): <code>FgSync["화면 활성화 시에만 데이터 동기화 : onResume 시작 / onPause 중지"]</code> 단일 노드.
+      "데이터 동기화"에 친구 위치가 포함되는지 여전히 모호.
+    </p>
     <p class="text-sm">
       <code>StartBgService</code> 분기는
       <code>BgUserSync</code> + <code>BgFriendSync</code> + <code>WearableListener</code>
@@ -316,7 +379,13 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>7. d3 홈화면 — <strong>무전(PTT) 권한 거부 후 흐름 막다른 골목</strong></h3>
+    <h3>7. d3 홈화면 — <strong>무전(PTT) 권한 거부 후 흐름 막다른 골목</strong>
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L215): <code>MicPermRequest -- "거부됨" --> ClosePopup</code> 그대로.
+      설정 이동 안내 노드 여전히 없음.
+    </p>
     <p class="text-sm">
       <code>MicPermRequest -- "거부됨" --&gt; ClosePopup</code>
       — 권한 거부 시 그냥 팝업 닫음.
@@ -336,7 +405,12 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>8. d4 인앱 알림 — <code>FRIEND_ACCEPTED</code> vs <code>FRIEND_REQUEST</code> 구분 없음</h3>
+    <h3>8. d4 인앱 알림 — <code>FRIEND_ACCEPTED</code> vs <code>FRIEND_REQUEST</code> 구분 없음
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L283): <code>UserAction -- "친구 수락 알림 클릭" --> CallMarkAsReadFriend</code> 단일 케이스 그대로.
+    </p>
     <p class="text-sm">
       친구 알림 흐름은
       <code>UserAction -- "친구 수락 알림 클릭"</code>
@@ -359,7 +433,14 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>9. d4 인앱 알림 — <code>PlayAudio</code> 후 휘발성 원칙 충돌</h3>
+    <h3>9. d4 인앱 알림 — <code>PlayAudio</code> 후 휘발성 원칙 충돌
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L270-276): <code>CheckValidity</code>는 "유효기간"만 체크 ·
+      <code>AudioEnd: "재생 종료 (목록에서는 지워지지 않고 유지)"</code> 그대로.
+      VoiceMessages 원본 삭제 후 Notifications 재생 버튼 재클릭 시나리오는 여전히 모호.
+    </p>
     <p class="text-sm">
       d1 ③에서 "재생 완료 시 문서 삭제 (휘발성 유지)" → VoiceMessages 자체는 삭제.
     </p>
@@ -380,7 +461,13 @@
   </div>
 
   <div class="severity-warn rounded-lg p-4 mb-4">
-    <h3>10. d5 DM 도메인 — <code>unread_counts</code> 초기값 누락 명시</h3>
+    <h3>10. d5 DM 도메인 — <code>unread_counts</code> 초기값 누락 명시
+      <span class="badge-yellow ml-2 text-[10px]">v2 유지</span>
+    </h3>
+    <p class="text-xs text-gray-500 italic">
+      v2 재검증 (systemflows L298-300): "1:1채팅방 개설 시 unread_counts 값 넣어주기" 노트는 mermaid 본문 위에 그대로 잔존.
+      flowchart는 여전히 <code>SubChatDirect</code>(기존 방 입장)부터 시작 — 방 개설 trigger plot 없음.
+    </p>
     <p class="text-sm">
       다이어그램 위 주석에:
     </p>
@@ -406,7 +493,7 @@
   <h2>💡 작은 일관성 권장 (cosmetic, but matters)</h2>
 
   <div class="severity-info rounded-lg p-4 mb-4">
-    <h3>11. 분기 패턴 통일</h3>
+    <h3>11. 분기 패턴 통일 <span class="badge-yellow ml-2 text-[10px]">v2 유지</span></h3>
     <p class="text-sm">
       d1 ① DMs는 <code>Live/{uid}</code> 조회로 3분기,
       d1 ③ VoiceMessages는 트리거 즉시 푸시 →
@@ -416,14 +503,15 @@
   </div>
 
   <div class="severity-info rounded-lg p-4 mb-4">
-    <h3>12. 한국어 표기 통일</h3>
+    <h3>12. 한국어 표기 통일 <span class="badge-yellow ml-2 text-[10px]">v2 일부 완화</span></h3>
     <p class="text-sm">
-      d5 DM 도메인 flowchart의 한자 혼용("메세지" vs "메시지") 통일.
+      v2 재검증 결과 "메시지"로 대부분 통일됨. <strong>"메세지" 잔존 2건 (L219 d3 <code>PttUpload</code>, L278 d4 주석 "DM (메세지) 알림 흐름")</strong>만
+      남음. 5분 작업으로 완료 가능.
     </p>
   </div>
 
   <div class="severity-info rounded-lg p-4 mb-4">
-    <h3>13. PTT Hold 중 인터럽트 핸들링</h3>
+    <h3>13. PTT Hold 중 인터럽트 핸들링 <span class="badge-yellow ml-2 text-[10px]">v2 유지</span></h3>
     <p class="text-sm">
       d3 홈화면 <code>holdPTT → release</code> 흐름에서
       Hold 중에 전화 등 인터럽트 들어오면? —
@@ -538,9 +626,19 @@
           </li>
           <li>
             <strong>💡 P2 (시간 날 때)</strong>:
-            분기 패턴 통일 + 표기 통일 + PTT 인터럽트 노드.
+            분기 패턴 통일 + 표기 통일 ("메세지"→"메시지" L219, L278) + PTT 인터럽트 노드.
           </li>
         </ol>
+        <div class="bg-emerald-50 border border-emerald-300 rounded p-3 mt-3 text-sm">
+          <strong class="text-emerald-900">✅ v2 재검증 메시지 (정우석 부팀장께)</strong>:
+          <p class="text-emerald-900 mt-1">
+            5/19 systemflow 재링크 후 Mermaid 코드를 line-by-line으로 재검증한 결과
+            <strong>5/18 1차 검증 13건이 모두 사실관계 정확</strong>으로 확인됨.
+            Mermaid + Git diff 형식 선택 자체가 검증 정확도를 보장한 사례 sentinel ⭐⭐.
+            BatchCommit "오류 시 자동 취소" 명시는 보조강사가 1차 검증 시 놓친 디테일을 보완해주신 부분 ✅.
+            나머지 11건은 P0/P1 우선순위에 따라 정우석 부팀장 본인 페이스 + 팀 분담으로 결정 권장.
+          </p>
+        </div>
         <p class="text-sm text-orange-700 mt-3">
           ⚠️ 단 <strong>R-burn 정우석 케어 절대 필수</strong>
           (5/15~17 새벽 02:48+04:48 commit + 셀프 머지 87.5% sentinel).
@@ -604,6 +702,14 @@
       <strong>1팀에 양팀 사례 공유 권장</strong>
       (1팀 회의 형태 작동 X 6일차 + 다이어그램 산출물 미확인).
     </p>
+    <div class="bg-amber-50 border border-amber-300 rounded p-3 mt-3 text-sm">
+      <strong class="text-amber-900">🔄 v2 재검증 코호트 신호 (5/19)</strong>:
+      <p class="text-amber-900 mt-1">
+        2팀 PNG 재검증 → 1차 검증 4건 정정 필요 (Critical 1건 + Warning 1건 철회, Critical 1건 + Warning 1건 하향).
+        3팀 Mermaid 재검증 → 1차 검증 13건 <strong>전체 사실관계 유효</strong>.
+        <strong>형식이 검증 신뢰도를 결정</strong>: 텍스트 기반(Mermaid) > 이미지 기반(PNG) — 1팀이 다이어그램 작성 시작할 때 형식 선택 가이드로 활용 가능 ⭐⭐.
+      </p>
+    </div>
   </section>
 
   <hr>
@@ -613,9 +719,14 @@
   <section class="mb-6 text-sm">
     <ul>
       <li>
-        다이어그램 원본:
-        <a href="../mom/260518 - 진행중">teams-docs/3team/mom/260518 - 진행중</a>
-        (11차 회의록 · Mermaid 5장)
+        다이어그램 원본 (v2 재링크 후):
+        <a href="../systemflow/systemflows">teams-docs/3team/systemflow/systemflows</a>
+        (Mermaid 5장 · 5/19 최신 단일 파일로 분리)
+      </li>
+      <li>
+        <span class="text-gray-500">
+          (이전 원본: <code>teams-docs/3team/mom/260518</code> 11차 회의록 inline)
+        </span>
       </li>
       <li>
         AM 회의록:
@@ -641,7 +752,9 @@
   </section>
 
   <footer class="text-xs text-gray-500 text-center mt-8 pt-4 border-t border-gray-200">
-    보조강사 작성 · 2026-05-18 · Mermaid 코드 기반 검증 (사용자 직접 제공)
+    보조강사 작성 · 2026-05-18 1차 · <strong>2026-05-19 v2 재검증</strong> ·
+    Mermaid 코드 텍스트 정밀 분석 (line-by-line diff vs 1차 검증)<br>
+    <span class="text-emerald-700">v2 결론: 1차 검증 13건 전체 사실관계 유효 — Mermaid 코드 검증 신뢰도 ⭐⭐ sentinel</span>
   </footer>
 
 </div>

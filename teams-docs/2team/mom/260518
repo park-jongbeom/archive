@@ -103,7 +103,7 @@
             - 추천 형태: state transition diagram
             - 포함 내용: Login, Initial Setup, UserLangPref 초기화, Global Learning State preload, Dashboard entry
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3Aa17beba1-47d2-4415-ba66-9b779e814238%3Aimage.png?table=block&id=36373873-401a-80c6-a163-d801baddb35c&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://img.notionusercontent.com/s3/prod-files-secure%2F94e4a305-f804-42b2-b151-9faf892ffa79%2Fa17beba1-47d2-4415-ba66-9b779e814238%2Fimage.png/size/w=2000?exp=1779237313&sig=mQHcpJEJddWD5j9DyZCif_TylY2YVst0KU1k5DnUWec&imgBuildSrc=presignImageUrl&id=36373873-401a-80c6-a163-d801baddb35c&table=block&mtd=so)
             
         2. 전역 상태와 저장 책임 맵
             - 기준 문서: Umma_Data_Strategy_and_Language_State.md, SYS_LEARNING_STATE_INFRA.md
@@ -111,9 +111,9 @@
             - 추천 형태: 계층도 + 저장 매트릭스
             - 포함 내용: Local Cache, Room, Firebase, Dashboard 표시용 Summary, 실제 원본 데이터 구분
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A5ef1a09e-44b5-458c-b4b0-976aad7d7f97%3Aimage.png?table=block&id=36373873-401a-8092-8f14-fd54bff0dae5&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A5ef1a09e-44b5-458c-b4b0-976aad7d7f97%3Aimage.png?table=block&id=36373873-401a-8092-8f14-fd54bff0dae5&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A33ff897f-0929-4290-baba-1896a8afc312%3Aimage.png?table=block&id=36373873-401a-80c8-95d7-edbb92a3dbf3&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A33ff897f-0929-4290-baba-1896a8afc312%3Aimage.png?table=block&id=36373873-401a-80c8-95d7-edbb92a3dbf3&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         3. Dashboard 진입점 맵
             - 기준 문서: FLOW_DASHBOARD.md
@@ -121,7 +121,7 @@
             - 추천 형태: navigation map
             - 포함 내용: Dashboard cards, selected language, target flow, summary source
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3Abfe6a931-f518-4cb4-90a6-179dbddd7ced%3Aimage.png?table=block&id=36373873-401a-8061-b379-e6bb85a89f68&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3Abfe6a931-f518-4cb4-90a6-179dbddd7ced%3Aimage.png?table=block&id=36373873-401a-8061-b379-e6bb85a89f68&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         4. AI Chat 실시간 세션 라이프사이클
             - 기준 문서: SYS_REALTIME_INFRA.md, FLOW_AI_CHAT.md
@@ -129,7 +129,7 @@
             - 추천 형태: 시퀀스 다이어그램
             - 포함 내용: Bootstrap, PTT input, stream, final turn save, re-entry restore
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A08b169b9-d579-4c78-af83-3e8df0d393bf%3Aimage.png?table=block&id=36373873-401a-80f3-98ca-ee69de13bfc1&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A08b169b9-d579-4c78-af83-3e8df0d393bf%3Aimage.png?table=block&id=36373873-401a-80f3-98ca-ee69de13bfc1&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         5. Correction 저장 파이프라인
             - 기준 문서: SYS_CORRECTION_INFRA.md, FLOW_CORRECTION.md
@@ -137,7 +137,7 @@
             - 추천 형태: flowchart 또는 sequence diagram
             - 포함 내용: recentFullContext, candidate extraction, suggestion generation, card selection, complete pipeline, pending sync
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A943fa952-c303-4731-87dc-e8384e6ffed3%3Aimage.png?table=block&id=36373873-401a-803c-a977-d96f938ebe57&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A943fa952-c303-4731-87dc-e8384e6ffed3%3Aimage.png?table=block&id=36373873-401a-803c-a977-d96f938ebe57&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         6. SRS 반복학습 파이프라인
             - 기준 문서: SYS_SRS_INFRA.md, FLOW_SRS.md
@@ -145,15 +145,15 @@
             - 추천 형태: sequence diagram 또는 state diagram
             - 포함 내용: due deck load, flip, TTS, Again/Hard/Good/Easy, ReviewSchedulePolicy, local save, Summary update
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A60d076e4-2af7-4f4f-89ca-cd7782ef72d6%3Aimage.png?table=block&id=36373873-401a-803f-8023-c535e3002902&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A60d076e4-2af7-4f4f-89ca-cd7782ef72d6%3Aimage.png?table=block&id=36373873-401a-803f-8023-c535e3002902&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         7. 통계 기록 파이프라인
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A0e573b29-3278-4014-8197-ca1b796d48b9%3Aimage.png?table=block&id=36373873-401a-8078-9e94-d0d75a13db0e&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3A0e573b29-3278-4014-8197-ca1b796d48b9%3Aimage.png?table=block&id=36373873-401a-8078-9e94-d0d75a13db0e&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
         8. 통계화면 조회 및 차트표시 흐름
             
-            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3Ac0c80055-7fb7-4bbf-be66-8a03c8a3ced3%3Aimage.png?table=block&id=36373873-401a-802a-ac4f-e9969250fc57&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1250&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
+            ![image.png](https://mammoth-sassafras-ff5.notion.site/image/attachment%3Ac0c80055-7fb7-4bbf-be66-8a03c8a3ced3%3Aimage.png?table=block&id=36373873-401a-802a-ac4f-e9969250fc57&spaceId=94e4a305-f804-42b2-b151-9faf892ffa79&width=1180&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl)
             
             - 
 
