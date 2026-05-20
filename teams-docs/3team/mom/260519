@@ -1,0 +1,148 @@
+# 12차 회의록
+
+---
+
+<aside>
+📌
+
+**회의 요약**
+
+- 
+</aside>
+
+## 출결현황
+
+~~✅장지은~~
+
+~~✅정우석~~
+
+~~✅서은신~~
+
+~~✅이유빈~~
+
+## 논의사항
+
+- 
+
+## **진행 상황 점검**
+
+### 할일(9시)
+
+- 지은: 카카오 로그인 구현
+- 우석: 랜더링 마커 클릭 이벤트, 워치 데이터 수신 및 마커 표시, 워치 마커 클릭 이벤트, 팝업창 UI 디자인 구현, 워치 수신 구현
+- 은신:
+- 유빈: ~~토스트메세지 컴포넌트 생성하라는 코멘트에 맞춰 수정~~, Dm 사진 전송할 수 있도록 구현 예정, 마이페이지 UI 재구성, 친구 페이지 UI 재구성
+
+### 강사님 피드백(10시)
+
+- 백로그에 담당자 지정
+- 테스트 시트와 시나리오 필요
+- 위치 받아오는 거 속도도 중요하다.
+
+워치 인앱 알림 도착
+
+1. 상단 배너 알림
+2. 알림 클릭시 → 휴대폰에서 확인해주세요. 메세지 노출
+3. 워치에서 인앱 알림 내역 창 → 필요하나?
+4. 
+
+### 진행 상황(15시 반)
+
+- 지은: 카카오 로그인 완료, 구글 로그인 진행중
+- 우석: 랜더링 마커 클릭 이벤트, 팝업창 UI 디자인 구현, 기존 원터치 버튼 기능 결합
+    - 남은일: 로그인 타입 서버 처리, 이메일 가입 닉네임 처리, 워치 마커 클릭 이벤트
+- 은신: 폰 - 알림 띄우기, 알림 불러오기, 클릭 시 처리 완료(현재 구현 완료된 채팅만) 인앱 알림 디자인 수정중
+- 유빈: 마이페이지 + 프로필 편집(파이어스토어에서 불러오고 프로필 이미지 업로드 하는 것) 완료
+
+## 강사님 피드백 (16시)
+
+- 일정 관리 잘해라 백로그랑 노션 기능명세서 싱크 맞춰라
+- 
+
+# 협의사항
+
+#### observeNotificationList → getNotificationList
+
+기존에 구현해둔 API를 사용하지 않을 경우 삭제해주세요.
+
+```kotlin
+override fun observeNotificationList(userId: String): Flow<List<Notification>> {
+        return callbackFlow {
+            val query = firestore.collection("Notifications")
+                .document(userId)
+                .collection("Notification")
+                .orderBy("created_at", Query.Direction.DESCENDING)
+
+            val listener = query.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    val items = snapshot.documents.mapNotNull { doc ->
+                        val dto = doc.toObject(NotificationDto::class.java)
+                        dto?.toEntity(doc.id)
+                    }
+                    trySend(items)
+                    Log.d("NotificationRepo", "실시간 알림 스트림 갱신: ${items.size}건")
+                }
+            }
+
+            awaitClose { listener.remove() }
+        }
+    }
+```
+
+### DB → Live데이터 유저 프로필 항목 제거
+
+이미 친구들 정보를 리스너로 관리 중이기 때문에 불필요한 데이터 발생
+
+# 트러블 슈팅
+
+**결론: setMinUpdateDistanceMeters를 사용한 GPS제어는 센서의 호출 주기 자체를 조절하려고 한 목적과 달라 다른 방법을 고민해볼 필요가 있다.**
+
+`setMinUpdateDistanceMeters(10f)`를 설정하더라도, GPS 하드웨어 자체는 기본적으로 설정하신 **Interval(10초) 주기에 맞춰 계속 깨어나 위치를 계산**합니다.
+
+---
+
+## 1. 하드웨어와 앱의 동작 과정
+
+동작 프로세스는 크게 2단계로 나뉩니다.
+
+```kotlin
+[1단계: GPS 하드웨어] 10초마다 깨어나서 현재 위도/경도 계산 (배터리 소모 대)
+         ↓
+[2단계: Location Services] 계산된 위치가 이전 위치보다 10m 이상 변했는지 검사
+         ↓
+ (10m 이상 변했다면) -> 앱의 onLocationResult()로 데이터 전달
+ (10m 미만 변했다면) -> 앱에 전달하지 않고 버림 (앱 내 로직 소모 차단)
+```
+
+즉, 하드웨어(GPS)는 10초마다 돌면서 위치를 파악하지만, 10미터 이상 움직이지 않았다면 **앱(코드)단으로 그 결과를 던져주지 않고 중간에서 커트**하는 것입니다.
+
+---
+
+## 2. 그렇다면 배터리는 왜 절약되는 걸까요?
+
+하드웨어가 계속 도는데도 배터리가 절약된다고 하는 이유는 다음과 같습니다.
+
+- **앱 내부 연산 및 네트워크 절약:** 위치가 바뀔 때마다 화면을 다시 그리거나(UI 갱신), 로컬 DB에 저장하거나, 서버(예: Firebase)로 위치 데이터를 보내는 등의 **무거운 후속 작업들이 전부 생략**됩니다. 이 과정에서 발생하는 CPU와 네트워크 배터리 소모가 통째로 사라집니다.
+- **OS 차원의 최적화(배치 처리 등):** Google Play 서비스(Location Services)는 하드웨어가 계산한 값을 앱에 매번 전달하지 않아도 될 때, 내부적으로 하드웨어의 구동 방식을 조절하거나 다른 앱들의 요청과 주기를 맞추는 등 OS 차원의 최적화를 수행하여 배터리를 추가로 아낍니다.
+
+---
+
+## 💡 결론 및 팁
+
+결과적으로 GPS 자체를 잠재워서 배터리를 가장 확실하게 아끼는 변수는 `Interval`(주기)이 맞습니다.
+
+따라서 배터리 효율을 극대화하고 싶으시다면 아래처럼 두 가지를 함께 조합하시는 것이 정석입니다.
+
+```kotlin
+val locationRequest = LocationRequest.Builder(
+    Priority.PRIORITY_HIGH_ACCURACY, 30000L) // 1. GPS가 깨어나는 주기 자체를 30초로 완화
+    .setMinUpdateDistanceMeters(30f)          // 2. 30초마다 깼더라도, 30m 안 움직였으면 앱 로직 실행 안 함
+    .build()
+```
+
+이렇게 구성하시면 GPS 하드웨어가 깨어나는 횟수(하드웨어 배터리 절약)와 앱이 실행되는 횟수(소프트웨어 배터리 절약)를 동시에 줄일 수 있습니다.
