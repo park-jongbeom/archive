@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2팀 (Umma) 2026-05-19 PM</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  .quote { border-left: 4px solid #6366f1; padding: 0.75rem 1rem; background: #eef2ff; margin: 0.5rem 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+  details > summary { cursor: pointer; padding: 0.75rem 1rem; background: #f3f4f6; border-radius: 8px; font-weight: 600; user-select: none; }
+  details > summary:hover { background: #e5e7eb; }
+  details[open] > summary { background: #e0e7ff; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  details > div { padding: 1rem; background: #fafbfc; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+  th { background: #f3f4f6; padding: 0.5rem; text-align: left; border: 1px solid #d1d5db; font-weight: 600; }
+  td { padding: 0.5rem; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .badge-green { background: #d1fae5; color: #065f46; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-yellow { background: #fef3c7; color: #92400e; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-red { background: #fee2e2; color: #991b1b; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-star { background: #fef3c7; color: #b45309; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  ul, ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+  ul li { list-style: disc; margin: 0.25rem 0; }
+  ol li { list-style: decimal; margin: 0.25rem 0; }
+  h1, h2, h3, h4 { font-weight: 700; margin: 0.75rem 0 0.5rem; line-height: 1.3; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.25rem; }
+  h3 { font-size: 1.1rem; color: #374151; }
+  h4 { font-size: 1rem; color: #4b5563; }
+  p { margin: 0.5rem 0; line-height: 1.6; }
+  code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.85em; }
+  pre { background: #1f2937; color: #f9fafb; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 0.5rem 0; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  a { color: #4f46e5; text-decoration: underline; }
+  a:hover { color: #3730a3; }
+  strong { color: #111827; font-weight: 700; }
+  hr { border: 0; border-top: 1px solid #e5e7eb; margin: 1rem 0; }
+  blockquote { border-left: 4px solid #d1d5db; padding-left: 1rem; color: #4b5563; margin: 0.5rem 0; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <!-- ===== 헤더 ===== -->
+  <header class="mb-6">
+    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+      <h1 class="text-2xl font-bold text-gray-900">2팀 (Umma)</h1>
+      <span class="text-sm text-gray-500">2026-05-19 PM · Week 3 D2</span>
+    </div>
+    <div class="text-sm text-gray-600">베이스라인: <a href="./260519_am.md">snapshots/260519_am.md</a> (정재훈 공식 탈퇴 확정 ⭐⭐⭐ MAJOR + 스프린트 기간 고정 결정</div>
+  </header>
+
+  <!-- ===== 정량 지표 카드 (4개 가로) ===== -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white rounded-lg p-3 border-l-4 border-blue-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">회의 시간</div>
+      <div class="text-lg font-bold text-gray-900">14&#x27;50</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-green-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">사전 통지 이행률</div>
+      <div class="text-lg font-bold text-gray-900">미측정</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-yellow-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">Carry-over 이행률</div>
+      <div class="text-lg font-bold text-gray-900">미측정</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-purple-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">신호등 회고</div>
+      <div class="text-lg font-bold text-gray-900">❌ 6일 연속 미시행</div>
+    </div>
+  </section>
+
+  <!-- ===== 🎯 이번 회의에서 확인할 사항 (최상단 강조 박스 — 사용자 요구 핵심) ===== -->
+  <section class="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-300 rounded-xl p-5 mb-6 shadow-md">
+    <h2 class="text-xl font-bold text-red-900 mb-3 flex items-center gap-2 border-b-2 border-red-200 pb-2">
+      <span class="text-2xl">🎯</span> 이번 회의에서 확인할 사항
+    </h2>
+    <div class="space-y-3 text-sm">
+      <div class="text-sm text-gray-600">상세 항목 없음 — 본문 펼침 섹션 참조</div>
+    </div>
+  </section>
+
+  <!-- ===== 🟢 한 줄 요약 ===== -->
+  <section class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-gray-200">
+    <h2 class="text-xl font-bold mb-3 text-gray-900 border-b-2 border-gray-200 pb-2">🟢 한 줄 요약</h2>
+    <div class="text-sm"><p class="text-gray-500">요약 없음</p></div>
+  </section>
+
+  <!-- ===== ▼ 펼침 섹션 (회의 외에는 접힘) ===== -->
+  <section class="space-y-3">
+    <details><summary>🎤 회의 결과 요약 (transcript ~3분 인식 핵심 발화)</summary><div><h3>① 🟢⭐⭐⭐ 태환 데모 시나리오 + 스프린트 학습 본격 진척 sentinel MAJOR</h3><p>태환 발화: "지금 하고 있는건 스프린트 데모 그거를 짜고 있어요. 저희가 개발 단위기관을 1이랑 2로 나눠가지고 현재는 생각하고 있고 추후에 4가 생길 수도 있지만 1이랑 2만 지금 보고 있습니다. <strong>1은 저번주 화요일부터 내일까지로 잡았고 그 완료 기준은 오스랑 대시 부분 이슈 다 끝냈을 때 가정해서</strong>. 두 번째 단기관은 저희가 내일 새로운 기능들 배정을 받아요. 저도 그렇고 명준님도 그렇고. 그거를 받고 저희가 개인적으로 이걸 살펴본 다음에 '아 이정도면 견적이 나오겠구나' 의견을 취약해서 그 기간 두 번째 기간에 세부 기간에... 기간을 정할 예정입니다."</p><ul><li>= <strong>AM 강사 결정 "태환님 데모 시나리오 + 스프린트 학습 파견" → PM 즉시 본격 진척</strong> = 1팀 박재민 5/18 AM "99% 오늘 PR" → 11:38 commit 패턴과 동일 = <strong>회의 → 데이터 직접 정합 sentinel ⭐⭐⭐</strong> ✅ + 회의에서 직접 보고 = Sprint 2 운영 사이클 완전 견고화</li></ul><h3>② 🟢⭐⭐⭐ 정재훈 분담 → 태환 즉시 인계 완료 sentinel</h3><p>태환 발화: "저는 대시보드 부분 이슈들을 다 끝냈구요. <strong>오늘 작업은 원래 재훈님이 가져가셨었는데 저한테 바로 넘어가서 그거를 끝내는 작업을 한거고요</strong>. 회의록 보시면 대시 002부터 005까지 반영된 화면이 토글이 되어 있습니다. 쉽게 말하면 대시보드 화면을 꾸미는 작업이었기 때문에 그렇게 완료가 됐다 봐주시면 되겠고요."</p><ul><li>= <strong>AM 정재훈 탈퇴 sentinel → PM 같은 날 분담 인계 완전 처리 sentinel MAJOR</strong> ⭐⭐⭐</li><li>1팀 5/19 AM 손지희 이제이 분담 자율 인수 + PM 온보딩 자발 인수와 <strong>양팀 동시 패턴</strong> = <strong>위기 대응 자율 분담 코호트 패턴 sentinel ⭐⭐⭐</strong></li></ul><h3>③ 🟢⭐⭐ 김명준 AUTH 002 완료 + 003/004 진입 (R-out-2 회복 본격)</h3><p>김명준 발화: "아웃스 002 끝냈고 003 이랑 004 이제 들어가려고 합니다. 002는... 앱 진입한건 초기 설정 002랑 004입니다. 설명이 이상한데... 보니까 앱 진입, 로그아웃, 초기 진입, 초기 설정. 지금 AC 체크 된 것도 다 된거고 AC 체크 안된거 해야됩니다."</p><ul><li>= AM 정원화 보고 "AUTH 001~004 + PR 리뷰 반영" → PM 김명준 본인 직접 보고 ⭐⭐ (5/15 PM 자제 합의 → 5/18 회복 → 5/19 새벽 작업 ⚠️ → PM 본인 발화 ✅) = <strong>R-out-2 회복 사이클 완전 견고화 + 회의 발화 채널도 견고화 sentinel</strong></li></ul><h3>④ ⚠️ 회의 분량 14'50" vs 발화 인식 ~3분</h3><ul><li>whisper 인식 1~7줄 (~3분 실질 발화) 후 hallucination ("아 아 아" 반복)</li><li><strong>가능성</strong>: (a) 회의 후반 silence (강사 길게 침묵) (b) 회의 자연 종료 후 audio 잔존 (c) 마이크 이슈로 후반 미수신</li><li>1팀 R-mtg-mic 패턴과 다르게 회의 시간은 견고 (14'50") 단 발화 인식 부족 = <strong>2팀 후반 silence 신규 신호</strong> ⚠️</li></ul><h3>⑤ 🚨 R-burn 2명 동시 케어 + 4명 호명 격려 ❌ PM 미시</h3><ul><li>김명준 R-burn-2 재발 자제 합의 재인용 ❌</li><li>정원화 R-burn 자율 추가 케어 ❌</li><li>4명 호명 격려 (R14 + AC 1~10 + Sprint 2 + R-out-2) ❌</li><li>신호등 회고 ❌ 6일 연속</li></ul><p>→ <strong>회의 외 1:1 절대 마지노선 유지</strong> (정재훈 탈퇴 후 4명 체제 운영 재정의 통합)</p></div></details><details open><summary>📊 6시간 변화 — Finished / Will finish by when</summary><div><h3>오전 회의 후 Finished (10:00 → 15:30)</h3><ul><li>태환: 대시 002~005 화면 꾸미기 완료 ⭐⭐⭐ (정재훈 분담 인계)</li><li>태환: 스프린트 데모 시나리오 작성 진행 ⭐⭐⭐ (AM 파견 결정 즉시 시행)</li><li>김명준: AUTH-002 완료 + 003/004 진입 ⭐⭐</li><li>정원화/박재민: 진척 직접 보고 미발화 (전반 발화만)</li></ul><h3>Will finish by when (오늘 일과 종료 = 18:00)</h3><ul><li>김명준 AUTH-003/004 진척 (AC 체크 마감)</li><li>정원화 SRS 신규 작업 본격 진입 (Correction 마무리 후)</li><li>박재민 RT-003 머지 + RT-004 진입</li><li>태환 데모 시나리오 1단위 마감 (내일 마감 기준)</li><li>(위험) R-burn 2명 동시 케어 ❌ + 신호등 회고 ❌</li></ul><h3>정량 수치 (15:30 시점 — 회의 후 cross-check 필요)</h3><ul><li>AM 후 신규 commit: 미점검 (회의 후 git log 권장)</li><li>정재훈 분담 → 태환 인계 = 대시 002~005 완료 (보드 Done 추가 가능성)</li><li>활성 기여자: 4명 추정 (태환 본격 활성화 + 김명준 + 정원화 + 박재민)</li></ul></div></details><details open><summary>✅ 오전 회의 액션 아이템 진척 (PM 핵심)</summary><div><table><thead><tr><th>액션 (AM 합의/결정)</th><th>담당</th><th>오전 상태</th><th>현재 (PM)</th><th>진척</th></tr></thead><tbody><tr><td>정재훈 분담 인계 (002~005 영역)</td><td>태환+정원화</td><td>✅ AM 결정</td><td>✅ <strong>PM 태환 완료 sentinel ⭐⭐⭐</strong></td><td>🟢⭐⭐⭐</td></tr><tr><td>AUTH 영역 PR 리뷰 반영 + 머지</td><td>김명준</td><td>✅ AM 합의</td><td>✅ <strong>PM 002 완료 + 003/004 진입</strong></td><td>🟢⭐⭐</td></tr><tr><td>Correction 마무리 + SRS 신규 시작</td><td>정원화</td><td>✅ AM 합의</td><td>△ PM 미언급 (전반만 발화)</td><td>🟡</td></tr><tr><td>태환 데모 시나리오 + 스프린트 학습 (파견)</td><td>태환</td><td>✅ AM 결정</td><td>✅ <strong>PM 즉시 본격 진척 sentinel ⭐⭐⭐</strong></td><td>🟢⭐⭐⭐</td></tr><tr><td>스프린트 기간 고정 (한 주기)</td><td>강사+팀</td><td>✅ AM 결정</td><td>✅ 태환 1/2 단위 구분 결정 (구체화)</td><td>🟢⭐⭐</td></tr><tr><td>RT-003 머지 + RT-004 진입</td><td>박재민</td><td>✅ AM 합의</td><td>△ PM 미언급</td><td>🟡</td></tr><tr><td>R-burn 2명 동시 케어 (1:1)</td><td>강사</td><td>❌ AM 미시</td><td>❌ PM 미시 (회의 외 1:1)</td><td>🚨</td></tr><tr><td>신호등 회고</td><td>강사+보조</td><td>❌ AM 미시</td><td>❌ PM 미시 (6일 연속)</td><td>🚨</td></tr></tbody></table><p><strong>진척 비율: 🟢 5/8 (62.5%) ⭐⭐ + 🟡 1/8 + 🚨 2/8</strong> — AM 결정 직접 정합 sentinel 견고화</p></div></details><details><summary>🗂️ 보드 정합성 신호 (PM)</summary><div><table><thead><tr><th>신호</th><th>해석</th><th>격상 R-항목</th></tr></thead><tbody><tr><td>🟢⭐⭐⭐ <strong>태환 데모 시나리오 + 스프린트 1/2 단위 구분 sentinel MAJOR</strong></td><td>AM 파견 결정 → PM 즉시 본격 = Sprint 2 운영 사이클 완전 견고화</td><td>R-cap 폭발 견고화 ⭐⭐⭐</td></tr><tr><td>🟢⭐⭐⭐ <strong>정재훈 분담 → 태환 즉시 인계 완료 sentinel</strong></td><td>4명 체제 위기 대응 자율 분담 코호트 패턴 (1팀 손지희 양팀 동시)</td><td>R-out-3 분담 인계 완료</td></tr><tr><td>🟢⭐⭐ <strong>김명준 R-out-2 회복 회의 발화 채널 견고화</strong></td><td>AM 정원화 보고 → PM 본인 직접 발화 = 다중 채널 견고화</td><td>R-out-2 견고화 ⭐⭐</td></tr><tr><td>🚨 <strong>R-burn 2명 동시 패턴 케어 ❌ 미시</strong></td><td>정원화 자기 비난 + 김명준 새벽 작업 = 회의 외 1:1 절대</td><td>R-burn 코호트</td></tr><tr><td>⚠️ <strong>회의 14'50" vs 발화 ~3분 신규</strong></td><td>후반 silence 또는 audio 이슈 = 2팀 신규 신호</td><td>R-mtg (후반 silence)</td></tr><tr><td>⚠️ <strong>박재민/정원화 PM 직접 발화 0 추정</strong></td><td>회의 후반 hallucination이라 정확 X 단 전반 발화 X</td><td>R-quiet 후보 (검증 필요)</td></tr></tbody></table></div></details><details><summary>🔁 Carry-over 자동 재출현 + 이행률 (AM 미해소 + 신규)</summary><div><table><thead><tr><th>Carry-over 항목</th><th>Owner</th><th>마감</th><th>PM 회의에서 다뤘나?</th><th>데이터 상태</th><th>이월 횟수</th></tr></thead><tbody><tr><td>🚨🚨 정원화 자기 비난 케어</td><td>강사 + 1:1</td><td>1:1</td><td>❌</td><td>🚨 미해결</td><td><strong>4회차</strong> 🚨🚨 1:1 절대</td></tr><tr><td>🚨🚨 김명준 R-burn-2 재발 자제 합의 재인용</td><td>강사</td><td>1:1</td><td>❌ (PM 본인 발화는 ✅ 단 자제 톤 미시)</td><td>🚨 미해결 (PM commit 0건 = 자제 효과 가능성 ⭐)</td><td><strong>3회차</strong> 🚨🚨 1:1 절대</td></tr><tr><td>⭐⭐⭐ 정재훈 탈퇴 후 분담 인계</td><td>태환 + 정원화</td><td>오늘</td><td>✅✅ <strong>PM 태환 완료 sentinel ⭐⭐⭐</strong></td><td>🟢⭐⭐⭐ <strong>AM 발화 → PM 같은 날 완료</strong></td><td><strong>해소</strong> ⭐⭐⭐ MAJOR</td></tr><tr><td>⭐⭐⭐ 4명 체제 운영 재정의</td><td>강사진 + 팀</td><td>1:1</td><td>❌</td><td>🟡 4명 체제 자율 진행 sentinel ⭐</td><td><strong>신규 → 1:1</strong></td></tr><tr><td>🟢⭐⭐⭐ 4명 호명 격려 (R14 + AC + Sprint 2 + R-out-2)</td><td>강사</td><td>PM</td><td>❌ 강사 격려 0건</td><td>🟢⭐⭐ 데이터 견고화 (자율 보고만)</td><td><strong>2회차 → 내일 AM</strong></td></tr><tr><td>⭐⭐⭐ 스프린트 기간 고정 ✅ + 1/2 단위 구분</td><td>강사 + 태환</td><td>(해소)</td><td>✅✅ <strong>PM 태환 1/2 단위 구분 결정 ⭐⭐</strong></td><td>🟢⭐⭐⭐ 견고화</td><td><strong>해소</strong> ⭐⭐⭐</td></tr><tr><td>⭐⭐⭐ 김명준 R-out-2 회복 회의 발화</td><td>강사</td><td>PM</td><td>✅⭐⭐ PM 본인 발화 (AUTH 002 완료)</td><td>🟢⭐⭐ 견고화</td><td><strong>해소</strong> ⭐⭐</td></tr><tr><td>🚨 R3/R2 통합 결정</td><td>강사 + 정원화</td><td>1:1</td><td>❌</td><td>🟡 5/18 11시 코드 리뷰 룰 후속 미점검</td><td><strong>4회차</strong> 1:1</td></tr><tr><td>🚨 노션 WBS 의제 후속</td><td>정원화</td><td>회의 외</td><td>❌</td><td>🟡 진행 추정</td><td><strong>3회차</strong></td></tr><tr><td>🚨 신호등 회고</td><td>강사 + 보조</td><td>(PM 후)</td><td>❌ 6일 연속</td><td>(7일차 시도)</td><td><strong>7일차 시도</strong></td></tr><tr><td>🚨 매니저/강사진 코호트 신호 검토 (2명 중도포기 확정)</td><td>강사진</td><td>회의 외</td><td>✅ AM 강사 발화 (정재훈 탈퇴)</td><td>🚨 강사진 회의 필요</td><td><strong>2회차 → 강사진</strong></td></tr></tbody></table><p><strong>PM 회의 후 → 내일 AM 사전 이행률</strong>:</p><ul><li>회의-내 이행률 (AM + PM 합산): <strong>5/11 = 45.5% ⭐⭐ 견고화</strong> (정재훈 분담 인계 + 스프린트 기간 + 태환 파견 + 김명준 회복 + R-out-2 회복)</li><li>데이터-기반 진척률: <strong>8/11 = 72.7% ⭐⭐⭐</strong></li></ul><p><strong>🚨 R-burn 2명 동시 + R3/R2 + 4명 체제 운영 재정의 + 신호등 회고 = 4건 1:1 잔여</strong></p></div></details><details><summary>🚦 R-항목 점검 (오전 09:30 → 오후 회의 후 변화)</summary><div><table><thead><tr><th>R-ID</th><th>5/19 AM 09:30</th><th>5/19 PM 회의 후</th><th>변화</th></tr></thead><tbody><tr><td><strong>R-out-3</strong> (정재훈)</td><td>🚨🚨 1:1 면담 진행</td><td>⭐⭐⭐ <strong>공식 탈퇴 확정 + 분담 인계 완료 sentinel</strong></td><td><strong>해소 (사라짐)</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-out-2</strong> (김명준 회복)</td><td>🟢⭐⭐⭐ AUTH 4건 본격</td><td>🟢⭐⭐⭐ <strong>PM 본인 직접 발화 + 002 완료 + 003/004 진입</strong> = 다중 채널 견고화</td><td><strong>확정 완성</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-burn-2</strong> (김명준)</td><td>🚨🚨🚨 재발 sentinel</td><td>🟡 PM commit 0건 추정 (자제 효과 가능성 ⭐)</td><td><strong>자제 효과 가능성 ⭐ 단 1:1 절대</strong></td></tr><tr><td><strong>R-burn</strong> (정원화 자율 추가)</td><td>🚨🚨 견고화</td><td>🚨 PM 미시 (1:1 절대)</td><td>정체</td></tr><tr><td><strong>R-cap</strong> (Sprint 2 폭발)</td><td>🟢⭐⭐⭐ 폭발 sentinel</td><td>🟢⭐⭐⭐ <strong>태환 데모/스프린트 1/2 단위 결정 = 운영 사이클 완전 견고화</strong></td><td><strong>완전 견고화</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-quiet</strong> (태환)</td><td>🟢⭐⭐⭐ 견고화</td><td>🟢⭐⭐⭐ <strong>PM 회의 주도 발화 sentinel</strong> (대시 인계 + 데모 + 스프린트)</td><td><strong>확정 완성</strong> ⭐⭐⭐</td></tr><tr><td><strong>Tuckman Norming sentinel</strong></td><td>🟢⭐⭐⭐ 견고화</td><td>🟢⭐⭐⭐ <strong>4명 체제 진입 + 자율 분담 + 데모 작성 = 완전 견고화</strong></td><td><strong>완전 견고화</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-mtg (후반 silence 신규)</strong></td><td>(해당 X)</td><td>⚠️ 회의 14'50" vs 발화 ~3분 = 신규 신호</td><td><strong>신규 — 검증 필요</strong></td></tr><tr><td><strong>R-quiet 코호트 (박재민/정원화 PM 직접 발화 추정 0)</strong></td><td>(해당 X)</td><td>⚠️ 후반 hallucination이라 정확 X</td><td><strong>신규 — 검증 필요</strong></td></tr><tr><td><strong>R13/R14</strong></td><td>🟢 CLEAN</td><td>🟢 CLEAN 유지 ✅</td><td>안정 ⭐⭐⭐</td></tr><tr><td><strong>R3/R2</strong></td><td>🟡 부분 해소</td><td>🟡 미점검 (회의 후 검증)</td><td>정체</td></tr><tr><td><strong>R-action</strong></td><td>(해당 X)</td><td>🟢⭐⭐ AM 액션 진척 62.5% ⭐⭐ MAJOR</td><td><strong>MAJOR 해소</strong></td></tr><tr><td><strong>4명 체제 sentinel (R-personnel)</strong></td><td>(신규 AM)</td><td>🟢⭐⭐⭐ <strong>분담 인계 완료 + 데모 작성 진척</strong> = 4명 체제 즉시 적응 sentinel MAJOR</td><td><strong>즉시 적응</strong> ⭐⭐⭐</td></tr></tbody></table></div></details><details><summary>👤 인물별 회의 발화 정합성 (AM + PM 통합)</summary><div><table><thead><tr><th>멤버</th><th>AM 발화</th><th>PM 발화</th><th>신호</th></tr></thead><tbody><tr><td>박재민 (woals)</td><td>✅ 자기 보고 (RT-003/004)</td><td>❌ 추정 (후반 hallucination)</td><td>🟢⭐ AM 발화 견고 / ⚠️ PM 검증 필요</td></tr><tr><td>정원화 (wanna)</td><td>✅⭐⭐⭐ 회의 주도 + 4명 보고</td><td>❌ 추정</td><td>🟢⭐⭐⭐ AM 주도 / ⚠️ PM 검증 필요</td></tr><tr><td>태환 (taehwan)</td><td>❌ 추정 (정원화 보고)</td><td>✅⭐⭐⭐ <strong>PM 회의 주도</strong> (대시 인계 + 데모 + 스프린트 1/2 단위)</td><td>🟢⭐⭐⭐ PM 회의 주도 sentinel MAJOR</td></tr><tr><td>김명준 (jssmt247)</td><td>❌ 추정 (정원화 보고)</td><td>✅⭐⭐ AUTH 002 완료 + 003/004 진입</td><td>🟢⭐⭐ R-out-2 회복 다중 채널</td></tr><tr><td>정재훈 (jjh)</td><td>(탈퇴 발화)</td><td>(탈퇴)</td><td>⭐⭐⭐ 공식 탈퇴 (5명 → 4명)</td></tr></tbody></table><p>→ <strong>AM + PM 발화 채널 회복 sentinel</strong>: 정원화 (AM 주도) + 태환 (PM 주도) + 김명준 (PM 본인 발화) = 3명 활성 발화 sentinel ⭐⭐⭐ → <strong>위기 대응 분담 인계 완전 사이클</strong>: AM 탈퇴 발화 → PM 같은 날 분담 인계 + 데모 작성 = 회의 → 데이터 직접 정합 ⭐⭐⭐ MAJOR</p></div></details><details open><summary>💡 보조강사 권장 액션 (3건 압축, 좋은 점부터)</summary><div><ol><li>🟢⭐⭐⭐ <strong>격려 (좋은 점부터) — 위기 대응 자율 분담 + 태환 PM 주도 sentinel MAJOR</strong> ⭐⭐⭐</li><li>(a) <strong>태환 PM 주도 + 스프린트 1/2 단위 + 데모 시나리오 sentinel MAJOR</strong> — AM 강사 파견 결정 → PM 즉시 본격 = 회의 → 데이터 직접 정합</li><li>(b) <strong>정재훈 분담 → 태환 즉시 인계 완료 sentinel</strong> — 4명 체제 위기 대응 자율 분담 (1팀 손지희 양팀 동시 패턴)</li><li>(c) <strong>김명준 R-out-2 회복 다중 채널 견고화</strong> — AM 정원화 보고 + PM 본인 직접 발화 + AUTH 002 완료</li></ol><ol><li>🚨🚨 <strong>critical push (R-burn 2명 동시 + 4명 체제 운영 재정의 + 신호등 회고)</strong></li><li>(a) <strong>🚨 R-burn 2명 동시 케어 1:1 절대</strong> — 김명준 자제 합의 재인용 + 정원화 자기 비난 케어 (회의 외)</li><li>(b) <strong>🚨 4명 체제 운영 재정의</strong> — 분담 인계 완료 후 5명 → 4명 체제 단위 결정 (1:1)</li><li>(c) <strong>🚨 신호등 회고 6일 연속 → 내일 AM 강제 시도</strong> (7일차)</li></ol><ol><li>🟡 <strong>신호 환기</strong> —</li><li><strong>R-mtg (후반 silence) 신규 검증</strong> — 14'50" vs 발화 ~3분 audio 이슈 확인 권장</li><li><strong>박재민/정원화 PM 직접 발화 0 검증</strong> (R-quiet 후보 vs 발화 인식 한계 구분)</li><li><strong>2주 내 2명 중도포기 코호트 신호 매니저/강사진 회의</strong> (1팀 송성호 + 2팀 정재훈)</li></ol></div></details><details open><summary>🌙 내일 AM carry-over (자동 이월 + 우선순위)</summary><div><table><thead><tr><th>항목</th><th>Owner</th><th>마감</th><th>이월 횟수</th><th>자동 격상?</th></tr></thead><tbody><tr><td>🟢⭐⭐⭐ 4명 호명 격려 (PM 미시 회복)</td><td>강사</td><td>내일 AM 1순위</td><td>(PM 미시)</td><td>🟢</td></tr><tr><td>🚨🚨 R-burn 2명 동시 케어 1:1</td><td>강사</td><td>회의 외</td><td><strong>4회차</strong></td><td>🚨🚨</td></tr><tr><td>🚨 4명 체제 운영 재정의 (1:1)</td><td>강사진 + 팀</td><td>1:1</td><td>신규</td><td>🚨</td></tr><tr><td>🟢⭐⭐⭐ 태환 데모/스프린트 진척 추적</td><td>강사</td><td>내일 AM</td><td>(PM 진척)</td><td>🟢 견고화</td></tr><tr><td>🟢⭐⭐⭐ 정재훈 분담 인계 완료 sentinel 격려</td><td>강사</td><td>내일 AM 격려</td><td>(PM 완료)</td><td>🟢</td></tr><tr><td>🚨 신호등 회고 7일차 강제</td><td>강사 + 보조</td><td>내일 AM</td><td><strong>7일차</strong></td><td>🚨</td></tr><tr><td>🚨 R3/R2 통합 결정</td><td>강사 + 정원화</td><td>1:1</td><td><strong>4회차</strong></td><td>🚨</td></tr><tr><td>🚨 매니저/강사진 코호트 신호 회의</td><td>강사진</td><td>회의 외</td><td><strong>2회차</strong></td><td>🚨</td></tr><tr><td>🟡 R-mtg 후반 silence 검증</td><td>강사 + 보조</td><td>회의 외</td><td>신규</td><td>🟡</td></tr></tbody></table></div></details><details><summary>🚦 오늘 신호등 (1단어 회고 — 30초)</summary><div><div class="quote"><strong>❌ 6일 연속 미시행</strong> (5/14~5/19) — <strong>내일 AM 강제 시도 절대 필수 (7일차)</strong> — 보조강사 채팅 백업 즉시 시도 권장.</div><ul><li>강사: ____ "____" (미발화)</li><li>보조강사: 🟢 "전환" 추정 (4명 체제 즉시 적응 + 태환 PM 주도)</li><li>팀장 박재민: 🟢 "마감" 추정</li><li>부팀장 정원화: 🟢 "정착" 추정 (SRS 신규)</li><li>태환: 🟢 "스프린트" 추정 (1/2 단위 결정)</li></ul></div></details>
+  </section>
+
+  <!-- ===== 푸터 ===== -->
+  <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-center">
+    원본 MD: <code>260519_pm.md</code> · 생성: 2026-05-19 18:09 · <a href="../../.shared/html/dashboard.html">📊 코호트 대시보드</a>
+  </footer>
+
+</div>
+
+</body>
+</html>

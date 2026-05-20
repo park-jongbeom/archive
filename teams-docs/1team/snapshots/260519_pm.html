@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1팀 (Scoffee) 2026-05-19 PM</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  .quote { border-left: 4px solid #6366f1; padding: 0.75rem 1rem; background: #eef2ff; margin: 0.5rem 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+  details > summary { cursor: pointer; padding: 0.75rem 1rem; background: #f3f4f6; border-radius: 8px; font-weight: 600; user-select: none; }
+  details > summary:hover { background: #e5e7eb; }
+  details[open] > summary { background: #e0e7ff; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  details > div { padding: 1rem; background: #fafbfc; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+  th { background: #f3f4f6; padding: 0.5rem; text-align: left; border: 1px solid #d1d5db; font-weight: 600; }
+  td { padding: 0.5rem; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .badge-green { background: #d1fae5; color: #065f46; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-yellow { background: #fef3c7; color: #92400e; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-red { background: #fee2e2; color: #991b1b; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-star { background: #fef3c7; color: #b45309; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  ul, ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+  ul li { list-style: disc; margin: 0.25rem 0; }
+  ol li { list-style: decimal; margin: 0.25rem 0; }
+  h1, h2, h3, h4 { font-weight: 700; margin: 0.75rem 0 0.5rem; line-height: 1.3; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.25rem; }
+  h3 { font-size: 1.1rem; color: #374151; }
+  h4 { font-size: 1rem; color: #4b5563; }
+  p { margin: 0.5rem 0; line-height: 1.6; }
+  code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.85em; }
+  pre { background: #1f2937; color: #f9fafb; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; margin: 0.5rem 0; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  a { color: #4f46e5; text-decoration: underline; }
+  a:hover { color: #3730a3; }
+  strong { color: #111827; font-weight: 700; }
+  hr { border: 0; border-top: 1px solid #e5e7eb; margin: 1rem 0; }
+  blockquote { border-left: 4px solid #d1d5db; padding-left: 1rem; color: #4b5563; margin: 0.5rem 0; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <!-- ===== 헤더 ===== -->
+  <header class="mb-6">
+    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+      <h1 class="text-2xl font-bold text-gray-900">1팀 (Scoffee)</h1>
+      <span class="text-sm text-gray-500">2026-05-19 PM · Week 3 D2</span>
+    </div>
+    <div class="text-sm text-gray-600">베이스라인: <a href="./260519_am.md">snapshots/260519_am.md</a> (AM 9'24" ⭐⭐⭐ MAJOR 회복 sentinel + 손지희 실</div>
+  </header>
+
+  <!-- ===== 정량 지표 카드 (4개 가로) ===== -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white rounded-lg p-3 border-l-4 border-blue-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">회의 시간</div>
+      <div class="text-lg font-bold text-gray-900">9&#x27;51</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-green-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">사전 통지 이행률</div>
+      <div class="text-lg font-bold text-gray-900">미측정</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-yellow-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">Carry-over 이행률</div>
+      <div class="text-lg font-bold text-gray-900">미측정</div>
+    </div>
+    <div class="bg-white rounded-lg p-3 border-l-4 border-purple-500 shadow-sm">
+      <div class="text-xs text-gray-500 mb-1">신호등 회고</div>
+      <div class="text-lg font-bold text-gray-900">❌ 7일 연속 미시행</div>
+    </div>
+  </section>
+
+  <!-- ===== 🎯 이번 회의에서 확인할 사항 (최상단 강조 박스 — 사용자 요구 핵심) ===== -->
+  <section class="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-300 rounded-xl p-5 mb-6 shadow-md">
+    <h2 class="text-xl font-bold text-red-900 mb-3 flex items-center gap-2 border-b-2 border-red-200 pb-2">
+      <span class="text-2xl">🎯</span> 이번 회의에서 확인할 사항
+    </h2>
+    <div class="space-y-3 text-sm">
+      <div class="text-sm text-gray-600">상세 항목 없음 — 본문 펼침 섹션 참조</div>
+    </div>
+  </section>
+
+  <!-- ===== 🟢 한 줄 요약 ===== -->
+  <section class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-gray-200">
+    <h2 class="text-xl font-bold mb-3 text-gray-900 border-b-2 border-gray-200 pb-2">🟢 한 줄 요약</h2>
+    <div class="text-sm"><p class="text-gray-500">요약 없음</p></div>
+  </section>
+
+  <!-- ===== ▼ 펼침 섹션 (회의 외에는 접힘) ===== -->
+  <section class="space-y-3">
+    <details><summary>🎤 회의 결과 요약 (transcript 9&#x27;51&quot; 기반)</summary><div><h3>① 정섭 헬스 SDK 연결 본격 진행 (오전 분담 후속 ⭐)</h3><ul><li>정섭: "지금 계속 붙이고 있습니다 연결이 지금 추위 부분 빼고" — 헬스 SDK 연결 작업 진행 중</li><li>AM 오전 결정 (Health Connect vs 삼성 헬스 SDK 분기 처리) 후속 본격 진척</li></ul><h3>② ⚠️ 강사 발견: 온보딩 백로그 누락</h3><ul><li>강사: "원 보딩은 여기 티켓도 없는데요?" = 보드에 온보딩 영역 카드 없음</li><li>손지희: "플로우B가 실행되기 전에 옴보딩이 있어야 그 설정이 되는데 저희가 플로우A 먼저 했었잖아요... 플로우 단계에서 옴보딩이 빠져있었거든요... 저희끼리 제이님이 아 옴보딩도 그건 해야겠네요"</li><li>= <strong>플로우 작성 시 온보딩 빠짐 → 카드 미등록 → R-W (명세-구현 비동기) 1팀 발현 sentinel ⚠️</strong></li></ul><h3>③ 🟢⭐⭐⭐ 손지희 온보딩 자발 인수 sentinel MAJOR</h3><ul><li>손지희: "제가 해야할 것 같습니다" → 강사: "근데 지금 제이님이 계속 밀려있잖아요?" → 손지희: "네 제가 해야할 것 같아요"</li><li>강사: "지금 하실 분이 빨리 하시는게 좋습니다. 자 이렇게 시행처 겪으면서 조금 조금씩 알아가셔도 될 것 같아요"</li><li>= <strong>R-burn-1 회복 후 본격 진입 + 자율 분담 결정 완전 사이클 sentinel ⭐⭐⭐</strong></li></ul><h3>④ 🟢⭐⭐ 백로그 일괄 등록 결정 ✅</h3><ul><li>강사: "원래는 이제 내일부터 뭐이란 집으로 좀 정리가 되어 있는 것 같은데 실제로는 지금 이미 중간부터 정상님이 이거를 진행하고 계셨던 상황... 플로우 P 관련한 백로그는 다시 더 추가적으로 올리셔야 되는 부분"</li><li>손지희: "할 때마다 그때그때 등록을 하고 있었어가지고 아 할 때마다 아니면 한 번에 다 등록을 해놓고 할까요?"</li><li>강사: "그때" (= 한 번에 일괄 등록)</li><li>= <strong>R2 Closes #N 정착 + 백로그 운영 결정 ✅ Decision Log 추가</strong></li></ul><h3>⑤ 🟢⭐ 이제이 PM 복귀 + 분담 재조정 (오전 분담 인수 사이클)</h3><ul><li>AM에서 손지희가 이제이 분담 1건 자율 인수 → PM에서 이제이 복귀 후 손지희 온보딩 자발 인수 = <strong>분담 사이클 양 방향 완전 작동 sentinel</strong></li></ul><h3>⑥ ⚠️ 정섭 PC 이슈 신규 발현</h3><ul><li>정섭: "컴퓨터가 난리가 나가지고... 캠도 켜고 영상도 이렇게 틀려져 있고 하니까 잡아먹는 게 되게 많은 건지 컴퓨터가 못 버티네요"</li><li>강사: "PC 업그레이드 좀 하셔야 되겠는데... 발전을 얼마나 맥으로 하세요? 맥을... 굽이 하려고 하는데"</li><li>정섭: "윈도우 PC... 램 32기가입니다"</li><li>손지희: "저는 지금 브라우저 한 열몇 개 띄우고 있어요"</li><li>정섭: "저도 지금 브라우저가 열 개 정도... 안드로이드 스튜디오 한 세네 개..."</li><li>강사: "맥은 괜찮다는 거 모르겠으면 여쭤보시고... 저희가 직접 하면 이제 알아가는 거니까 부탁하시면 됩니다"</li><li>= <strong>개발 환경 신규 신호 (R-환경) — 1팀 R-mtg-mic 마이크와 별개로 정섭 PC 성능 한계</strong>. PM 회의 작동에는 직접 영향 X 단 향후 영상 출력/데모 시 영향 가능</li></ul><h3>⑦ 🚨 이제이 분담 밀림 우려 명시</h3><ul><li>강사: "근데 지금 제이님이 계속 밀려있잖아요?"</li><li>= <strong>R-attend 4일째 코호트 + 분담 인계 누적 → 강사 직접 우려 발화 sentinel</strong> ⚠️</li><li>단 손지희가 자발 인수로 즉시 해소 sentinel ⭐⭐⭐ = 1팀 내부 자율 분담 작동 검증</li></ul><h3>⑧ 🚦 신호등 회고 ❌ 7일 연속 미시행</h3><ul><li>강사 종료: "자 그래요 오늘 오후 미팅은 마치도록 하겠습니다"</li><li>B4 신호등 회고 시도 7일차 실패 (5/13~5/19) — <strong>회의 채널 완전 회복에도 신호등 정착 X = 별도 정착 시도 필요</strong></li></ul></div></details><details open><summary>📊 6시간 변화 — Finished / Will finish by when</summary><div><h3>오전 회의 후 Finished (10:00 → 15:30 추정 — 회의 후 commit 점검 필요)</h3><ul><li>손지희: 설정 UI ↔ 리포트 UI 로직 연결 작업 진행 (오전 보고)</li><li>정섭: 삼성 헬스 SDK 연결 진행 (PM "추위 부분 빼고 다 했어")</li><li>이제이 (오후 복귀): A-4-6 음료 검색 후속 + 손지희 인수 1건</li></ul><h3>Will finish by when (오늘 일과 종료 = 18:00)</h3><ul><li>손지희 <strong>온보딩 영역 자발 인수</strong> ⭐⭐⭐ (Flow B 선행 조건 sentinel) — 본격 시작</li><li>정섭 헬스 SDK 연결 (추위 부분 빼고 마감) + 백로그 일괄 추가 등록</li><li>이제이 음료 검색 마감 + 분담 1건 (손지희 인수 분 외)</li><li>(위험) <strong>신호등 회고 7일 연속 미시행</strong> — 내일 AM 강제 시도 필요</li></ul><h3>정량 수치 (15:30 시점 — 회의 후 cross-check 필요)</h3><ul><li>AM 후 신규 commit: 미점검 (회의 후 git log 권장)</li><li>활성 기여자: 3명 활성 추정 (손지희 코드 본격 + 정섭 SDK + 이제이 오후 복귀)</li></ul></div></details><details open><summary>✅ 오전 회의 액션 아이템 진척 (PM 핵심)</summary><div><table><thead><tr><th>액션 (AM 합의)</th><th>담당</th><th>오전 합의 상태</th><th>현재 (PM)</th><th>진척</th></tr></thead><tbody><tr><td>헬스 SDK 분기 결정 (min SDK API 24~29)</td><td>정섭</td><td>✅ AM 결정</td><td>"추위 부분 빼고 다 했어" — 본격 연결 진행</td><td>🟢⭐⭐⭐</td></tr><tr><td>설정 UI ↔ 리포트 UI 로직 연결</td><td>손지희</td><td>✅ AM 합의</td><td>PM "온보딩 자발 인수" 추가 ⭐⭐⭐</td><td>🟢⭐⭐⭐</td></tr><tr><td>이제이 음료 검색 + 분담 1건 인계</td><td>손지희/이제이</td><td>✅ AM 자율 결정</td><td>PM 이제이 복귀 ✅</td><td>🟢⭐</td></tr><tr><td>Decision Log 문서화 (강사 자발 push)</td><td>손지희</td><td>✅ AM 합의 (피그마 확인)</td><td>PM 미점검</td><td>🟡</td></tr><tr><td>테스트 시나리오 문서화 + 링크 공유</td><td>팀</td><td>✅ AM 합의</td><td>PM 미언급 (1:1 후 권장)</td><td>🟡</td></tr><tr><td>Flow B 이월 결정 + 백로그 추가 등록</td><td>팀</td><td>✅ AM 합의</td><td>✅ PM "한 번에 다 등록" 결정</td><td>🟢⭐⭐</td></tr><tr><td>신호등 회고</td><td>강사 + 보조</td><td>❌ AM 미시행</td><td>❌ PM 미시행 (7일 연속)</td><td>🚨</td></tr></tbody></table><p><strong>진척 비율: 🟢 5/7 (71.4%) + 🟡 2/7 + 🚨 1/7</strong> ⭐⭐ MAJOR 회복</p></div></details><details><summary>🗂️ 보드 In Progress + 분담 cross-check (PM 변형)</summary><div><div class="quote">⚠️ <strong>5/19 PM 보드 PDF 부재</strong> — 다음 점검부터 15:20 PDF 추출 권장.</div><h3>정합성 신호</h3><table><thead><tr><th>신호</th><th>해석</th><th>격상 R-항목</th></tr></thead><tbody><tr><td>🟢⭐⭐⭐ <strong>손지희 온보딩 자발 인수 sentinel MAJOR</strong></td><td>R-burn-1 회복 후 본격 진입 + 자율 분담 결정 완전 사이클</td><td>R-burn-1 회복 완전 사이클 ⭐⭐⭐</td></tr><tr><td>🟢⭐⭐ <strong>백로그 일괄 등록 결정 ✅</strong></td><td>Flow B 관련 백로그 한 번에 등록 = R2 정착 + 운영 결정</td><td>R2/Decision Log 진척 ⭐⭐</td></tr><tr><td>⚠️ <strong>온보딩 백로그 누락 발견 (강사 직접)</strong></td><td>플로우 작성 시 온보딩 빠짐 = R-W (명세-구현 비동기) 1팀 발현 sentinel</td><td>R-W 신규 1팀 발현</td></tr><tr><td>🚨 <strong>이제이 분담 밀림 우려 (강사 직접)</strong></td><td>R-attend 4일째 누적 → 강사 직접 우려 — 단 손지희 인수로 즉시 해소 ⭐⭐⭐</td><td>R-attend 견고화 / 분담 자율 해소 ⭐⭐⭐</td></tr><tr><td>⚠️ <strong>정섭 PC 이슈 신규</strong></td><td>32GB RAM 한계 + 캠/영상 동시 = 데모 단계 영향 가능</td><td>R-환경 신규 (PC 성능)</td></tr><tr><td>✅ <strong>회의 채널 완전 회복 sentinel</strong></td><td>AM 9'24" + PM 9'51" = 양 회의 9분+ baseline +75% 평균</td><td>R-mtg-mic-1팀 임계 돌파 해소 ⭐⭐⭐</td></tr></tbody></table></div></details><details><summary>🔁 Carry-over 자동 재출현 + 이행률 (AM 미해소 + 신규)</summary><div><table><thead><tr><th>Carry-over 항목</th><th>Owner</th><th>마감</th><th>PM 회의에서 다뤘나?</th><th>데이터 상태</th><th>이월 횟수</th></tr></thead><tbody><tr><td>🟢⭐⭐⭐ <strong>min SDK 결정 ✅</strong> (AM 해소)</td><td>정섭</td><td>오늘 결정</td><td>✅ AM 해소 + PM 본격 진행</td><td>🟢⭐⭐⭐ "추위 부분 빼고 다 했어"</td><td><strong>해소</strong> ⭐⭐⭐</td></tr><tr><td>🟢⭐⭐⭐ <strong>백로그 일괄 등록 ✅</strong> (신규 PM 결정)</td><td>손지희</td><td>오늘</td><td>✅ PM 결정</td><td>🟢⭐⭐ Decision Log 추가</td><td><strong>해소</strong> ⭐⭐</td></tr><tr><td>🟢⭐⭐⭐ <strong>회의 채널 회복 sentinel</strong> ✅</td><td>강사 + 팀</td><td>AM/PM</td><td>✅✅ AM + PM 모두 회복</td><td>🟢⭐⭐⭐ 평균 9'37"</td><td><strong>사실상 해소</strong> ⭐⭐⭐</td></tr><tr><td>🚨🚨 7회차 임박 6건 (min SDK 1건 해소)</td><td>강사 + 팀</td><td>오늘 1:1</td><td>❌ PM 미시 (회의 회복으로 압박 완화)</td><td>🚨 미해결</td><td><strong>7회차 임박 유지</strong></td></tr><tr><td>🚨 노출 API 키 Firebase 콘솔 제한</td><td>손지희</td><td>1:1</td><td>❌</td><td>❓ 미점검</td><td><strong>7회차 임박</strong></td></tr><tr><td>🚨 PO 역할 분담 / 부팀장 자리</td><td>강사 + 팀</td><td>1:1</td><td>❌</td><td>🚨 미해결 (단 손지희 실질 진행자 운영 = 사실상 팀장 역할 견고화 ⭐⭐⭐)</td><td><strong>7회차 임박</strong> (단 데이터 견고화)</td></tr><tr><td>🚨 Must 7→5~6 압축 결정</td><td>강사 + 팀</td><td>1:1</td><td>❌</td><td>🟡 Flow B 이월 합의 ✅ = 부분 해소 sentinel ⭐</td><td><strong>7회차 임박 → 부분 해소 ⭐</strong></td></tr><tr><td>🚨 코드 리뷰 정례화</td><td>강사 + 팀</td><td>1:1</td><td>❌</td><td>🚨 R3 정섭 신규 셀프 머지 (#45/#47)</td><td><strong>7회차 임박</strong></td></tr><tr><td>🚨 이제이 R-quiet</td><td>강사</td><td>회의 발화</td><td>✅ AM 자체 분담 발화 ⭐ + PM 복귀 ✅</td><td>🟢⭐ 부분 해소 (회의 참여 시작)</td><td><strong>부분 해소 sentinel ⭐</strong></td></tr><tr><td>🚨 손지희 R-burn-1 회복 인정</td><td>강사</td><td>격려</td><td>❌ PM 격려 0건 (단 데이터 견고화 ⭐⭐⭐)</td><td>🟢⭐⭐⭐ 온보딩 자발 인수 = 회복 완전 사이클</td><td><strong>데이터 해소 ⭐⭐⭐ / 회의 격려 누락</strong></td></tr><tr><td>🟢⭐ Decision Log 문서화 push ⭐⭐ (강사 자발 AM)</td><td>손지희 + 보조</td><td>매 회의</td><td>△ PM 미점검</td><td>🟡 진행 추정</td><td><strong>2회차 → 진행</strong></td></tr><tr><td>🟢⭐ 테스트 시나리오 문서화 (강사 자발 AM)</td><td>팀</td><td>1주 내</td><td>❌ PM 미언급</td><td>🟡 신규</td><td><strong>2회차 → 1:1</strong></td></tr><tr><td>⚠️ <strong>정섭 PC 이슈 신규</strong></td><td>강사 + 정섭</td><td>회의 외</td><td>✅ PM 강사 자발 발화 ⭐ (맥 권유)</td><td>🟡 정섭 응답 (브라우저 10+ 사용)</td><td><strong>신규</strong></td></tr><tr><td>⚠️ <strong>온보딩 백로그 누락</strong> (PM 강사 발견)</td><td>손지희 + 팀</td><td>오늘</td><td>✅ PM 즉시 해소 (손지희 자발 인수 ⭐⭐⭐)</td><td>🟢⭐⭐⭐ 분담 결정</td><td><strong>신규 → 즉시 해소</strong> ⭐⭐⭐</td></tr><tr><td>🚨 신호등 회고 ❌ 7일 연속</td><td>강사 + 보조</td><td>(PM 후)</td><td>❌</td><td>(7일차 실패)</td><td><strong>8일차 시도 권장 (내일 AM)</strong></td></tr></tbody></table><p><strong>PM 회의 후 → 내일 AM 사전 이행률</strong>:</p><ul><li>회의-내 이행률 (AM + PM 합산): <strong>6/15 = 40% ⭐⭐ MAJOR 회복</strong> (min SDK ✅ + 백로그 일괄 ✅ + 회의 채널 회복 ✅ + 손지희 분담 자율 ✅ + 이제이 자율 발화 ✅ + 손지희 온보딩 자발 인수 ✅)</li><li>데이터-기반 진척률: <strong>10/15 = 66.7% ⭐⭐⭐</strong></li></ul></div></details><details><summary>🚦 R-항목 점검 (오전 09:30 → 오후 회의 후 변화)</summary><div><table><thead><tr><th>R-ID</th><th>5/19 AM 09:30</th><th>5/19 PM 회의 후</th><th>변화</th></tr></thead><tbody><tr><td><strong>R-mtg-mic-1팀</strong></td><td>🚨🚨🚨 7일째 임계 돌파 확정</td><td>🟢⭐⭐⭐ <strong>사실상 해소 sentinel ⭐⭐⭐</strong> (AM 9'24" + PM 9'51")</td><td><strong>MAJOR 해소</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-burn-1</strong> (손지희)</td><td>🟢⭐⭐⭐ 회복 후 코드 본격 진입</td><td>🟢⭐⭐⭐ <strong>온보딩 자발 인수 = 회복 완전 사이클 ⭐⭐⭐</strong></td><td><strong>확정 완성</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-quiet</strong> (이제이)</td><td>🟢⭐⭐⭐ 데이터 견고화 / 회의 결석</td><td>🟢⭐ PM 복귀 ✅ + AM 자체 분담 발화 ✅</td><td><strong>부분 회복</strong> ⭐</td></tr><tr><td><strong>R-attend</strong></td><td>🚨🚨 4일째 코호트 견고화</td><td>🚨 PM 이제이 복귀 ✅ + 강사 우려 명시 ⚠️</td><td><strong>부분 해소 + 우려 명시</strong></td></tr><tr><td><strong>R-cap</strong> (Norming)</td><td>🟢⭐⭐⭐ 견고화 sentinel</td><td>🟢⭐⭐⭐ <strong>확정 완성</strong> (회의 채널 회복 + 자율 분담)</td><td><strong>확정 완성</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-PO</strong></td><td>🚨🚨🚨 7회차 임박</td><td>🚨🚨 7회차 임박 단 손지희 실질 진행자 = 사실상 팀장 역할 견고화 ⭐⭐⭐</td><td><strong>데이터 견고화</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-DL</strong> (Decision Log)</td><td>🚨 정체</td><td>🟡 PM 강사 자발 push ⭐⭐ + min SDK + 백로그 일괄 = 3건 결정 추가 ⭐⭐⭐</td><td><strong>시동</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-MN</strong> (Must-4/5)</td><td>🚨 후행 영향 ↑</td><td>🟢⭐ <strong>Flow B 이월 합의 ✅</strong> = Must 압축 부분 결정 sentinel</td><td><strong>부분 해소</strong> ⭐</td></tr><tr><td><strong>R3</strong> (셀프 머지)</td><td>🚨 5/19 AM 2건 신규</td><td>🚨 7회차 임박 유지 (1:1 미언급)</td><td>정체</td></tr><tr><td><strong>R2</strong> (Issue Closes)</td><td>🚨 6 PR 누락 임박</td><td>🟡 백로그 일괄 등록 결정 = 정착 진입 sentinel ⭐</td><td><strong>부분 해소</strong> ⭐</td></tr><tr><td><strong>R-W</strong> (명세-구현 비동기) 신규 1팀</td><td>(해당 X)</td><td>⚠️ <strong>온보딩 백로그 누락 발견 sentinel — 즉시 해소 ⭐⭐⭐</strong> (손지희 자발 인수)</td><td><strong>신규 → 즉시 해소</strong> ⭐⭐⭐</td></tr><tr><td><strong>R-환경</strong> (정섭 PC) 신규</td><td>(해당 X)</td><td>⚠️ <strong>정섭 32GB RAM 한계 + 캠/영상 동시 = 신규</strong></td><td><strong>신규 → 회의 외 결정 권장</strong></td></tr><tr><td><strong>R-stall</strong> (#20·#26)</td><td>🟢⭐⭐⭐ 견고화</td><td>🟢⭐⭐⭐ 유지 + PR #45/#47 머지 추가</td><td>견고화 유지</td></tr><tr><td><strong>R13</strong></td><td>🟢 origin CLEAN</td><td>🟢 CLEAN 유지 ✅</td><td>안정</td></tr><tr><td><strong>R-action</strong> (AM 미시작)</td><td>(PM 항목)</td><td>🟢⭐⭐ <strong>AM 액션 진척 71.4% ⭐⭐ MAJOR</strong></td><td><strong>MAJOR 해소</strong></td></tr></tbody></table></div></details><details><summary>👤 인물별 회의 발화 정합성 (AM + PM 통합)</summary><div><table><thead><tr><th>멤버</th><th>AM 발화</th><th>PM 발화</th><th>분담 인수</th><th>신호</th></tr></thead><tbody><tr><td>손지희 (son)</td><td>✅⭐⭐⭐ 실질 진행자 + 본인 보고 + 이제이 분담 자율 인수</td><td>✅⭐⭐⭐ 온보딩 자발 인수 + 백로그 일괄 등록 합의</td><td>AM 1건 + PM 온보딩 영역</td><td>🟢⭐⭐⭐ R-burn-1 회복 완전 사이클 + 팀장 역할 견고화</td></tr><tr><td>정섭 (JungSub)</td><td>✅⭐⭐ 헬스 SDK 본격 보고 + min SDK 결정 발화</td><td>✅⭐ 헬스 SDK 진행 보고 + PC 이슈 명시</td><td>(Must-6 단독)</td><td>🟢⭐⭐ 브랜치 통합 + SDK 본격 / ⚠️ PC 이슈 신규</td></tr><tr><td>이제이 (juu124)</td><td>❌ 결석 (병원 — 사유 명확 ✅)</td><td>✅ PM 복귀 (발화 직접 추정)</td><td>(분담 1건 손지희에 인계 후 본인 음료 검색 + 1건)</td><td>🟢⭐ 부분 회복 / 🚨 분담 밀림 강사 우려</td></tr></tbody></table><p>→ <strong>commit 활동 + 회의 발화 모두 활성</strong> = 손지희 + 정섭 (PM 신규 명시 인정 ⭐⭐⭐) → <strong>이제이 PM 복귀 ✅</strong> = R-attend 코호트 4일째 패턴 정상 종료 (단 분담 밀림 우려 명시)</p></div></details><details open><summary>💡 보조강사 권장 액션 (3건 압축, 좋은 점부터)</summary><div><ol><li>🟢⭐⭐⭐ <strong>격려 (좋은 점부터) — 회의 채널 회복 + 손지희 자발 분담 완전 사이클 sentinel</strong> ⭐⭐⭐</li><li>(a) <strong>회의 채널 완전 회복 sentinel MAJOR</strong> — AM 9'24" + PM 9'51" = baseline +75% 평균 = R-mtg-mic-1팀 7일 임계 돌파 해소</li><li>(b) <strong>손지희 R-burn-1 회복 완전 사이클 sentinel MAJOR</strong> — Must-6/7 동시 진입 + AM 이제이 분담 인수 + PM 온보딩 자발 인수</li><li>(c) <strong>min SDK 결정 + 백로그 일괄 등록 ✅</strong> (Decision Log 시동 + R2 정착 진입)</li></ol><ol><li>🚨🚨 <strong>critical push (남은 7회차 임박 6건 + 신호등 회고 8일차)</strong> —</li><li>(a) <strong>🚨 7회차 임박 6건 1:1 일정 확정</strong> (PO/부팀장/Must 추가 압축/API/코드리뷰/이제이 R-quiet) — 회의 채널 회복으로 1:1 압박 완화 ⭐ 단 결정 자체는 필요</li><li>(b) <strong>🚨 신호등 회고 7일 연속 미시행 → 내일 AM 강제 시도 절대 필수</strong> (B4 정착 시도 8일차)</li><li>(c) <strong>⚠️ 정섭 PC 이슈 회의 외 결정</strong> (맥 권유 후속 — 매니저/회사 정책 확인)</li></ol><ol><li>🟡 <strong>신호 환기</strong> —</li><li><strong>R-W 신규 1팀 발현 (명세-구현 비동기 = 온보딩 누락) sentinel</strong> — 향후 플로우 작성 시 일괄 등록 룰 적용 권장</li><li><strong>테스트 시나리오 문서화 (AM 강사 자발 push)</strong> — 1:1 후 1주 내 권장</li><li><strong>R3 정섭 신규 2건 (#45/#47) 코드 리뷰 정례화 통합 결정</strong> (1:1)</li></ol></div></details><details open><summary>🌙 내일 AM carry-over (자동 이월 + 우선순위)</summary><div><table><thead><tr><th>항목</th><th>Owner</th><th>마감</th><th>이월 횟수</th><th>자동 격상?</th></tr></thead><tbody><tr><td>🚨 7회차 임박 6건 1:1 일정 확정</td><td>강사 + 팀</td><td>내일 1:1</td><td><strong>7회차</strong></td><td>자동 🚨 (단 회의 채널 회복으로 압박 완화)</td></tr><tr><td>🚨 신호등 회고 8일차 시도</td><td>강사 + 보조</td><td>내일 AM 강제</td><td><strong>8일차</strong></td><td>자동 🚨</td></tr><tr><td>🟢⭐⭐⭐ 손지희 온보딩 자발 인수 진척 추적</td><td>강사</td><td>내일 AM 격려</td><td>(PM 진척)</td><td>🟢 격려 1순위</td></tr><tr><td>🟢⭐⭐⭐ 회의 채널 회복 견고화 추적</td><td>강사 + 보조</td><td>내일 AM</td><td>(PM 회복)</td><td>🟢 견고화</td></tr><tr><td>🟢⭐⭐ 백로그 일괄 등록 진척</td><td>손지희</td><td>내일 AM</td><td>(PM 결정)</td><td>🟡 진척 추적</td></tr><tr><td>⚠️ 정섭 PC 이슈 회의 외 결정</td><td>강사 + 정섭</td><td>회의 외</td><td>신규</td><td>⚠️</td></tr><tr><td>🟡 Decision Log 시동 검증 (피그마 기록)</td><td>손지희</td><td>내일 AM</td><td>(PM 진척)</td><td>🟡</td></tr><tr><td>🟡 테스트 시나리오 문서화 (AM 강사 자발)</td><td>팀</td><td>1주 내</td><td>신규</td><td>🟡</td></tr><tr><td>🟡 R-W 신규 1팀 발현 — 명세-구현 비동기 룰 적용</td><td>팀</td><td>내일 AM</td><td>신규</td><td>🟡</td></tr></tbody></table></div></details><details><summary>🚦 오늘 신호등 (1단어 회고 — 30초)</summary><div><div class="quote"><strong>❌ 7일 연속 미시행</strong> (5/13~5/19) — 강사 종료 멘트 "오늘 오후 미팅은 마치도록 하겠습니다"로 즉시 종료. <strong>내일 AM 강제 시도 절대 필수 (8일차)</strong> — 보조강사 채팅 백업 즉시 시도 권장.</div><ul><li>강사: ____ "____" (미발화)</li><li>보조강사: 🟢 "회복" 추정 (회의 채널 완전 회복 sentinel + 자율 분담)</li><li>팀장 손지희: 🟢 "분담" 추정 (온보딩 자발 인수 + 자율 운영)</li><li>align? — (미시행으로 검증 불가)</li></ul></div></details>
+  </section>
+
+  <!-- ===== 푸터 ===== -->
+  <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-center">
+    원본 MD: <code>260519_pm.md</code> · 생성: 2026-05-19 18:09 · <a href="../../.shared/html/dashboard.html">📊 코호트 대시보드</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
