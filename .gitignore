@@ -45,3 +45,8 @@ desktop.ini
 *.log
 *.tmp
 *.bak
+
+# ============================================
+# Team repo clones — for local build/test only
+# ============================================
+teams-docs/*/repo/
