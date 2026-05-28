@@ -1,0 +1,214 @@
+# 부트캠프 6기 5/27 발견 화면 동작 오류 패턴 → semgrep 규칙
+# 작성 기준: operation/reports/critical_review_260527/team{1,2,3}_runtime.md
+# 적용 명령: semgrep --config operation/scripts/semgrep-rules/ teams-docs/{팀}/repo/app/src/main/
+#
+# 설계 원칙:
+# - 단순한 패턴 우선 (semgrep 표현력 한계로 복잡한 부정 조건은 false positive 다발)
+# - 우리 5/27 보고서 기반 — 학생 코드를 비난하지 말고 시연 리스크만 신호
+# - 각 규칙 메시지에 5/27 보고서 참조 ID 포함
+
+rules:
+  # ─────────────────────────────────────────────
+  # [P1] Placeholder 텍스트 잔존 — 시연 미완성 인상
+  # ─────────────────────────────────────────────
+  - id: bootcamp-placeholder-text-stub
+    pattern-either:
+      - pattern: Text("드로어블 열림")
+      - pattern: Text("플레이스 홀더")
+      - pattern: Text("플레이스홀더")
+      - pattern: Text("placeholder")
+      - pattern: Text("Placeholder")
+      - pattern: Text("준비 중")
+      - pattern: Text("준비중")
+      - pattern: Text("TODO")
+    message: |
+      [P1] Placeholder 텍스트 잔존. 시연 화면에 미완성 텍스트가 노출됩니다.
+      예: 3팀 SettingsDrawer.kt Text("드로어블 열림") (5/27 R3-N3 신규)
+    languages: [kotlin]
+    severity: ERROR
+
+  # ─────────────────────────────────────────────
+  # [P2] 더미/임시 데이터 마커
+  # ─────────────────────────────────────────────
+  - id: bootcamp-dummy-data-marker
+    pattern-regex: '(?i)//\s*(─+\s*)?\[?\s*(테스트용|임시)\s*(더미|dummy)'
+    message: |
+      [P2] 더미/임시 데이터 마커 발견. 시연 시 가짜 데이터 노출 가능성.
+      예: 1팀 ReportViewModel.kt:84-214 (5/27 Y1 잔존, 5/22 R1-2부터 미해소)
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: bootcamp-dummy-variable-name
+    pattern-regex: '\bval\s+(dummy|fake|mock)[A-Z][A-Za-z]*\s*='
+    paths:
+      include:
+        - "*.kt"
+      exclude:
+        - "*Test*.kt"
+        - "*test*.kt"
+        - "**/test/**"
+        - "**/androidTest/**"
+        - "**/fake/**"
+    message: |
+      [P2-2] dummy/fake/mock 접두 변수 발견 (main 소스셋). 더미 데이터 잔존 가능성.
+    languages: [kotlin]
+    severity: WARNING
+
+  # ─────────────────────────────────────────────
+  # [P3] Android 13+ POST_NOTIFICATIONS 런타임 요청 누락 휴리스틱
+  # (requestMultiplePermissionsLauncher.launch 발견 시 보고 — 결과 수동 확인 필요)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-permission-launcher-arrays
+    pattern: requestMultiplePermissionsLauncher.launch(arrayOf(...))
+    message: |
+      [P3] 권한 launcher 호출 발견. POST_NOTIFICATIONS(Android 13+) / ACCESS_BACKGROUND_LOCATION 포함 여부 수동 확인 필요.
+      예: 3팀 MapScreen.kt:436-443 POST_NOTIFICATIONS 누락 (5/27 R3-N4 신규)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P4] Service Intent 생성 패턴 (start 누락 의심)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-service-intent-creation
+    pattern: Intent($CTX, $SERVICE::class.java)
+    message: |
+      [P4] Service Intent 생성 발견. startForegroundService/startService 호출 동반 여부 수동 확인.
+      예: 3팀 MapScreen.kt:178-184 Intent 생성만 하고 start 호출 누락 (5/27 R3-N2 잔존+악화)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P5] TimePicker AM/PM 강제 보정 (12h 어긋남)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-timepicker-am-pm-force-shift
+    pattern-either:
+      - pattern: if ($H < 12) $H + 12 else $H
+      - pattern: if ($H >= 12) $H else $H + 12
+    message: |
+      [P5] TimePicker AM/PM 강제 보정. AM 06:00 저장 → 재오픈 시 PM 18:00 로 뜨고 그대로 저장 시 값 12h 손상.
+      예: 1팀 SettingScreen.kt:352-359 / L394-401 (5/27 O2 신규)
+    languages: [kotlin]
+    severity: WARNING
+
+  # ─────────────────────────────────────────────
+  # [P6] 빈 람다 dialog cancel/dismiss
+  # ─────────────────────────────────────────────
+  - id: bootcamp-empty-dialog-cancel-lambda
+    pattern-regex: '\bon(Cancel|DismissRequest|Dismiss)\s*=\s*\{\s*\}'
+    message: |
+      [P6] 다이얼로그 cancel/dismiss 빈 람다. 사용자가 X/뒤로가기로 닫을 수 없어 갇힘.
+      예: 2팀 ChatScreen.kt:367 onCancel = {} (5/27 R2-2 5일째 미해소)
+    languages: [kotlin]
+    severity: WARNING
+
+  # ─────────────────────────────────────────────
+  # [P7] uid silent return (사용자 무반응)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-silent-return-no-ui-feedback
+    pattern-either:
+      - pattern: "val $X = $REPO.getCurrentUserUid() ?: return"
+      - pattern: "val $X = getCurrentUserUid() ?: return"
+      - pattern: "val $X = $REPO.getCurrentUid() ?: return"
+      - pattern: "val $X = getCurrentUid() ?: return"
+      - pattern: "val $X = $REPO.uid ?: return"
+    message: |
+      [P7] uid null 시 silent return. 화면에 Loading/Error 표시 없이 무반응.
+      예: 2팀 SrsStudyViewModel.kt:165 (5/27 N1 신규)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P8] Cloud Function 호출 (functions/index.js 부재 시 NOT_FOUND)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-cloud-function-call
+    pattern: functions.getHttpsCallable($NAME).call(...)
+    message: |
+      [P8] Cloud Function 호출. functions/index.js export 여부 또는 콘솔 배포 상태 확인 필수.
+      예: 3팀 VoiceRemoteDataSourceImpl.kt:30-38 sendVoiceMessage (5/27 R3-N1 회귀)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P9] Room fallbackToDestructiveMigration
+  # ─────────────────────────────────────────────
+  - id: bootcamp-room-destructive-migration
+    pattern-either:
+      - pattern: $X.fallbackToDestructiveMigration(...)
+      - pattern: $X.fallbackToDestructiveMigrationOnDowngrade(...)
+    message: |
+      [P9] Room fallbackToDestructiveMigration 발견. 스키마 변경 시 사용자 데이터 전체 삭제.
+      운영 단계에서는 Migration 명시 권장.
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P11] UTC epoch day off-by-one (KST 미반영)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-utc-epoch-day-off-by-one
+    pattern: LocalDate.ofEpochDay($X / 86400000)
+    message: |
+      [P11] UTC 기준 epoch day 변환 — KST 사용자가 23:30~24:00 사이 기록 시 다음날 칸에 표시.
+      예: 1팀 CaffeinMainViewModel.kt:47 (5/27 O4 신규)
+      → Instant.ofEpochMilli(...).atZone(ZoneId.systemDefault()).toLocalDate() 사용 권장.
+    languages: [kotlin]
+    severity: WARNING
+
+  # ─────────────────────────────────────────────
+  # [P12] 화면 로컬 mutableStateOf (ViewModel/저장소 미연결 의심)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-screen-local-state-no-vm
+    patterns:
+      - pattern: var $X by remember { mutableStateOf($V) }
+      - metavariable-regex:
+          metavariable: $X
+          regex: '^(isDarkMode|darkMode|selectedNativeLanguage|nativeLanguage|wakeTime|sleepTime|notificationEnabled)$'
+    message: |
+      [P12] 화면 로컬 mutableStateOf — ViewModel/DataStore 미연결로 화면 이탈 시 소실 가능성.
+      예: 2팀 MyPageScreen.kt:52 selectedNativeLanguage (5/27 R2-4 잔존)
+      예: 1팀 SettingScreen.kt:77 isDarkMode (5/27 Y6 잔존)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P13] when 분기에서 else -> return false (미지원 enum silent)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-when-else-silent-false
+    pattern: |
+      when ($X) {
+          ...
+          else -> return false
+      }
+    message: |
+      [P13] when 분기 else -> return false. 신규 enum 값 추가 시 silent fail.
+      예: 2팀 TextToSpeechController.kt:38-43 LangCode 미지원 silent (5/27 N5 신규)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P14] LaunchedEffect 내부 while + delay 폴링 (무한 대기 가능성)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-launched-effect-while-delay
+    pattern: |
+      LaunchedEffect(...) {
+          ...
+          while ($COND) {
+              delay(...)
+          }
+          ...
+      }
+    message: |
+      [P14] LaunchedEffect 내부 while + delay 폴링. 조건 미충족 시 무한 대기 가능성.
+      예: 3팀 Navigation.kt:71-89 핫스타트 시 무한 대기 (5/27 R3-N7 신규)
+    languages: [kotlin]
+    severity: INFO
+
+  # ─────────────────────────────────────────────
+  # [P16] hardcoded ratio = 0 (1팀 deepSleepRatio = 0 모순 패턴)
+  # ─────────────────────────────────────────────
+  - id: bootcamp-hardcoded-zero-ratio
+    pattern-regex: '\b[a-z]\w*(Ratio|Score|Rate|Percent)\s*=\s*0\b\s*[,)\n]'
+    message: |
+      [P16] xxxRatio/Score/Rate/Percent = 0 하드코딩 의심. ViewModel 필터(>0)와 결합 시 데이터 표시 0건 가능.
+      예: 1팀 SamsungHealthDataSourceImpl.kt:71 deepSleepRatio = 0 (5/27 O1 핵심 sentinel)
+    languages: [kotlin]
+    severity: WARNING
