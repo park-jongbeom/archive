@@ -7,5 +7,7 @@
 			"path": "../../work/AI규칙정리/ai_claude"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
 }
