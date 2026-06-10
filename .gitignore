@@ -50,3 +50,10 @@ desktop.ini
 # Team repo clones — for local build/test only
 # ============================================
 teams-docs/*/repo/
+
+# Large meeting/consultation video recordings (kept outside the repo)
+*.mkv
+*.mp4
+*.mov
+*.avi
+*.wav
